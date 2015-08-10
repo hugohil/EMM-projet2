@@ -1,0 +1,74 @@
+package com.example.clement.emm_project2.server;
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.util.Log;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.clement.emm_project2.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+/**
+ * Created by perso on 10/08/15.
+ */
+public class ServerHandler {
+    private Context context;
+    private static ServerHandler instance;
+    private final String TAG = ServerHandler.class.getSimpleName();
+    private ProgressDialog progress;
+
+    public ServerHandler(Context context){
+        this.context = context;
+        progress = new ProgressDialog(this.context);
+    }
+
+    public static synchronized ServerHandler getInstance(Context context){
+        if(instance == null){
+            instance = new ServerHandler(context);
+        }
+        return instance;
+    }
+
+    public void getCategories(final ResponseHandler handler){
+        progress.setMessage(context.getResources().getString(R.string.server_dialog));
+        progress.show();
+        RequestQueue requestQueue = Volley.newRequestQueue(this.context);
+        JsonArrayRequest jsonArrayReq = new JsonArrayRequest(Request.Method.GET,
+                "http://eas.elephorm.com/api/categories",
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        JSONObject json;
+
+                        try {
+                            json = new JSONObject(response.getJSONObject(0).toString());
+
+                            // TODO: parse datas to fit Category model
+                            handler.onSuccess(json.toString());
+                        } catch (JSONException e) {
+                            Log.d(TAG, e.toString());
+                            handler.onError(e.toString());
+                        }
+                        progress.hide();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d(TAG, error.toString());
+                        handler.onError(error.toString());
+                        progress.hide();
+                    }
+                });
+        requestQueue.add(jsonArrayReq);
+    }
+}

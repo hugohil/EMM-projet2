@@ -2,16 +2,37 @@ package com.example.clement.emm_project2;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.example.clement.emm_project2.server.ResponseHandler;
+import com.example.clement.emm_project2.server.ServerHandler;
 
 public class MainActivity extends ActionBarActivity {
+    private final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ServerHandler server = new ServerHandler(this);
+        // TODO: this is async so we need to add a loader or something
+
+        server.getCategories(new ResponseHandler(){
+            @Override
+            public void onSuccess(String datas){
+                Log.d(TAG, datas);
+            }
+            @Override
+            public void onError(String error){
+                Log.e(TAG, error);
+                Toast toast = Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
     }
 
     @Override
