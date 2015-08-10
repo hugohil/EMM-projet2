@@ -24,4 +24,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile 'com.mcxiaoke.volley:library:1.0.17'
     compile files('libs/jackson-core-2.6.1.jar')
+    compile files('libs/jackson-annotations-2.6.0.jar')
 }
