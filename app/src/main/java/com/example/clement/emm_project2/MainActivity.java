@@ -7,11 +7,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.server.ResponseHandler;
 import com.example.clement.emm_project2.server.ServerHandler;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONArray;
+
+import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
     private final String TAG = MainActivity.class.getSimpleName();
+    private List<Category> categories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +30,19 @@ public class MainActivity extends ActionBarActivity {
 
         server.getCategories(new ResponseHandler(){
             @Override
-            public void onSuccess(String datas){
-                Log.d(TAG, datas);
+            public void onSuccess(Object datas){
+                // Log.d(TAG, datas.toString());
+                ObjectMapper mapper = new ObjectMapper();
+                JSONArray json = (JSONArray) datas;
+                try {
+                    for (int i = 0; i < json.length(); i++){
+                        Category cat = mapper.readValue(json.getJSONObject(i).toString(), Category.class);
+                        categories.add(cat);
+                    }
+                    Log.d(TAG, "size: "+categories.size());
+                } catch (Exception error){
+                    Log.e(TAG, error.toString());
+                }
             }
             @Override
             public void onError(String error){

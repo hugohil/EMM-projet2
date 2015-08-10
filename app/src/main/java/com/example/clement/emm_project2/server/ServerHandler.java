@@ -47,17 +47,7 @@ public class ServerHandler {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        JSONObject json;
-
-                        try {
-                            json = new JSONObject(response.getJSONObject(0).toString());
-
-                            // TODO: parse datas to fit Category model
-                            handler.onSuccess(json.toString());
-                        } catch (JSONException e) {
-                            Log.d(TAG, e.toString());
-                            handler.onError(e.toString());
-                        }
+                        handler.onSuccess(response);
                         progress.hide();
                     }
                 },

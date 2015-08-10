@@ -29,6 +29,9 @@ public class Category {
     @JsonProperty("subcategories")
     private List<SubCategory> subCategories;
 
+    @JsonProperty("__v")
+    private String v;
+
     public String getId() {
         return id;
     }
@@ -83,5 +86,13 @@ public class Category {
 
     public void setSubCategories(List<SubCategory> subCategories) {
         this.subCategories = subCategories;
+    }
+
+    public String getV() {
+        return v;
+    }
+
+    public void setV(String v) {
+        this.v = v;
     }
 }

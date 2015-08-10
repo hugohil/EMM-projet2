@@ -24,6 +24,9 @@ public class SubCategory {
     @JsonProperty("active")
     private boolean active;
 
+    @JsonProperty("__v")
+    private String v;
+
     public String getId() {
         return id;
     }
@@ -70,5 +73,13 @@ public class SubCategory {
 
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
+    }
+
+    public String getV() {
+        return v;
+    }
+
+    public void setV(String v) {
+        this.v = v;
     }
 }

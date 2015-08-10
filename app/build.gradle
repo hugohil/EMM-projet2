@@ -17,6 +17,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }
 }
 
 dependencies {
@@ -25,4 +29,5 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.17'
     compile files('libs/jackson-core-2.6.1.jar')
     compile files('libs/jackson-annotations-2.6.0.jar')
+    compile files('libs/jackson-databind-2.6.1.jar')
 }
