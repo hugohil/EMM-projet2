@@ -1,11 +1,8 @@
 package com.example.clement.emm_project2.model;
 
-import android.media.Image;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Clement on 10/08/15.
