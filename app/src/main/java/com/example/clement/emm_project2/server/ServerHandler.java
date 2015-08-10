@@ -12,6 +12,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.clement.emm_project2.R;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +26,8 @@ public class ServerHandler {
     private static ServerHandler instance;
     private final String TAG = ServerHandler.class.getSimpleName();
     private ProgressDialog progress;
+
+    public static final String API_BASE_URL = "http://eas.elephorm.com/api/";
 
     public ServerHandler(Context context){
         this.context = context;
@@ -43,7 +46,7 @@ public class ServerHandler {
         progress.show();
         RequestQueue requestQueue = Volley.newRequestQueue(this.context);
         JsonArrayRequest jsonArrayReq = new JsonArrayRequest(Request.Method.GET,
-                "http://eas.elephorm.com/api/categories",
+                API_BASE_URL + "categories",
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {

@@ -2,6 +2,8 @@ package com.example.clement.emm_project2.model;
 
 import android.media.Image;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -13,9 +15,10 @@ public class Formation {
     /*
      * Represents a formation item as described in the api doc
      */
-
+    @JsonProperty("title")
     private String title;
 
+    @JsonProperty("subtitle")
     private String subtitle;
 
     /*
