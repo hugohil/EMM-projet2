@@ -43,7 +43,7 @@ public class MainActivity extends ActionBarActivity {
                         da.open();
                         Category cat = mapper.readValue(json.getJSONObject(i).toString(), Category.class);
                         categories.add(cat);
-                        da.createCategory(cat);
+                        da.createData(cat);
                         Log.d(TAG, "category created");
                         da.close();
                     }
@@ -62,19 +62,14 @@ public class MainActivity extends ActionBarActivity {
         });
 
         Author author = new Author();
-        author.setFullname("Didier");
-        author.setMongoID("ejorj24234");
-        author.setLink("http://www.jaimelessaucisses.com");
+        author.setFullName("Alain");
+        author.setMongoID("OIjdozpadJEZ");
+        author.setLink("test");
 
 
         DataAccess da = new DataAccess(this);
         da.open();
-        Author newAuthor = da.createAuthor(author);
-        Log.d(TAG, "NEW AUTHOR -> "+newAuthor.getFullname());
-        Log.d(TAG, "Created Author");
-        Log.d(TAG, "Getting all authors...");
-        List<Author> authors = da.getAllAuthors();
-        Log.d(TAG, "ALL AUTHORS ->"+authors);
+        Author newAuthor2 = (Author) da.createData(author);
         da.close();
     }
 

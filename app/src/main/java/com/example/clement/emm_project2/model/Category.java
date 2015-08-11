@@ -12,7 +12,6 @@ import java.util.List;
  * Created by Clement on 10/08/15.
  */
 public class Category extends AppData{
-    private final String TAG = Category.class.getSimpleName();
 
     @JsonProperty("tid")
     private int tid;
@@ -92,7 +91,6 @@ public class Category extends AppData{
             ObjectMapper mapper = new ObjectMapper();
             return mapper.writeValueAsString(this.getSubCategories());
         } catch (JsonProcessingException e){
-            Log.d(TAG, e.toString());
             return null;
         }
     }

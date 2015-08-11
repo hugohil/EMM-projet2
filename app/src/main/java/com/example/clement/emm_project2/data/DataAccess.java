@@ -4,13 +4,17 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.clement.emm_project2.database.AuthorDatabaseHelper;
 import com.example.clement.emm_project2.database.CategoryDatabaseHelper;
 import com.example.clement.emm_project2.database.DatabaseHelper;
+import com.example.clement.emm_project2.model.AppData;
 import com.example.clement.emm_project2.model.Author;
 import com.example.clement.emm_project2.model.Category;
+import com.example.clement.emm_project2.util.ReflectUtil;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +22,7 @@ import java.util.List;
  * Created by Clement on 10/08/15.
  */
 public class DataAccess {
-
+    private final String TAG = DataAccess.class.getSimpleName();
     private SQLiteDatabase database;
     private DatabaseHelper dbHelper;
 
@@ -34,47 +38,44 @@ public class DataAccess {
         dbHelper.close();
     }
 
-    public Category createCategory(Category category) {
+    public AppData createData(AppData data) {
+        // 1. Build ContentValues
         ContentValues values = new ContentValues();
 
-        values.put(CategoryDatabaseHelper.COLUMN_MONGOID, category.getMongoID());
-        values.put(CategoryDatabaseHelper.COLUMN_TITLE, category.getTitle());
-        values.put(CategoryDatabaseHelper.COLUMN_DESCRIPTION, category.getDescription());
-        values.put(CategoryDatabaseHelper.COLUMN_ACTIVE, category.getActive());
-        values.put(CategoryDatabaseHelper.COLUMN_IMAGEURL, category.getImageURL());
-        values.put(CategoryDatabaseHelper.COLUMN_SUBCATEGORIES, category.getJSONSubCategories());
+        Field[] fields = ReflectUtil.getObjectFields(data);
+        String[] fieldNames = new String[fields.length + 2];
+        fieldNames[0] = "id";
+        fieldNames[1] = "mongoid";
+        for(int i = 0; i < fields.length; i++) {
+            Object fieldValue = ReflectUtil.getObjectFieldValue(data, fields[i]);
+            String fieldName = fields[i].getName();
+            fieldNames[i + 2] = fieldName;
+            if(fieldValue != null) {
+                // We need to handle special case here like fieldValue type or some restricted fields
+                values.put(fieldName, fieldValue.toString());
+            }
+        }
+        values.put("mongoid", data.getMongoID());
 
-        long insertId = database.insert(CategoryDatabaseHelper.TABLE_NAME, null,
+        // 2. Insert in DB
+        String tableName = ReflectUtil.getDatabaseTableName(data);
+        long insertId = database.insert(tableName, null,
                 values);
+        Log.d(TAG, "Inserted data "+data.toString()+ " id= "+insertId);
 
-        Cursor cursor = database.query(CategoryDatabaseHelper.TABLE_NAME,
-                CategoryDatabaseHelper.ALL_COLUMNS, CategoryDatabaseHelper.COLUMN_ID + " = " + insertId, null,
+        // 3. Get & return created data
+        Cursor cursor = database.query(tableName,
+                fieldNames, "id = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
-        Category newCategory = cursorToCategory(cursor);
-        cursor.close();
-        return newCategory;
+        if(cursor != null) {
+            data = cursorToData(cursor, data.getClass());
+        }
+
+        return data;
     }
 
-    public Author createAuthor(Author author) {
-        ContentValues values = new ContentValues();
-
-        values.put(AuthorDatabaseHelper.COLUMN_MONGOID, author.getMongoID());
-        values.put(AuthorDatabaseHelper.COLUMN_FULLNAME, author.getFullname());
-        values.put(AuthorDatabaseHelper.COLUMN_LINK, author.getLink());
-        long insertId = database.insert(AuthorDatabaseHelper.TABLE_NAME, null,
-                values);
-
-        Cursor cursor = database.query(AuthorDatabaseHelper.TABLE_NAME,
-                AuthorDatabaseHelper.ALL_COLUMNS, AuthorDatabaseHelper.COLUMN_ID + " = " + insertId, null,
-                null, null, null);
-        cursor.moveToFirst();
-        Author newAuthor = cursorToAuthor(cursor);
-        cursor.close();
-        return newAuthor;
-    }
-
-    public List<Author> getAllAuthors() {
+    /*public List<Author> getAllAuthors() {
         List<Author> authors = new ArrayList<Author>();
 
         Cursor cursor = database.query(AuthorDatabaseHelper.TABLE_NAME,
@@ -82,34 +83,50 @@ public class DataAccess {
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            Author author = cursorToAuthor(cursor);
+            Author author = cursorToData(cursor);
             authors.add(author);
             cursor.moveToNext();
         }
         // make sure to close the cursor
         cursor.close();
         return authors;
+    }*/
+
+
+    private AppData cursorToData(Cursor cursor, Class c) {
+        AppData data = null;
+        try {
+           data = (AppData)c.newInstance();
+        } catch( Exception e) {
+            Log.d(TAG, "Cannot instanciate class " + c.getSimpleName().toString());
+        }
+        Log.d(TAG, "Column count -> "+cursor.getColumnCount());
+        Field[] fields = ReflectUtil.getObjectFields(data);
+        data.setId(cursor.getLong(0));
+        data.setMongoID(cursor.getString(1));
+        for(int i = 0; i< fields.length; i++) {
+            Field f = fields[i];
+            Object fieldValue = null;
+            switch(cursor.getType(i + 2)) {
+                case Cursor.FIELD_TYPE_BLOB:
+                    fieldValue = cursor.getBlob(i + 2);
+                    break;
+                case Cursor.FIELD_TYPE_FLOAT:
+                    fieldValue = cursor.getFloat(i + 2);
+                    break;
+                case Cursor.FIELD_TYPE_INTEGER:
+                    fieldValue = cursor.getInt(i + 2);
+                    break;
+                case Cursor.FIELD_TYPE_STRING:
+                    fieldValue = cursor.getString(i + 2);
+                    break;
+                case Cursor.FIELD_TYPE_NULL:
+                    break;
+
+            }
+            ReflectUtil.setObjectFieldValue(data, f, fieldValue);
+        }
+        return data;
     }
 
-
-    private Author cursorToAuthor(Cursor cursor) {
-        Author author = new Author();
-        author.setId(cursor.getLong(0));
-        author.setFullname(cursor.getString(1));
-        author.setLink(cursor.getString(2));
-        return author;
-    }
-
-    private Category cursorToCategory(Cursor cursor) {
-        Category category = new Category();
-        category.setId(cursor.getLong(0));
-        category.setTid(cursor.getInt(1));
-        category.setTitle(cursor.getString(2));
-        category.setDescription(cursor.getString(3));
-        category.setImageURL(cursor.getString(4));
-        category.setActive(cursor.getInt(5) == 0 ? false : true);
-        // TODO subCategories
-
-        return category;
-    }
 }
