@@ -58,6 +58,7 @@ public class MainActivity extends ActionBarActivity {
 
         Author author = new Author();
         author.setFullname("Didier");
+        author.setMongoID("ejorje24234");
         author.setLink("http://www.jaimelessaucisses.com");
 
         DataAccess da = new DataAccess(this);

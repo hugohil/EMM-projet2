@@ -8,13 +8,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class AppData {
 
     @JsonProperty("_id")
+    private String mongoID;
+
     private Long id;
 
     public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = Long.parseLong(id);
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getMongoID() {
+        return mongoID;
+    }
+
+    public void setMongoID(String mongoID) {
+        this.mongoID = mongoID;
     }
 }
