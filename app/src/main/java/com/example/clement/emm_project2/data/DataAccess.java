@@ -82,8 +82,6 @@ public class DataAccess {
                 SubCategoryDatabaseHelper.ALL_COLUMNS, SubCategoryDatabaseHelper.COLUMN_ID + " = " + insertId, null,
                 null, null, null);
         cursor.close();
-
-        Log.d(TAG, "subcat saved in DB.");
     }
 
     public Author createAuthor(Author author) {

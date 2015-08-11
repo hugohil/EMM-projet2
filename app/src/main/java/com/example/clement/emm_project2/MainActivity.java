@@ -5,8 +5,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.clement.emm_project2.adapters.CatListAdapter;
 import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.Author;
 import com.example.clement.emm_project2.model.Category;
@@ -21,62 +23,56 @@ import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
     private final String TAG = MainActivity.class.getSimpleName();
-    private List<Category> categories = new ArrayList<Category>();
+    private List<Category> categories;
+    private ListView listView;
+    private CatListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ServerHandler server = new ServerHandler(this);
-        // TODO: this is async so we need to add a loader or something
+        listView = (ListView) findViewById(R.id.act_main_listView);
+        categories = new ArrayList<Category>();
+        adapter = new CatListAdapter(this, categories);
 
+        ServerHandler server = new ServerHandler(this);
         server.getCategories(new ResponseHandler() {
             @Override
             public void onSuccess(Object datas) {
-                // Log.d(TAG, datas.toString());
-                ObjectMapper mapper = new ObjectMapper();
-                JSONArray json = (JSONArray) datas;
-                try {
-                    DataAccess da = new DataAccess(getBaseContext());
-                    for (int i = 0; i < json.length(); i++) {
-                        da.open();
-                        Category cat = mapper.readValue(json.getJSONObject(i).toString(), Category.class);
-                        categories.add(cat);
-                        da.createCategory(cat);
-                        Log.d(TAG, "category created");
-                        da.close();
-                    }
-                    Log.d(TAG, "size: " + categories.size());
-                } catch (Exception error) {
-                    Log.e(TAG, error.toString());
-                }
+                parseJSONDatas((JSONArray) datas);
             }
 
             @Override
             public void onError(String error) {
                 Log.e(TAG, error);
-                Toast toast = Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT);
-                toast.show();
+                Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
             }
         });
 
-        Author author = new Author();
-        author.setFullname("Didier");
-        author.setMongoID("ejorj24234");
-        author.setLink("http://www.jaimelessaucisses.com");
-
-
-        DataAccess da = new DataAccess(this);
-        da.open();
-        Author newAuthor = da.createAuthor(author);
-        Log.d(TAG, "NEW AUTHOR -> "+newAuthor.getFullname());
-        Log.d(TAG, "Created Author");
-        Log.d(TAG, "Getting all authors...");
-        List<Author> authors = da.getAllAuthors();
-        Log.d(TAG, "ALL AUTHORS ->"+authors);
-        da.close();
+        // populateListView(categories);
     }
+
+    private void parseJSONDatas(JSONArray json){
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            DataAccess da = new DataAccess(getBaseContext());
+            for (int i = 0; i < json.length(); i++) {
+                da.open();
+                Category cat = mapper.readValue(json.getJSONObject(i).toString(), Category.class);
+                categories.add(cat);
+                da.createCategory(cat);
+                da.close();
+            }
+            adapter.notifyDataSetChanged();
+        } catch (Exception error) {
+            Toast.makeText(getBaseContext(), error.toString(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // private void populateListView(List<Category> catList){
+        // adapter.notifyDataSetChanged();
+    // }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
