@@ -10,12 +10,10 @@ import com.example.clement.emm_project2.database.AuthorDatabaseHelper;
 import com.example.clement.emm_project2.database.CategoryDatabaseHelper;
 import com.example.clement.emm_project2.database.DatabaseHelper;
 import com.example.clement.emm_project2.database.SubCategoryDatabaseHelper;
-import com.example.clement.emm_project2.model.AppData;
 import com.example.clement.emm_project2.model.Author;
 import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.model.SubCategory;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

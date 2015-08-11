@@ -1,7 +1,7 @@
 package com.example.clement.emm_project2;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -61,20 +61,21 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        // Author author = new Author();
-        // author.setFullname("Didier");
-        // author.setMongoID("ejorj24234");
-        // author.setLink("http://www.jaimelessaucisses.com");
+        Author author = new Author();
+        author.setFullname("Didier");
+        author.setMongoID("ejorj24234");
+        author.setLink("http://www.jaimelessaucisses.com");
 
-        // DataAccess da = new DataAccess(this);
-        // da.open();
-        // da.createAuthor(author);
 
-        // Log.d(TAG, "Created first author !");
-        // Log.d(TAG, "Getting all authors...");
-        // List<Author> authors = da.getAllAuthors();
-        // Log.d(TAG, "ALL AUTHORS ->"+authors);
-        // da.close();
+        DataAccess da = new DataAccess(this);
+        da.open();
+        Author newAuthor = da.createAuthor(author);
+        Log.d(TAG, "NEW AUTHOR -> "+newAuthor.getFullname());
+        Log.d(TAG, "Created Author");
+        Log.d(TAG, "Getting all authors...");
+        List<Author> authors = da.getAllAuthors();
+        Log.d(TAG, "ALL AUTHORS ->"+authors);
+        da.close();
     }
 
     @Override
