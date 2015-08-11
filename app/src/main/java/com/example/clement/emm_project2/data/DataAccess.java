@@ -5,18 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.provider.UserDictionary;
-import android.util.Log;
 
 import com.example.clement.emm_project2.contentprovider.AppContentProvider;
 import com.example.clement.emm_project2.database.AuthorDatabaseHelper;
 import com.example.clement.emm_project2.database.CategoryDatabaseHelper;
 import com.example.clement.emm_project2.database.DatabaseHelper;
-import com.example.clement.emm_project2.model.AppData;
 import com.example.clement.emm_project2.model.Author;
 import com.example.clement.emm_project2.model.Category;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +42,6 @@ public class DataAccess {
     }
 
     public Category createCategory(Category category) {
-        // TODO Refactor with contentProvider.insert
         ContentValues values = new ContentValues();
 
         values.put(CategoryDatabaseHelper.COLUMN_MONGOID, category.getMongoID());
@@ -56,12 +51,19 @@ public class DataAccess {
         values.put(CategoryDatabaseHelper.COLUMN_IMAGEURL, category.getImageURL());
         values.put(CategoryDatabaseHelper.COLUMN_SUBCATEGORIES, category.getJSONSubCategories());
 
-        long insertId = database.insert(CategoryDatabaseHelper.TABLE_NAME, null,
-                values);
+        Uri uri = context.getContentResolver().insert(
+                AppContentProvider.CONTENT_URI_CATEGORIES,
+                values
+        );
 
-        Cursor cursor = database.query(CategoryDatabaseHelper.TABLE_NAME,
-                CategoryDatabaseHelper.ALL_COLUMNS, CategoryDatabaseHelper.COLUMN_ID + " = " + insertId, null,
-                null, null, null);
+        Cursor cursor = context.getContentResolver().query(
+                Uri.parse(AppContentProvider.CONTENT_URI_CATEGORIES + "/#" + uri.getLastPathSegment()),
+                CategoryDatabaseHelper.ALL_COLUMNS,
+                null,
+                null,
+                null
+        );
+
         cursor.moveToFirst();
         Category newCategory = cursorToCategory(cursor);
         cursor.close();
@@ -81,11 +83,11 @@ public class DataAccess {
         );
 
         Cursor cursor = context.getContentResolver().query(
-            Uri.parse(AppContentProvider.CONTENT_URI_AUTHORS + "/#" + uri.getLastPathSegment()),
-            AuthorDatabaseHelper.ALL_COLUMNS,
-            null,
-            null,
-            null
+                Uri.parse(AppContentProvider.CONTENT_URI_AUTHORS + "/#" + uri.getLastPathSegment()),
+                AuthorDatabaseHelper.ALL_COLUMNS,
+                null,
+                null,
+                null
         );
 
         cursor.moveToFirst();
@@ -114,6 +116,28 @@ public class DataAccess {
         // make sure to close the cursor
         cursor.close();
         return authors;
+    }
+
+    public List<Category> getAllCategories() {
+        List<Category> categories = new ArrayList<Category>();
+
+        // Getting datas from contentProvider
+        Cursor cursor = context.getContentResolver().query(
+                AppContentProvider.CONTENT_URI_CATEGORIES,   // The content URI of the words table
+                CategoryDatabaseHelper.ALL_COLUMNS,                        // The columns to return for each row
+                null,                     // Selection criteria
+                null,                     // Selection criteria
+                null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Category category = cursorToCategory(cursor);
+            categories.add(category);
+            cursor.moveToNext();
+        }
+        // make sure to close the cursor
+        cursor.close();
+        return categories;
     }
 
 

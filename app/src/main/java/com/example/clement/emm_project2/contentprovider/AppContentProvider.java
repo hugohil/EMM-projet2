@@ -8,14 +8,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.example.clement.emm_project2.database.AuthorDatabaseHelper;
 import com.example.clement.emm_project2.database.CategoryDatabaseHelper;
 import com.example.clement.emm_project2.database.DatabaseHelper;
-import com.example.clement.emm_project2.model.Author;
-
-import org.apache.http.auth.AUTH;
 
 import java.util.Arrays;
 import java.util.HashSet;
