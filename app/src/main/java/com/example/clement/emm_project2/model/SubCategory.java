@@ -71,4 +71,8 @@ public class SubCategory extends AppData{
     public void setV(String v) {
         this.v = v;
     }
+
+    public boolean getActive() {
+        return this.active;
+    }
 }

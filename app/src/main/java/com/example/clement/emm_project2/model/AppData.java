@@ -12,14 +12,14 @@ public class AppData {
     private String mongoID;
 
     @JsonIgnore
-    private Long id;
+    private int id;
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
     @JsonIgnore
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
