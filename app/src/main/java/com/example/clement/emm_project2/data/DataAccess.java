@@ -39,11 +39,12 @@ public class DataAccess {
     public Category createCategory(Category category) {
         ContentValues values = new ContentValues();
 
+        values.put(CategoryDatabaseHelper.COLUMN_MONGOID, category.getMongoID());
         values.put(CategoryDatabaseHelper.COLUMN_TITLE, category.getTitle());
         values.put(CategoryDatabaseHelper.COLUMN_DESCRIPTION, category.getDescription());
         values.put(CategoryDatabaseHelper.COLUMN_ACTIVE, category.getActive());
         values.put(CategoryDatabaseHelper.COLUMN_IMAGEURL, category.getImageURL());
-        /*values.put(CategoryDatabaseHelper.COLUMN_SUBCATEGORIES, category.getSubCategories());*/
+        values.put(CategoryDatabaseHelper.COLUMN_SUBCATEGORIES, category.getJSONSubCategories());
 
         long insertId = database.insert(CategoryDatabaseHelper.TABLE_NAME, null,
                 values);

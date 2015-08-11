@@ -1,5 +1,6 @@
 package com.example.clement.emm_project2.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -10,12 +11,14 @@ public class AppData {
     @JsonProperty("_id")
     private String mongoID;
 
+    @JsonIgnore
     private Long id;
 
     public Long getId() {
         return id;
     }
 
+    @JsonIgnore
     public void setId(Long id) {
         this.id = id;
     }

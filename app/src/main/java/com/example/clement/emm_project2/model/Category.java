@@ -1,6 +1,10 @@
 package com.example.clement.emm_project2.model;
 
+import android.util.Log;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -8,6 +12,7 @@ import java.util.List;
  * Created by Clement on 10/08/15.
  */
 public class Category extends AppData{
+    private final String TAG = Category.class.getSimpleName();
 
     @JsonProperty("tid")
     private int tid;
@@ -80,6 +85,16 @@ public class Category extends AppData{
 
     public void setSubCategories(List<SubCategory> subCategories) {
         this.subCategories = subCategories;
+    }
+
+    public String getJSONSubCategories(){
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(this.getSubCategories());
+        } catch (JsonProcessingException e){
+            Log.d(TAG, e.toString());
+            return null;
+        }
     }
 
     public String getV() {

@@ -38,9 +38,14 @@ public class MainActivity extends ActionBarActivity {
                 ObjectMapper mapper = new ObjectMapper();
                 JSONArray json = (JSONArray) datas;
                 try {
+                    DataAccess da = new DataAccess(getBaseContext());
                     for (int i = 0; i < json.length(); i++) {
+                        da.open();
                         Category cat = mapper.readValue(json.getJSONObject(i).toString(), Category.class);
                         categories.add(cat);
+                        da.createCategory(cat);
+                        Log.d(TAG, "category created");
+                        da.close();
                     }
                     Log.d(TAG, "size: " + categories.size());
                 } catch (Exception error) {
@@ -56,20 +61,20 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        Author author = new Author();
-        author.setFullname("Didier");
-        author.setMongoID("ejorje24234");
-        author.setLink("http://www.jaimelessaucisses.com");
+        // Author author = new Author();
+        // author.setFullname("Didier");
+        // author.setMongoID("ejorj24234");
+        // author.setLink("http://www.jaimelessaucisses.com");
 
-        DataAccess da = new DataAccess(this);
-        da.open();
-        da.createAuthor(author);
+        // DataAccess da = new DataAccess(this);
+        // da.open();
+        // da.createAuthor(author);
 
-        Log.d(TAG, "Created first author !");
-        Log.d(TAG, "Getting all authors...");
-        List<Author> authors = da.getAllAuthors();
-        Log.d(TAG, "ALL AUTHORS ->"+authors);
-        da.close();
+        // Log.d(TAG, "Created first author !");
+        // Log.d(TAG, "Getting all authors...");
+        // List<Author> authors = da.getAllAuthors();
+        // Log.d(TAG, "ALL AUTHORS ->"+authors);
+        // da.close();
     }
 
     @Override
