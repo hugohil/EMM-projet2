@@ -10,7 +10,7 @@ public class CategoryDatabaseHelper {
     public static final String COLUMN_TID = "tid";
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_DESCRIPTION = "description";
-    public static final String COLUMN_IMAGEURL = "image_url";
+    public static final String COLUMN_IMAGEURL = "imageURL";
     public static final String COLUMN_ACTIVE = "active";
     public static final String COLUMN_SUBCATEGORIES = "subcategories";
 
@@ -36,6 +36,6 @@ public class CategoryDatabaseHelper {
             + COLUMN_DESCRIPTION + " text not null, "
             + COLUMN_IMAGEURL + " text, "
             + COLUMN_SUBCATEGORIES + " blob, "
-            + COLUMN_ACTIVE + " integer, "
+            + COLUMN_ACTIVE + " integer "
             +");";
 }

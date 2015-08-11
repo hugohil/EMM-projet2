@@ -6,9 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Created by Clement on 10/08/15.
  */
 public class SubCategory extends AppData{
-    @JsonProperty("_id")
-    private Long id;
-
     @JsonProperty("tid")
     private int tid;
 
