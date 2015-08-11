@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.clement.emm_project2.data.DataAccess;
+import com.example.clement.emm_project2.model.AppData;
 import com.example.clement.emm_project2.model.Author;
 import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.server.ResponseHandler;
@@ -70,6 +71,8 @@ public class MainActivity extends ActionBarActivity {
         DataAccess da = new DataAccess(this);
         da.open();
         Author newAuthor2 = (Author) da.createData(author);
+        List<Category> categories = da.getAllData(Category.class);
+        Log.d(TAG, "Categories list size = "+categories.size());
         da.close();
     }
 

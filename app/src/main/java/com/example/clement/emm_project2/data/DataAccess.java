@@ -9,10 +9,13 @@ import android.util.Log;
 import com.example.clement.emm_project2.database.DatabaseHelper;
 import com.example.clement.emm_project2.database.SubCategoryDatabaseHelper;
 import com.example.clement.emm_project2.model.AppData;
+import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.model.SubCategory;
 import com.example.clement.emm_project2.util.ReflectUtil;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Clement on 10/08/15.
@@ -70,6 +73,38 @@ public class DataAccess {
         return data;
     }
 
+    public <T> List<T> getAllData(Class c) {
+        List<T> datas = new ArrayList<>();
+        T data = null;
+        try {
+           data = (T)c.newInstance();
+        } catch (Exception e) {
+            Log.d(TAG, e.getMessage());
+        }
+
+        Field[] fields = ReflectUtil.getObjectFields(data);
+        String[] fieldNames = new String[fields.length + 2];
+        fieldNames[0] = "id";
+        fieldNames[1] = "mongoid";
+        for(int i = 0; i < fields.length; i++) {
+            String fieldName = fields[i].getName();
+            fieldNames[i + 2] = fieldName;
+        }
+
+        Cursor cursor = database.query(ReflectUtil.getDatabaseTableName(data),
+                fieldNames, null, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            data = cursorToData(cursor, c);
+            datas.add(data);
+            cursor.moveToNext();
+        }
+        // make sure to close the cursor
+        cursor.close();
+        return datas;
+
+    }
+
     public void createSubCat(SubCategory sub, String catID){
         ContentValues values = new ContentValues();
 
@@ -109,14 +144,13 @@ public class DataAccess {
         return authors;
     }*/
 
-    private AppData cursorToData(Cursor cursor, Class c) {
+    private <T> T cursorToData(Cursor cursor, Class c) {
         AppData data = null;
         try {
            data = (AppData)c.newInstance();
         } catch( Exception e) {
             Log.d(TAG, "Cannot instanciate class " + c.getSimpleName().toString());
         }
-        Log.d(TAG, "Column count -> "+cursor.getColumnCount());
         Field[] fields = ReflectUtil.getObjectFields(data);
         data.setId(cursor.getInt(0));
         data.setMongoID(cursor.getString(1));
@@ -142,6 +176,6 @@ public class DataAccess {
             }
             ReflectUtil.setObjectFieldValue(data, f, fieldValue);
         }
-        return data;
+        return (T)data;
     }
 }
