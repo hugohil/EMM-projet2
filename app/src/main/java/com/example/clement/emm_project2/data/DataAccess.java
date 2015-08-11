@@ -6,25 +6,21 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.clement.emm_project2.database.AuthorDatabaseHelper;
-import com.example.clement.emm_project2.database.CategoryDatabaseHelper;
 import com.example.clement.emm_project2.database.DatabaseHelper;
+import com.example.clement.emm_project2.database.SubCategoryDatabaseHelper;
 import com.example.clement.emm_project2.model.AppData;
-import com.example.clement.emm_project2.model.Author;
-import com.example.clement.emm_project2.model.Category;
+import com.example.clement.emm_project2.model.SubCategory;
 import com.example.clement.emm_project2.util.ReflectUtil;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Clement on 10/08/15.
  */
 public class DataAccess {
-    private final String TAG = DataAccess.class.getSimpleName();
     private SQLiteDatabase database;
     private DatabaseHelper dbHelper;
+    private final String TAG = DataAccess.class.getSimpleName();
 
     public DataAccess(Context context) {
         dbHelper = new DatabaseHelper(context);
@@ -71,9 +67,30 @@ public class DataAccess {
         if(cursor != null) {
             data = cursorToData(cursor, data.getClass());
         }
-
         return data;
     }
+
+    public void createSubCat(SubCategory sub, String catID){
+        ContentValues values = new ContentValues();
+
+        values.put(SubCategoryDatabaseHelper.COLUMN_MONGOID, sub.getMongoID());
+        values.put(SubCategoryDatabaseHelper.COLUMN_TITLE, sub.getTitle());
+        values.put(SubCategoryDatabaseHelper.COLUMN_DESCRIPTION, sub.getDescription());
+        values.put(SubCategoryDatabaseHelper.COLUMN_ACTIVE, sub.getActive());
+        values.put(SubCategoryDatabaseHelper.COLUMN_IMAGEURL, sub.getImageURL());
+        values.put(SubCategoryDatabaseHelper.COLUMN_CATID, catID);
+
+        long insertId = database.insert(SubCategoryDatabaseHelper.TABLE_NAME, null,
+                values);
+
+        Cursor cursor = database.query(SubCategoryDatabaseHelper.TABLE_NAME,
+                SubCategoryDatabaseHelper.ALL_COLUMNS, SubCategoryDatabaseHelper.COLUMN_ID + " = " + insertId, null,
+                null, null, null);
+        cursor.close();
+
+        Log.d(TAG, "subcat saved in DB.");
+    }
+
 
     /*public List<Author> getAllAuthors() {
         List<Author> authors = new ArrayList<Author>();
@@ -92,7 +109,6 @@ public class DataAccess {
         return authors;
     }*/
 
-
     private AppData cursorToData(Cursor cursor, Class c) {
         AppData data = null;
         try {
@@ -102,7 +118,7 @@ public class DataAccess {
         }
         Log.d(TAG, "Column count -> "+cursor.getColumnCount());
         Field[] fields = ReflectUtil.getObjectFields(data);
-        data.setId(cursor.getLong(0));
+        data.setId(cursor.getInt(0));
         data.setMongoID(cursor.getString(1));
         for(int i = 0; i< fields.length; i++) {
             Field f = fields[i];
@@ -128,5 +144,4 @@ public class DataAccess {
         }
         return data;
     }
-
 }
