@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class AppData {
 
     @JsonProperty("_id")
+    private String mongoID;
+
     private Long id;
 
     public Long getId() {
@@ -16,5 +18,13 @@ public class AppData {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getMongoID() {
+        return mongoID;
+    }
+
+    public void setMongoID(String mongoID) {
+        this.mongoID = mongoID;
     }
 }

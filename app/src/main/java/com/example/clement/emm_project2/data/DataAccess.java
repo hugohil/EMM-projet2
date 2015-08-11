@@ -60,6 +60,7 @@ public class DataAccess {
     public Author createAuthor(Author author) {
         ContentValues values = new ContentValues();
 
+        values.put(AuthorDatabaseHelper.COLUMN_MONGOID, author.getMongoID());
         values.put(AuthorDatabaseHelper.COLUMN_FULLNAME, author.getFullname());
         values.put(AuthorDatabaseHelper.COLUMN_LINK, author.getLink());
         long insertId = database.insert(AuthorDatabaseHelper.TABLE_NAME, null,

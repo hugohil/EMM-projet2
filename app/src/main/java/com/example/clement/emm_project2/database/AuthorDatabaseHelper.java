@@ -8,13 +8,15 @@ import android.graphics.Picture;
 public class AuthorDatabaseHelper {
 
     public static final String TABLE_NAME = "author";
-    public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_MONGOID = "_id";
     public static final String COLUMN_FULLNAME = "fullname";
     public static final String COLUMN_LINK = "link";
     public static final String COLUMN_PICTURE = "picture";
 
     public static final String[] ALL_COLUMNS = {
             AuthorDatabaseHelper.COLUMN_ID,
+            AuthorDatabaseHelper.COLUMN_MONGOID,
             AuthorDatabaseHelper.COLUMN_FULLNAME,
             AuthorDatabaseHelper.COLUMN_LINK
     };
@@ -22,6 +24,7 @@ public class AuthorDatabaseHelper {
     public static final String CREATE_TABLE_STATEMENT = "create table "
             + TABLE_NAME + "("
             + COLUMN_ID + " integer primary key autoincrement, "
+            + COLUMN_MONGOID + " text not null, "
             + COLUMN_FULLNAME +" text not null, "
             + COLUMN_LINK +" text,"
             + COLUMN_PICTURE+ " blob"
