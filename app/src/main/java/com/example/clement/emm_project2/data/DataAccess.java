@@ -4,9 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 
-import com.example.clement.emm_project2.contentprovider.AppContentProvider;
 import com.example.clement.emm_project2.database.AuthorDatabaseHelper;
 import com.example.clement.emm_project2.database.CategoryDatabaseHelper;
 import com.example.clement.emm_project2.database.DatabaseHelper;
@@ -21,15 +19,10 @@ import java.util.List;
  */
 public class DataAccess {
 
-    private final String TAG = DataAccess.class.getSimpleName();
-
-    private Context context;
-
     private SQLiteDatabase database;
     private DatabaseHelper dbHelper;
 
     public DataAccess(Context context) {
-        this.context = context;
         dbHelper = new DatabaseHelper(context);
     }
 
@@ -51,19 +44,12 @@ public class DataAccess {
         values.put(CategoryDatabaseHelper.COLUMN_IMAGEURL, category.getImageURL());
         values.put(CategoryDatabaseHelper.COLUMN_SUBCATEGORIES, category.getJSONSubCategories());
 
-        Uri uri = context.getContentResolver().insert(
-                AppContentProvider.CONTENT_URI_CATEGORIES,
-                values
-        );
+        long insertId = database.insert(CategoryDatabaseHelper.TABLE_NAME, null,
+                values);
 
-        Cursor cursor = context.getContentResolver().query(
-                Uri.parse(AppContentProvider.CONTENT_URI_CATEGORIES + "/#" + uri.getLastPathSegment()),
-                CategoryDatabaseHelper.ALL_COLUMNS,
-                null,
-                null,
-                null
-        );
-
+        Cursor cursor = database.query(CategoryDatabaseHelper.TABLE_NAME,
+                CategoryDatabaseHelper.ALL_COLUMNS, CategoryDatabaseHelper.COLUMN_ID + " = " + insertId, null,
+                null, null, null);
         cursor.moveToFirst();
         Category newCategory = cursorToCategory(cursor);
         cursor.close();
@@ -76,20 +62,12 @@ public class DataAccess {
         values.put(AuthorDatabaseHelper.COLUMN_MONGOID, author.getMongoID());
         values.put(AuthorDatabaseHelper.COLUMN_FULLNAME, author.getFullname());
         values.put(AuthorDatabaseHelper.COLUMN_LINK, author.getLink());
+        long insertId = database.insert(AuthorDatabaseHelper.TABLE_NAME, null,
+                values);
 
-        Uri uri = context.getContentResolver().insert(
-                AppContentProvider.CONTENT_URI_AUTHORS,
-                values
-        );
-
-        Cursor cursor = context.getContentResolver().query(
-                Uri.parse(AppContentProvider.CONTENT_URI_AUTHORS + "/#" + uri.getLastPathSegment()),
-                AuthorDatabaseHelper.ALL_COLUMNS,
-                null,
-                null,
-                null
-        );
-
+        Cursor cursor = database.query(AuthorDatabaseHelper.TABLE_NAME,
+                AuthorDatabaseHelper.ALL_COLUMNS, AuthorDatabaseHelper.COLUMN_ID + " = " + insertId, null,
+                null, null, null);
         cursor.moveToFirst();
         Author newAuthor = cursorToAuthor(cursor);
         cursor.close();
@@ -99,13 +77,8 @@ public class DataAccess {
     public List<Author> getAllAuthors() {
         List<Author> authors = new ArrayList<Author>();
 
-        // Getting datas from contentProvider
-        Cursor cursor = context.getContentResolver().query(
-                AppContentProvider.CONTENT_URI_AUTHORS,   // The content URI of the words table
-                AuthorDatabaseHelper.ALL_COLUMNS,                        // The columns to return for each row
-                null,                     // Selection criteria
-                null,                     // Selection criteria
-                null);
+        Cursor cursor = database.query(AuthorDatabaseHelper.TABLE_NAME,
+                AuthorDatabaseHelper.ALL_COLUMNS, null, null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -116,28 +89,6 @@ public class DataAccess {
         // make sure to close the cursor
         cursor.close();
         return authors;
-    }
-
-    public List<Category> getAllCategories() {
-        List<Category> categories = new ArrayList<Category>();
-
-        // Getting datas from contentProvider
-        Cursor cursor = context.getContentResolver().query(
-                AppContentProvider.CONTENT_URI_CATEGORIES,   // The content URI of the words table
-                CategoryDatabaseHelper.ALL_COLUMNS,                        // The columns to return for each row
-                null,                     // Selection criteria
-                null,                     // Selection criteria
-                null);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            Category category = cursorToCategory(cursor);
-            categories.add(category);
-            cursor.moveToNext();
-        }
-        // make sure to close the cursor
-        cursor.close();
-        return categories;
     }
 
 
