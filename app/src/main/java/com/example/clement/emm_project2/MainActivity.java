@@ -1,5 +1,6 @@
 package com.example.clement.emm_project2;
 
+import android.database.Cursor;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -63,9 +64,9 @@ public class MainActivity extends ActionBarActivity {
 
         DataAccess da = new DataAccess(this);
         da.open();
-        da.createAuthor(author);
-
-        Log.d(TAG, "Created first author !");
+        Author newAuthor = da.createAuthor(author);
+        Log.d(TAG, "NEW AUTHOR -> "+newAuthor.getFullname());
+        Log.d(TAG, "Created Author");
         Log.d(TAG, "Getting all authors...");
         List<Author> authors = da.getAllAuthors();
         Log.d(TAG, "ALL AUTHORS ->"+authors);

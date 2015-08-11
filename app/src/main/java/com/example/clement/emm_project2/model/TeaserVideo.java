@@ -5,7 +5,7 @@ import android.media.Image;
 /**
  * Created by Clement on 10/08/15.
  */
-public class TeaserVideo {
+public class TeaserVideo extends AppData {
 
     private String videoUrl;
 
