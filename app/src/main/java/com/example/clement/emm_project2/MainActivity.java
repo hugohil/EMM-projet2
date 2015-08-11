@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.clement.emm_project2.adapters.CatListAdapter;
 import com.example.clement.emm_project2.data.DataAccess;
+import com.example.clement.emm_project2.model.AppData;
 import com.example.clement.emm_project2.model.Author;
 import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.server.ResponseHandler;
@@ -49,8 +50,6 @@ public class MainActivity extends ActionBarActivity {
                 Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
             }
         });
-
-        // populateListView(categories);
     }
 
     private void parseJSONDatas(JSONArray json){
@@ -61,7 +60,7 @@ public class MainActivity extends ActionBarActivity {
                 da.open();
                 Category cat = mapper.readValue(json.getJSONObject(i).toString(), Category.class);
                 categories.add(cat);
-                da.createCategory(cat);
+                da.createData(cat);
                 da.close();
             }
             adapter.notifyDataSetChanged();
@@ -69,10 +68,6 @@ public class MainActivity extends ActionBarActivity {
             Toast.makeText(getBaseContext(), error.toString(), Toast.LENGTH_SHORT).show();
         }
     }
-
-    // private void populateListView(List<Category> catList){
-        // adapter.notifyDataSetChanged();
-    // }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

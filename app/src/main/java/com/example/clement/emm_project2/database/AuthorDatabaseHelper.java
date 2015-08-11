@@ -9,7 +9,7 @@ public class AuthorDatabaseHelper {
 
     public static final String TABLE_NAME = "author";
     public static final String COLUMN_ID = "id";
-    public static final String COLUMN_MONGOID = "_id";
+    public static final String COLUMN_MONGOID = "mongoid";
     public static final String COLUMN_FULLNAME = "fullname";
     public static final String COLUMN_LINK = "link";
     public static final String COLUMN_PICTURE = "picture";

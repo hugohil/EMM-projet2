@@ -1,7 +1,8 @@
 package com.example.clement.emm_project2.model;
 
 import android.media.Image;
-import android.provider.ContactsContract;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Map;
 
@@ -10,18 +11,19 @@ import java.util.Map;
  */
 public class Author extends AppData {
 
-    private String fullname;
+    @JsonProperty("fullname")
+    private String fullName;
 
     private String link;
 
     private Map<String, Image> picture;
 
-    public String getFullname() {
-        return fullname;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
+    public void setFullName(String fullname) {
+        this.fullName = fullname;
     }
 
     public String getLink() {
@@ -38,5 +40,9 @@ public class Author extends AppData {
 
     public void setPicture(Map<String, Image> picture) {
         this.picture = picture;
+    }
+
+    public String toString() {
+        return "Author = [fullname: "+ this.fullName + ", link: "+ this.link + "]";
     }
 }
