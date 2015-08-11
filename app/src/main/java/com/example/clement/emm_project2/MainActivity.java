@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.clement.emm_project2.data.DataAccess;
+import com.example.clement.emm_project2.model.Author;
 import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.server.ResponseHandler;
 import com.example.clement.emm_project2.server.ServerHandler;
@@ -14,11 +16,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONArray;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
     private final String TAG = MainActivity.class.getSimpleName();
-    private List<Category> categories;
+    private List<Category> categories = new ArrayList<Category>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,29 +31,44 @@ public class MainActivity extends ActionBarActivity {
         ServerHandler server = new ServerHandler(this);
         // TODO: this is async so we need to add a loader or something
 
-        server.getCategories(new ResponseHandler(){
+        server.getCategories(new ResponseHandler() {
             @Override
-            public void onSuccess(Object datas){
+            public void onSuccess(Object datas) {
                 // Log.d(TAG, datas.toString());
                 ObjectMapper mapper = new ObjectMapper();
                 JSONArray json = (JSONArray) datas;
                 try {
-                    for (int i = 0; i < json.length(); i++){
+                    for (int i = 0; i < json.length(); i++) {
                         Category cat = mapper.readValue(json.getJSONObject(i).toString(), Category.class);
                         categories.add(cat);
                     }
-                    Log.d(TAG, "size: "+categories.size());
-                } catch (Exception error){
+                    Log.d(TAG, "size: " + categories.size());
+                } catch (Exception error) {
                     Log.e(TAG, error.toString());
                 }
             }
+
             @Override
-            public void onError(String error){
+            public void onError(String error) {
                 Log.e(TAG, error);
                 Toast toast = Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT);
                 toast.show();
             }
         });
+
+        Author author = new Author();
+        author.setFullname("Didier");
+        author.setLink("http://www.jaimelessaucisses.com");
+
+        DataAccess da = new DataAccess(this);
+        da.open();
+        da.createAuthor(author);
+
+        Log.d(TAG, "Created first author !");
+        Log.d(TAG, "Getting all authors...");
+        List<Author> authors = da.getAllAuthors();
+        Log.d(TAG, "ALL AUTHORS ->"+authors);
+        da.close();
     }
 
     @Override

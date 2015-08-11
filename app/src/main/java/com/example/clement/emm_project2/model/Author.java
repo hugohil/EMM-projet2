@@ -1,13 +1,14 @@
 package com.example.clement.emm_project2.model;
 
 import android.media.Image;
+import android.provider.ContactsContract;
 
 import java.util.Map;
 
 /**
  * Created by Clement on 10/08/15.
  */
-public class Author {
+public class Author extends AppData {
 
     private String fullname;
 

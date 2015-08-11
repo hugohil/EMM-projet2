@@ -7,9 +7,7 @@ import java.util.List;
 /**
  * Created by Clement on 10/08/15.
  */
-public class Category {
-    @JsonProperty("_id")
-    private String id;
+public class Category extends AppData{
 
     @JsonProperty("tid")
     private int tid;
@@ -32,12 +30,12 @@ public class Category {
     @JsonProperty("__v")
     private String v;
 
-    public String getId() {
-        return id;
+    public boolean getActive() {
+        return this.active;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public int getTid() {
@@ -68,10 +66,6 @@ public class Category {
         return active;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
     public String getImageURL() {
         return imageURL;
     }
@@ -94,5 +88,9 @@ public class Category {
 
     public void setV(String v) {
         this.v = v;
+    }
+
+    public String toString() {
+        return "[" + title + " ," + description + "]";
     }
 }

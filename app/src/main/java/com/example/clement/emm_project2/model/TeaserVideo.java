@@ -12,7 +12,7 @@ public class TeaserVideo {
     private Image videoPoster;
 
     private String title;
-
+z
     public String getVideoUrl() {
         return videoUrl;
     }

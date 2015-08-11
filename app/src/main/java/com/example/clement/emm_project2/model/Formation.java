@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Created by Clement on 10/08/15.
  */
-public class Formation {
+public class Formation extends AppData {
     /*
      * Represents a formation item as described in the api doc
      */
