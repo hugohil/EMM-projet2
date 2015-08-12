@@ -27,7 +27,7 @@ public class ServerHandler {
     private final String TAG = ServerHandler.class.getSimpleName();
     private ProgressDialog progress;
 
-    public static final String API_BASE_URL = "http://eas.elephorm.com/api/";
+    public static final String API_BASE_URL = "http://eas.elephorm.com/api/v1/";
 
     public ServerHandler(Context context){
         this.context = context;
@@ -58,7 +58,7 @@ public class ServerHandler {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d(TAG, error.toString());
-                        handler.onError(error.getMessage());
+                        handler.onError(error.toString());
                         progress.hide();
                     }
                 });
