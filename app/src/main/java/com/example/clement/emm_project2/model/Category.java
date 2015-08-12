@@ -12,6 +12,7 @@ import java.util.List;
  * Created by Clement on 10/08/15.
  */
 public class Category extends AppData{
+    private final String TAG = Category.class.getSimpleName();
 
     @JsonProperty("tid")
     private int tid;
@@ -78,20 +79,22 @@ public class Category extends AppData{
         this.imageURL = imageURL;
     }
 
-    public List<SubCategory> getSubCategories() {
-        return subCategories;
-    }
-
-    public void setSubCategories(List<SubCategory> subCategories) {
-        this.subCategories = subCategories;
-    }
-
-    public String getJSONSubCategories(){
+    public String getSubCategories() {
         try {
             ObjectMapper mapper = new ObjectMapper();
-            return mapper.writeValueAsString(this.getSubCategories());
+            return mapper.writeValueAsString(this.subCategories);
         } catch (JsonProcessingException e){
+            Log.d(TAG, e.toString());
             return null;
+        }
+    }
+
+    public void setSubCategories(String subCategories) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            this.subCategories = mapper.readValue(subCategories, List.class);
+        } catch (Exception e){
+            Log.d(TAG, e.toString());
         }
     }
 
