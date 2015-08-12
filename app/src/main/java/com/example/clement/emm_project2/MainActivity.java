@@ -64,8 +64,9 @@ public class MainActivity extends ActionBarActivity {
                 da.createData(cat);
                 da.close();
             }
-            adapter.notifyDataSetChanged();
+            adapter.updateList(categories);
         } catch (Exception error) {
+            Log.e(TAG, error.toString());
             Toast.makeText(getBaseContext(), error.toString(), Toast.LENGTH_SHORT).show();
         }
     }
