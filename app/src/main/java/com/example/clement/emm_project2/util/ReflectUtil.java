@@ -3,9 +3,14 @@ package com.example.clement.emm_project2.util;
 import android.util.Log;
 
 import com.example.clement.emm_project2.data.DataAccess;
+import com.example.clement.emm_project2.model.SubCategory;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -24,7 +29,7 @@ public class ReflectUtil {
         Method m = null;
         Object propertyValue = null;
         try {
-            m = o.getClass().getMethod("get" + StringUtil.capitalize(f.getName()));
+            m = o.getClass().getDeclaredMethod("get" + StringUtil.capitalize(f.getName()));
         } catch(Exception e) {
             Log.e(TAG, "error while trying to get the property '"
                     + f.getName()
@@ -50,12 +55,20 @@ public class ReflectUtil {
 
     public static void setObjectFieldValue(Object o, Field field, Object fieldValue) {
         Method m = null;
+        boolean isFieldList = false;
         try {
-            m = o.getClass().getDeclaredMethod("set" + StringUtil.capitalize(field.getName()), field.getType());
+            if(Collection.class.isAssignableFrom(field.getType())) {
+                // Field type is a List<T>, we need to look for the specific getter
+                // Maybe we'll need to define other special cases here
+                m = o.getClass().getDeclaredMethod("set" + StringUtil.capitalize(field.getName()), TypeReference.class, String.class);
+                isFieldList = true;
+            } else {
+                m = o.getClass().getDeclaredMethod("set" + StringUtil.capitalize(field.getName()), field.getType());
+            }
         } catch(NoSuchMethodException e) {
            Log.e(TAG, "error while trying to get the property '"
                     + field.getName()
-                    + "' getter, maybe the setter name is invalid... \n => "
+                    + "' setter, maybe the setter name is invalid... \n => "
                     + e.getMessage());
         }
         if(m != null) {
@@ -66,7 +79,13 @@ public class ReflectUtil {
                 if(m.getParameterTypes()[0].equals(boolean.class)) {
                     fieldValue = fieldValue == "true" ? true : false;
                 }
-                m.invoke(o, fieldValue);
+                if(isFieldList) {
+                    ParameterizedType type = (ParameterizedType)field.getGenericType();
+                    final Class subType = (Class)type.getActualTypeArguments()[0];
+                    m.invoke(o, new TypeReference<List<SubCategory>> () {},fieldValue);
+                } else {
+                    m.invoke(o, fieldValue);
+                }
             } catch(Exception e) {
                 Log.e(TAG, "error while trying to invoke setter of property '"
                         + field.getName()
