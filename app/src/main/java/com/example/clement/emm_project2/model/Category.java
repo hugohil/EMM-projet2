@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
@@ -12,8 +13,6 @@ import java.util.List;
  * Created by Clement on 10/08/15.
  */
 public class Category extends AppData{
-    private final String TAG = Category.class.getSimpleName();
-
     @JsonProperty("tid")
     private int tid;
 
@@ -84,18 +83,21 @@ public class Category extends AppData{
             ObjectMapper mapper = new ObjectMapper();
             return mapper.writeValueAsString(this.subCategories);
         } catch (JsonProcessingException e){
-            Log.d(TAG, e.toString());
+            Log.d(Category.class.getSimpleName(), e.toString());
             return null;
         }
     }
 
-    public void setSubCategories(String subCategories) {
+    public <T> T setSubCategories(final TypeReference<T> type, String subCategories) {
+        T data = null;
         try {
             ObjectMapper mapper = new ObjectMapper();
-            this.subCategories = mapper.readValue(subCategories, List.class);
+            data = mapper.readValue(subCategories, type);
+            this.subCategories = (List<SubCategory>) data;
         } catch (Exception e){
-            Log.d(TAG, e.toString());
+            Log.d(Category.class.getSimpleName(), e.toString());
         }
+        return data;
     }
 
     public String getV() {

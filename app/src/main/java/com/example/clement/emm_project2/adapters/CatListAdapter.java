@@ -41,6 +41,12 @@ public class CatListAdapter extends BaseAdapter {
         return position;
     }
 
+    public void updateList(List<Category> catList) {
+        this.catList.clear();
+        this.catList.addAll(catList);
+        this.notifyDataSetChanged();
+    }
+
     public View getView(int position, View convertView, ViewGroup parent){
         inflater = (inflater == null) ? (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) : inflater;
         convertView = (convertView == null) ? inflater.inflate(R.layout.category_row, null) : convertView;
