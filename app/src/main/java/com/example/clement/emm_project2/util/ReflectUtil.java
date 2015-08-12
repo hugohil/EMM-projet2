@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.example.clement.emm_project2.data.DataAccess;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 

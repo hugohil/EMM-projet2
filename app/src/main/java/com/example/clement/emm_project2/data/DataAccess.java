@@ -8,15 +8,12 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
 import com.example.clement.emm_project2.database.DatabaseHelper;
-import com.example.clement.emm_project2.database.SubCategoryDatabaseHelper;
 import com.example.clement.emm_project2.model.AppData;
-import com.example.clement.emm_project2.model.SubCategory;
 import com.example.clement.emm_project2.util.ReflectUtil;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Clement on 10/08/15.
