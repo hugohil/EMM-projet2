@@ -14,6 +14,7 @@ public class AppData {
     @JsonIgnore
     private int id;
 
+    @JsonIgnore
     public int getId() {
         return id;
     }

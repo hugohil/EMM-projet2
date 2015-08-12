@@ -70,8 +70,8 @@ public class MainActivity extends ActionBarActivity {
 
         DataAccess da = new DataAccess(this);
         da.open();
-        Author newAuthor2 = (Author) da.createData(author);
-        List<Category> categories = da.getAllData(Category.class);
+        Author newAuthor2 = da.createData(author);
+        List<Category> categories = da.getAllDatas(Category.class);
         Log.d(TAG, "Categories list size = "+categories.size());
         da.close();
     }

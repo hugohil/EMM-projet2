@@ -9,7 +9,6 @@ import android.util.Log;
 import com.example.clement.emm_project2.database.DatabaseHelper;
 import com.example.clement.emm_project2.database.SubCategoryDatabaseHelper;
 import com.example.clement.emm_project2.model.AppData;
-import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.model.SubCategory;
 import com.example.clement.emm_project2.util.ReflectUtil;
 
@@ -37,7 +36,7 @@ public class DataAccess {
         dbHelper.close();
     }
 
-    public AppData createData(AppData data) {
+    public <T extends AppData> T createData(AppData data) {
         // 1. Build ContentValues
         ContentValues values = new ContentValues();
 
@@ -51,6 +50,7 @@ public class DataAccess {
             fieldNames[i + 2] = fieldName;
             if(fieldValue != null) {
                 // We need to handle special case here like fieldValue type or some restricted fields
+//                switch(fieldValue)
                 values.put(fieldName, fieldValue.toString());
             }
         }
@@ -70,10 +70,10 @@ public class DataAccess {
         if(cursor != null) {
             data = cursorToData(cursor, data.getClass());
         }
-        return data;
+        return (T)data;
     }
 
-    public <T> List<T> getAllData(Class c) {
+    public <T extends AppData> List<T> getAllDatas(Class c) {
         List<T> datas = new ArrayList<>();
         T data = null;
         try {
@@ -126,25 +126,7 @@ public class DataAccess {
         Log.d(TAG, "subcat saved in DB.");
     }
 
-
-    /*public List<Author> getAllAuthors() {
-        List<Author> authors = new ArrayList<Author>();
-
-        Cursor cursor = database.query(AuthorDatabaseHelper.TABLE_NAME,
-                AuthorDatabaseHelper.ALL_COLUMNS, null, null, null, null, null);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            Author author = cursorToData(cursor);
-            authors.add(author);
-            cursor.moveToNext();
-        }
-        // make sure to close the cursor
-        cursor.close();
-        return authors;
-    }*/
-
-    private <T> T cursorToData(Cursor cursor, Class c) {
+    private <T extends AppData> T cursorToData(Cursor cursor, Class c) {
         AppData data = null;
         try {
            data = (AppData)c.newInstance();

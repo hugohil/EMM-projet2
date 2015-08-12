@@ -24,33 +24,43 @@ public class Formation extends AppData {
     /*
      * Specific rss feed URL
      */
+    @JsonProperty("guid")
     private String guid;
 
+    @JsonProperty("description")
     private String description;
 
+    @JsonProperty("pubdate")
     private Date pubDate;
 
+    @JsonProperty("link")
     private String link;
 
     /*
      * ean code of the formation (nmuber under barcode)
      */
+    @JsonProperty("ean")
     private String ean;
 
     /*
      * Total duration in seconds
      */
+    @JsonProperty("duration")
     private float duration;
 
+    @JsonProperty("category")
     private Category category;
 
+    @JsonProperty("subcategory")
     private SubCategory subCategory;
 
+    @JsonProperty("image")
     private Image image;
 
     /*
      * Link to QCM page
      */
+    @JsonProperty("qcm")
     private String qcm;
 
     /*
@@ -58,44 +68,55 @@ public class Formation extends AppData {
      * First index: Type (thumbs/Landscapes)
      * Second index: Size (small, medium, big)
      */
+    @JsonProperty("images")
     private Map<String, Map<String, Image>> images;
 
     /*
      * Formation teasing video
      */
+    @JsonProperty("teaser")
     private TeaserVideo teaser;
 
+    @JsonProperty("price")
     private float price;
 
     /*
      * Can be a list of String, let's see the data...
      */
+    @JsonProperty("prerequisites")
     private String prerequisites;
 
     /*
      * Idem
      */
+    @JsonProperty("objectives")
     private String objectives;
 
+    @JsonProperty("authors")
     private List<Author> authors;
 
     /*
      * Ratings of the formation (indexes : average [ average rating ] / Count [ ratings nb ])
      */
+    @JsonProperty("rating")
     private Map<String, Float> rating;
 
     /*
      * Total number of videos in the formation
      */
+    @JsonProperty("videocount")
     private int videoCount;
 
     /*
      * Last formation update date
      */
+    @JsonProperty("updatedAt")
     private Date updatedAt;
 
+    @JsonProperty("updatedAt")
     private boolean active;
 
+    @JsonProperty("items")
     private List<Item> items;
 
 
