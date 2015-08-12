@@ -84,5 +84,17 @@ public class ReflectUtil {
         return o.getClass().getSimpleName().toLowerCase();
     }
 
+    public static String[] getObjectFieldNames(Object o) {
+        Field[] fields = getObjectFields(o);
+        String[] fieldNames = new String[fields.length + 2];
+        fieldNames[0] = "id";
+        fieldNames[1] = "mongoid";
+        for(int i = 0; i < fields.length; i++) {
+            String fieldName = fields[i].getName();
+            fieldNames[i + 2] = fieldName;
+        }
+        return fieldNames;
+    }
+
 
 }

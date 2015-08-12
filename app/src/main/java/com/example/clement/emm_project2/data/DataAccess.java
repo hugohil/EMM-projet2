@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
 import com.example.clement.emm_project2.database.DatabaseHelper;
@@ -15,6 +16,7 @@ import com.example.clement.emm_project2.util.ReflectUtil;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Clement on 10/08/15.
@@ -82,14 +84,7 @@ public class DataAccess {
             Log.d(TAG, e.getMessage());
         }
 
-        Field[] fields = ReflectUtil.getObjectFields(data);
-        String[] fieldNames = new String[fields.length + 2];
-        fieldNames[0] = "id";
-        fieldNames[1] = "mongoid";
-        for(int i = 0; i < fields.length; i++) {
-            String fieldName = fields[i].getName();
-            fieldNames[i + 2] = fieldName;
-        }
+        String[] fieldNames = ReflectUtil.getObjectFieldNames(data);
 
         Cursor cursor = database.query(ReflectUtil.getDatabaseTableName(data),
                 fieldNames, null, null, null, null, null);
@@ -103,25 +98,6 @@ public class DataAccess {
         cursor.close();
         return datas;
 
-    }
-
-    public void createSubCat(SubCategory sub, String catID){
-        ContentValues values = new ContentValues();
-
-        values.put(SubCategoryDatabaseHelper.COLUMN_MONGOID, sub.getMongoID());
-        values.put(SubCategoryDatabaseHelper.COLUMN_TITLE, sub.getTitle());
-        values.put(SubCategoryDatabaseHelper.COLUMN_DESCRIPTION, sub.getDescription());
-        values.put(SubCategoryDatabaseHelper.COLUMN_ACTIVE, sub.getActive());
-        values.put(SubCategoryDatabaseHelper.COLUMN_IMAGEURL, sub.getImageURL());
-        values.put(SubCategoryDatabaseHelper.COLUMN_CATID, catID);
-
-        long insertId = database.insert(SubCategoryDatabaseHelper.TABLE_NAME, null,
-                values);
-
-        Cursor cursor = database.query(SubCategoryDatabaseHelper.TABLE_NAME,
-                SubCategoryDatabaseHelper.ALL_COLUMNS, SubCategoryDatabaseHelper.COLUMN_ID + " = " + insertId, null,
-                null, null, null);
-        cursor.close();
     }
 
     private <T extends AppData> T cursorToData(Cursor cursor, Class c) {
@@ -157,5 +133,56 @@ public class DataAccess {
             ReflectUtil.setObjectFieldValue(data, f, fieldValue);
         }
         return (T)data;
+    }
+
+    public <T extends AppData> T getDataById(Class c, Long id) {
+        T data = null;
+        try {
+            data = (T)c.newInstance();
+        } catch (Exception e) {
+            Log.d(TAG, e.getMessage());
+        }
+        String[] fieldNames = ReflectUtil.getObjectFieldNames(data);
+        String tableName = ReflectUtil.getDatabaseTableName(data);
+        Cursor cursor = database.query(tableName,
+                fieldNames, "id = " + id, null,
+                null, null, null);
+        cursor.moveToFirst();
+        if(cursor != null) {
+            data = cursorToData(cursor, data.getClass());
+        }
+        return (T)data;
+    }
+
+    public <T extends AppData> List<T> findDataWhere(Class c, String... args) {
+        if(args.length % 2 != 0) {
+            throw new IllegalArgumentException("Arguments must be a pair number ! (property, value)");
+        } else {
+            List<T> datas = new ArrayList<T>();
+            T data = null;
+            try {
+                data = (T)c.newInstance();
+            } catch (Exception e) {
+                Log.d(TAG, e.getMessage());
+            }
+            SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+            queryBuilder.setTables(ReflectUtil.getDatabaseTableName(data));
+
+            for(int i = 0; i < args.length; i = i+2) {
+                queryBuilder.appendWhere(args[i]+ " = "+args[i+1]);
+            }
+            String[] fieldNames = ReflectUtil.getObjectFieldNames(data);
+            Cursor cursor = queryBuilder.query(database, fieldNames,null, null, null, null, null);
+
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                data = cursorToData(cursor, c);
+                datas.add(data);
+                cursor.moveToNext();
+            }
+            // make sure to close the cursor
+            cursor.close();
+            return datas;
+        }
     }
 }
