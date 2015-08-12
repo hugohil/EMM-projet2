@@ -74,7 +74,7 @@ public class DataAccess {
     }
 
     public <T extends AppData> List<T> getAllDatas(Class c) {
-        List<T> datas = new ArrayList<>();
+        List<T> datas = new ArrayList<T>();
         T data = null;
         try {
            data = (T)c.newInstance();
@@ -122,8 +122,6 @@ public class DataAccess {
                 SubCategoryDatabaseHelper.ALL_COLUMNS, SubCategoryDatabaseHelper.COLUMN_ID + " = " + insertId, null,
                 null, null, null);
         cursor.close();
-
-        Log.d(TAG, "subcat saved in DB.");
     }
 
     private <T extends AppData> T cursorToData(Cursor cursor, Class c) {

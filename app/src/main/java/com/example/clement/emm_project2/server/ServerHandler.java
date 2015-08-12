@@ -58,7 +58,7 @@ public class ServerHandler {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d(TAG, error.toString());
-                        handler.onError(error.toString());
+                        handler.onError(error.getMessage());
                         progress.hide();
                     }
                 });
