@@ -3,13 +3,10 @@ package com.example.clement.emm_project2.util;
 import android.util.Log;
 
 import com.example.clement.emm_project2.data.DataAccess;
-import com.example.clement.emm_project2.model.SubCategory;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 
@@ -80,9 +77,7 @@ public class ReflectUtil {
                     fieldValue = fieldValue == "true" ? true : false;
                 }
                 if(isFieldList) {
-                    ParameterizedType type = (ParameterizedType)field.getGenericType();
-                    final Class subType = (Class)type.getActualTypeArguments()[0];
-                    m.invoke(o, new TypeReference<List<SubCategory>> () {},fieldValue);
+                    m.invoke(o, new TypeReference<List<Object>> () {},fieldValue);
                 } else {
                     m.invoke(o, fieldValue);
                 }
