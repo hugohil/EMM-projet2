@@ -10,6 +10,7 @@ import android.util.Log;
 import com.example.clement.emm_project2.database.DatabaseHelper;
 import com.example.clement.emm_project2.model.AppData;
 import com.example.clement.emm_project2.util.ReflectUtil;
+import com.example.clement.emm_project2.util.SharedPrefUtil;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -22,9 +23,11 @@ public class DataAccess {
     private SQLiteDatabase database;
     private DatabaseHelper dbHelper;
     private final String TAG = DataAccess.class.getSimpleName();
+    private Context context;
 
     public DataAccess(Context context) {
         dbHelper = new DatabaseHelper(context);
+        context = context;
     }
 
     public void open() {
@@ -49,7 +52,6 @@ public class DataAccess {
             fieldNames[i + 2] = fieldName;
             if(fieldValue != null) {
                 // We need to handle special case here like fieldValue type or some restricted fields
-//                switch(fieldValue)
                 values.put(fieldName, fieldValue.toString());
             }
         }
@@ -61,7 +63,10 @@ public class DataAccess {
                 values);
         Log.d(TAG, "Inserted data "+data.toString()+ " id= "+insertId);
 
-        // 3. Get & return created data
+        // 3. Insert ID in sharedPref
+        SharedPrefUtil.registerDataInCache(data, context);
+
+        // 4. Get & return created data
         Cursor cursor = database.query(tableName,
                 fieldNames, "id = " + insertId, null,
                 null, null, null);

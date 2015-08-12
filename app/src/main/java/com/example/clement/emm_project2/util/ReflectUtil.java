@@ -80,9 +80,7 @@ public class ReflectUtil {
                     fieldValue = fieldValue == "true" ? true : false;
                 }
                 if(isFieldList) {
-                    ParameterizedType type = (ParameterizedType)field.getGenericType();
-                    final Class subType = (Class)type.getActualTypeArguments()[0];
-                    m.invoke(o, new TypeReference<List<SubCategory>> () {},fieldValue);
+                    m.invoke(o, new TypeReference<List<Object>> () {},fieldValue);
                 } else {
                     m.invoke(o, fieldValue);
                 }
