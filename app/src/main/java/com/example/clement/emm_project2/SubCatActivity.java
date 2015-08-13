@@ -1,7 +1,7 @@
 package com.example.clement.emm_project2;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,14 +9,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.clement.emm_project2.adapters.SubCatListAdapter;
-import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.model.SubCategory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class SubCatActivity extends ActionBarActivity {

@@ -13,11 +13,11 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/elephorm" >
         </activity>
         <activity
             android:name=".SplashScreenActivity"
-            android:label="@string/Welcome"
+            android:label="@string/app_name"
             android:noHistory="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,6 +28,10 @@
         <activity
             android:name=".SubCatActivity"
             android:label="@string/title_activity_sub_cat" >
+        </activity>
+        <activity
+            android:name=".PreferencesActivity"
+            android:label="@string/title_activity_preferences" >
         </activity>
     </application>
 
