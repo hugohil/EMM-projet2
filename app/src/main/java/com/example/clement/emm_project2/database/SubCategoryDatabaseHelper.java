@@ -6,13 +6,14 @@ package com.example.clement.emm_project2.database;
 public class SubCategoryDatabaseHelper {
     public static final String TABLE_NAME = "subcategory";
     public static final String COLUMN_ID = "id";
-    public static final String COLUMN_MONGOID = "_id";
+    public static final String COLUMN_MONGOID = "mongoid";
     public static final String COLUMN_TID = "tid";
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_DESCRIPTION = "description";
     public static final String COLUMN_IMAGEURL = "imageURL";
     public static final String COLUMN_ACTIVE = "active";
     public static final String COLUMN_CATID = "catID";
+    public static final String COLUMN_V = "v";
 
     public static final String[] ALL_COLUMNS = {
             SubCategoryDatabaseHelper.COLUMN_ID,
@@ -23,6 +24,8 @@ public class SubCategoryDatabaseHelper {
             SubCategoryDatabaseHelper.COLUMN_IMAGEURL,
             SubCategoryDatabaseHelper.COLUMN_ACTIVE,
             SubCategoryDatabaseHelper.COLUMN_CATID,
+            SubCategoryDatabaseHelper.COLUMN_V
+
     };
 
     public static final String CREATE_TABLE_STATEMENT = "create table "
@@ -34,6 +37,7 @@ public class SubCategoryDatabaseHelper {
             + COLUMN_DESCRIPTION + " text not null, "
             + COLUMN_IMAGEURL + " text, "
             + COLUMN_ACTIVE + " integer, "
-            + COLUMN_CATID + " text not null "
+            + COLUMN_CATID + " text not null, "
+            + COLUMN_V + " text"
             +");";
 }

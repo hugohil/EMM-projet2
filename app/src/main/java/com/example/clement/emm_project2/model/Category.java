@@ -78,6 +78,10 @@ public class Category extends AppData{
         this.imageURL = imageURL;
     }
 
+    public List<SubCategory> getSubCategoriesAsList() {
+        return this.subCategories;
+    }
+
     public String getSubCategories() {
         try {
             ObjectMapper mapper = new ObjectMapper();

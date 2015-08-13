@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.database.DatabaseHelper;
 import com.example.clement.emm_project2.model.Category;
+import com.example.clement.emm_project2.model.SubCategory;
 import com.example.clement.emm_project2.server.ResponseHandler;
 import com.example.clement.emm_project2.server.ServerHandler;
 import com.example.clement.emm_project2.util.JsonUtil;
@@ -40,37 +41,53 @@ public class SplashScreenActivity extends ActionBarActivity {
 
         final Intent intent = new Intent(this, MainActivity.class);
 
-        Log.d(TAG, "Initializing app");
+        Log.i(TAG, "Initializing app");
         if (!SharedPrefUtil.areCategoriesInCache()) {
-            Log.d(TAG, "No data in cache, getting categories...");
+            // Let's register categories and subcategories
+            Log.i(TAG, "No data in cache, getting categories...");
             progress.setProgress(5);
             progressText.setText(getString(R.string.server_dialog));
-            ServerHandler server = new ServerHandler(this);
-            server.getCategories(new ResponseHandler() {
-                @Override
-                public void onSuccess(Object datas) {
-                    progress.setProgress(30);
-                    progressText.setText(getString(R.string.storing_data));
-                    List<Category> categories = JsonUtil.parseJsonDatas((JSONArray) datas, Category.class);
-                    DataAccess dataAccess = new DataAccess(getBaseContext());
-                    dataAccess.open();
-                    for (int i = 0; i < categories.size(); i++) {
-                        dataAccess.createData(categories.get(i));
-                        progressText.setText(getString(R.string.storing_data) + " " + (i + 1) + "/" + categories.size());
-                        progress.setProgress(30 + (i + 1) * (70 / categories.size()));
-                    }
-                    dataAccess.close();
-                    progressText.setText(getString(R.string.application_ready));
+            final ServerHandler server = new ServerHandler(this);
 
-                    startActivity(intent);
-                }
+            final Runnable r = new Runnable() {
+                public void run() {
+                    server.getCategories(new ResponseHandler() {
+                        @Override
+                        public void onSuccess(Object datas) {
+                            Log.i(TAG, "Got categories, registering in database...");
+                            progress.setProgress(30);
+                            progressText.setText(getString(R.string.storing_data));
+                            List<Category> categories = JsonUtil.parseJsonDatas((JSONArray) datas, Category.class);
+                            DataAccess dataAccess = new DataAccess(getBaseContext());
+                            dataAccess.open();
+                            for (int i = 0; i < categories.size(); i++) {
+                                Category category = categories.get(i);
+                                dataAccess.createData(category);
 
-                @Override
-                public void onError(String error) {
-                    Log.e(TAG, error);
-                    Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
+                                List<SubCategory> subCategories = category.getSubCategoriesAsList();
+                                for(SubCategory subCategory : subCategories) {
+                                    subCategory.setCatId(category.getMongoID());
+                                    dataAccess.createData(subCategory);
+                                }
+                                progressText.setText(getString(R.string.storing_data) + " " + (i + 1) + "/" + categories.size());
+                                progress.setProgress(30 + (i + 1) * (70 / categories.size()));
+                            }
+                            dataAccess.close();
+                            Log.i(TAG, "App initialized !");
+                            progressText.setText(getString(R.string.application_ready));
+
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            Log.e(TAG, error);
+                            Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
-            });
+            };
+            r.run();
         } else {
             startActivity(intent);
         }

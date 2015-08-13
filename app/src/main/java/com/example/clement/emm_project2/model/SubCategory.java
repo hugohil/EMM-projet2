@@ -1,5 +1,6 @@
 package com.example.clement.emm_project2.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -23,6 +24,9 @@ public class SubCategory extends AppData{
 
     @JsonProperty("__v")
     private String v;
+
+    @JsonIgnore
+    private String catId;
 
     public int getTid() {
         return tid;
@@ -74,5 +78,13 @@ public class SubCategory extends AppData{
 
     public boolean getActive() {
         return this.active;
+    }
+
+    public String getCatId() {
+        return catId;
+    }
+
+    public void setCatId(String catId) {
+        this.catId = catId;
     }
 }
