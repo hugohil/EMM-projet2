@@ -24,7 +24,7 @@ import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
     private final String TAG = MainActivity.class.getSimpleName();
-    private List<Category> categories;
+    private ArrayList<Category> categories;
     private ListView listView;
     private CatListAdapter adapter;
 
@@ -33,9 +33,10 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listView = (ListView) findViewById(R.id.act_main_listView);
         categories = new ArrayList<Category>();
         adapter = new CatListAdapter(this, categories);
+        listView = (ListView) findViewById(R.id.act_main_listView);
+        listView.setAdapter(adapter);
 
         ServerHandler server = new ServerHandler(this);
         server.getCategories(new ResponseHandler() {
@@ -60,11 +61,11 @@ public class MainActivity extends ActionBarActivity {
             for (int i = 0; i < json.length(); i++) {
                 da.open();
                 Category cat = mapper.readValue(json.getJSONObject(i).toString(), Category.class);
-                categories.add(cat);
+                this.categories.add(cat);
                 da.createData(cat);
                 da.close();
             }
-            adapter.updateList(categories);
+            adapter.notifyDataSetChanged();
         } catch (Exception error) {
             Log.e(TAG, error.toString());
             Toast.makeText(getBaseContext(), error.toString(), Toast.LENGTH_SHORT).show();

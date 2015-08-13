@@ -59,7 +59,7 @@ public class DataAccess {
         String tableName = ReflectUtil.getDatabaseTableName(data);
         long insertId = database.insert(tableName, null,
                 values);
-        Log.d(TAG, "Inserted data "+data.toString()+ " id= "+insertId);
+        // Log.d(TAG, "Inserted data "+data.toString()+ " id= "+insertId);
 
         // 3. Get & return created data
         Cursor cursor = database.query(tableName,
