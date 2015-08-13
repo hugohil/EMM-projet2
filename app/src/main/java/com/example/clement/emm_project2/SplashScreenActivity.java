@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.clement.emm_project2.data.DataAccess;
+import com.example.clement.emm_project2.database.DatabaseHelper;
 import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.server.ResponseHandler;
 import com.example.clement.emm_project2.server.ServerHandler;
@@ -34,9 +35,14 @@ public class SplashScreenActivity extends ActionBarActivity {
         final TextView progressText = (TextView) findViewById(R.id.progressText);
         final ProgressBar progress=(ProgressBar) findViewById(R.id.progressBar);
 
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        dbHelper.upgradeDbIfNecessary();
+
+        final Intent intent = new Intent(this, MainActivity.class);
+
         Log.d(TAG, "Initializing app");
         if (!SharedPrefUtil.areCategoriesInCache()) {
-
+            Log.d(TAG, "No data in cache, getting categories...");
             progress.setProgress(5);
             progressText.setText(getString(R.string.server_dialog));
             ServerHandler server = new ServerHandler(this);
@@ -54,6 +60,9 @@ public class SplashScreenActivity extends ActionBarActivity {
                         progress.setProgress(30 + (i + 1) * (70 / categories.size()));
                     }
                     dataAccess.close();
+                    progressText.setText(getString(R.string.application_ready));
+
+                    startActivity(intent);
                 }
 
                 @Override
@@ -62,14 +71,10 @@ public class SplashScreenActivity extends ActionBarActivity {
                     Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                 }
             });
+        } else {
+            startActivity(intent);
         }
-        progress.setProgress(100);
-        progressText.setText(getString(R.string.application_ready));
 
-        Log.d(TAG, "App Initialized");
-
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
     }
 
 

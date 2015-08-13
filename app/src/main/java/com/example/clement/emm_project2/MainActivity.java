@@ -42,6 +42,7 @@ public class MainActivity extends ActionBarActivity {
 
         // We need to use addAll here because with 'categories = dbCategories' adapter loses references to the list :/
         categories.addAll(dbCategories);
+        Log.wtf(TAG, "Size=" + categories.size());
         adapter.notifyDataSetChanged();
     }
 

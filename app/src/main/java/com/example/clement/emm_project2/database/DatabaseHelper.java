@@ -14,7 +14,7 @@ import com.example.clement.emm_project2.util.SharedPrefUtil;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 21;
+    private static final int DATABASE_VERSION = 30;
 
     // Database Name
     private static final String DATABASE_NAME = "elephormDB";
@@ -41,5 +41,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         SharedPrefUtil.clearAllDataInCache();
         onCreate(db);
+    }
+
+    public void upgradeDbIfNecessary() {
+        SQLiteDatabase db = getWritableDatabase();
+        int versionNb = db.getVersion();
+        if(versionNb < DATABASE_VERSION) {
+            onUpgrade(db, versionNb, DATABASE_VERSION);
+        }
     }
 }
