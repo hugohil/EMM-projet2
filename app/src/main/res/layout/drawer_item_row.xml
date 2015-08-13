@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
-    android:layout_height="wrap_content"
+    android:layout_height="50dp"
     android:layout_alignParentLeft="true"
     android:layout_alignParentRight="true"
     android:orientation="horizontal"
@@ -11,7 +11,7 @@
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:id="@+id/rowIcon"
         android:paddingLeft="16dp"
         android:paddingTop="4dp" />
@@ -21,8 +21,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="12dp"
         android:paddingTop="4dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
+        android:textSize="20dp"
         android:id="@+id/rowText" />
 
 </LinearLayout>

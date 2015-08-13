@@ -1,8 +1,8 @@
 package com.example.clement.emm_project2;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,9 +24,7 @@ import org.json.JSONArray;
 import java.util.List;
 
 // TODO : remove ActionBarActivity and extend normal Activity
-public class SplashScreenActivity extends ActionBarActivity {
-
-
+public class SplashScreenActivity extends Activity {
     private final String TAG = SplashScreenActivity.class.getSimpleName();
 
     @Override

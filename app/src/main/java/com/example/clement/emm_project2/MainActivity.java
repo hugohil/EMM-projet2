@@ -2,9 +2,7 @@ package com.example.clement.emm_project2;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -13,10 +11,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.clement.emm_project2.adapters.CatListAdapter;
-import com.example.clement.emm_project2.adapters.drawer.DrawerAdapter;
 import com.example.clement.emm_project2.adapters.drawer.DrawerManager;
 import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.Category;
@@ -52,13 +48,13 @@ public class MainActivity extends ActionBarActivity {
             public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
                 View child = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
                 if (child != null && mGestureDetector.onTouchEvent(motionEvent)) {
-                    drawerManager.closeDrawer();
                     switch(recyclerView.getChildLayoutPosition(child)) {
                         case 1:
                             Intent intent = new Intent(MainActivity.this, PreferencesActivity.class);
                             startActivity(intent);
                             break;
                     }
+                    drawerManager.closeDrawer();
                     return true;
                 }
                 return false;
