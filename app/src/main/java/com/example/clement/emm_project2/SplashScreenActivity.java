@@ -19,7 +19,6 @@ import com.example.clement.emm_project2.util.SharedPrefUtil;
 
 import org.json.JSONArray;
 
-import java.util.ArrayList;
 import java.util.List;
 
 // TODO : remove ActionBarActivity and extend normal Activity
@@ -36,7 +35,8 @@ public class SplashScreenActivity extends ActionBarActivity {
         final ProgressBar progress=(ProgressBar) findViewById(R.id.progressBar);
 
         Log.d(TAG, "Initializing app");
-        if (!SharedPrefUtil.areCategoriesInCache(getBaseContext())) {
+        if (!SharedPrefUtil.areCategoriesInCache()) {
+
             progress.setProgress(5);
             progressText.setText(getString(R.string.server_dialog));
             ServerHandler server = new ServerHandler(this);
@@ -63,11 +63,13 @@ public class SplashScreenActivity extends ActionBarActivity {
                 }
             });
         }
+        progress.setProgress(100);
+        progressText.setText(getString(R.string.application_ready));
 
         Log.d(TAG, "App Initialized");
 
-//        Intent intent = new Intent(this, MainActivity.class);
-//        startActivity(intent);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
 

@@ -1,7 +1,5 @@
 package com.example.clement.emm_project2;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -12,23 +10,17 @@ import android.widget.Toast;
 
 import com.example.clement.emm_project2.adapters.CatListAdapter;
 import com.example.clement.emm_project2.data.DataAccess;
-import com.example.clement.emm_project2.model.AppData;
-import com.example.clement.emm_project2.model.Author;
 import com.example.clement.emm_project2.model.Category;
-import com.example.clement.emm_project2.server.ResponseHandler;
-import com.example.clement.emm_project2.server.ServerHandler;
-import com.example.clement.emm_project2.util.SharedPrefUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class MainActivity extends ActionBarActivity {
     private final String TAG = MainActivity.class.getSimpleName();
-    private ArrayList<Category> categories;
+    private ArrayList<Category> categories = new ArrayList<Category>();;
     private ListView listView;
     private CatListAdapter adapter;
     private DataAccess dataAccess;
@@ -38,50 +30,19 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         dataAccess = new DataAccess(getBaseContext());
 
-        categories = new ArrayList<Category>();
+        // Set listView adapter
         adapter = new CatListAdapter(this, categories);
         listView = (ListView) findViewById(R.id.act_main_listView);
         listView.setAdapter(adapter);
 
+        // Getting categories
+        dataAccess.open();
+        List<Category> dbCategories =  dataAccess.getAllDatas(Category.class);
+        dataAccess.close();
 
-        if(!SharedPrefUtil.areCategoriesInCache(this)) {
-            ServerHandler server = new ServerHandler(this);
-            server.getCategories(new ResponseHandler() {
-                @Override
-                public void onSuccess(Object datas) {
-                    parseJSONDatas((JSONArray) datas);
-                }
-
-                @Override
-                public void onError(String error) {
-                    Log.e(TAG, error);
-                    Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else {
-            categories = dataAccess.getAllDatas(Category.class);
-            adapter.notifyDataSetChanged();
-        }
-
-
-    }
-
-    private void parseJSONDatas(JSONArray json){
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            for (int i = 0; i < json.length(); i++) {
-                dataAccess.open();
-                Category cat = mapper.readValue(json.getJSONObject(i).toString(), Category.class);
-                categories.add(cat);
-                dataAccess.createData(cat);
-                dataAccess.close();
-                Log.d(TAG, "" + categories.size());
-            }
-            adapter.notifyDataSetChanged();
-        } catch (Exception error) {
-            Log.e(TAG, error.toString());
-            Toast.makeText(getBaseContext(), error.toString(), Toast.LENGTH_SHORT).show();
-        }
+        // We need to use addAll here because with 'categories = dbCategories' adapter loses references to the list :/
+        categories.addAll(dbCategories);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

@@ -5,13 +5,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.clement.emm_project2.app.App;
+import com.example.clement.emm_project2.util.SharedPrefUtil;
+
 /**
  * Created by Clement on 10/08/15.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 18;
+    private static final int DATABASE_VERSION = 21;
 
     // Database Name
     private static final String DATABASE_NAME = "elephormDB";
@@ -35,6 +38,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + AuthorDatabaseHelper.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + CategoryDatabaseHelper.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + SubCategoryDatabaseHelper.TABLE_NAME);
+
+        SharedPrefUtil.clearAllDataInCache();
         onCreate(db);
     }
 }

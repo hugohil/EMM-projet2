@@ -2,8 +2,10 @@ package com.example.clement.emm_project2.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.example.clement.emm_project2.R;
+import com.example.clement.emm_project2.app.App;
 import com.example.clement.emm_project2.model.AppData;
 
 import java.util.HashSet;
@@ -14,7 +16,10 @@ import java.util.Set;
  */
 public class SharedPrefUtil {
 
-    public static void registerDataInCache(AppData data, Context context) {
+    private final static String TAG = SharedPrefUtil.class.getSimpleName();
+
+    public static void registerDataInCache(AppData data) {
+        Context context = App.getAppContext();
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
                 Context.MODE_PRIVATE);
         Set<String> loadedIds = sharedPref.getStringSet(data.getClass().getSimpleName(), null);
@@ -27,9 +32,11 @@ public class SharedPrefUtil {
 
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putStringSet(data.getClass().getSimpleName(), loadedIds);
+        editor.commit();
     }
 
-    public static boolean isDataInCache(AppData data, Context context) {
+    public static boolean isDataInCache(AppData data) {
+        Context context = App.getAppContext();
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
                 Context.MODE_PRIVATE);
         Set<String> loadedIds = sharedPref.getStringSet(data.getClass().getSimpleName(), null);
@@ -39,7 +46,8 @@ public class SharedPrefUtil {
         return true;
     }
 
-    public static boolean areCategoriesInCache(Context context) {
+    public static boolean areCategoriesInCache() {
+        Context context = App.getAppContext();
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
                 Context.MODE_PRIVATE);
         Set<String> loadedIds = sharedPref.getStringSet(context.getString(R.string.category), null);
@@ -49,7 +57,8 @@ public class SharedPrefUtil {
         return true;
     }
 
-    public static boolean isSubCategoryInCache(Context context, String id) {
+    public static boolean isSubCategoryInCache(String id) {
+        Context context = App.getAppContext();
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
                 Context.MODE_PRIVATE);
         Set<String> loadedIds = sharedPref.getStringSet(context.getString(R.string.subCategory), null);
@@ -57,6 +66,12 @@ public class SharedPrefUtil {
             return false;
         }
         return true;
+    }
+
+    public static void clearAllDataInCache() {
+        Context context = App.getAppContext();
+        context.getSharedPreferences(context.getString(R.string.cached_datas),
+                Context.MODE_PRIVATE).edit().clear().commit();
     }
 
 }
