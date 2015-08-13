@@ -2,6 +2,7 @@ package com.example.clement.emm_project2;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -27,65 +28,97 @@ import java.util.List;
 public class SplashScreenActivity extends Activity {
     private final String TAG = SplashScreenActivity.class.getSimpleName();
 
+    private class AsyncDataSynchronization extends AsyncTask<Void, Integer, Integer> {
+        private final String TAG = AsyncDataSynchronization.class.getSimpleName();
+        final ServerHandler server = new ServerHandler(SplashScreenActivity.this);
+        ProgressBar progressBar;
+        TextView progressText;
+
+        public AsyncDataSynchronization(ProgressBar progressBar, TextView progressText) {
+            this.progressBar = progressBar;
+            this.progressText = progressText;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //UI Thread
+            Log.i(TAG, "No data in cache, getting categories...");
+            progressBar.setProgress(5);
+        }
+
+        @Override
+        protected Integer doInBackground(Void... params) {
+
+            server.getCategories(new ResponseHandler() {
+                @Override
+                public void onSuccess(Object datas) {
+                    Log.i(TAG, "Got categories, registering in database...");
+
+                    publishProgress(20);
+
+                    List<Category> categories = JsonUtil.parseJsonDatas((JSONArray) datas, Category.class);
+
+                    DataAccess dataAccess = new DataAccess(getBaseContext());
+                    dataAccess.open();
+                    for (int i = 0; i < categories.size(); i++) {
+                        Category category = categories.get(i);
+                        dataAccess.createData(category);
+
+                        List<SubCategory> subCategories = category.getSubCategoriesAsList();
+                        for (SubCategory subCategory : subCategories) {
+                            subCategory.setCatId(category.getMongoID());
+                            dataAccess.createData(subCategory);
+                        }
+
+                        final int j = i;
+                        publishProgress(0 + (j + 1) * (80 / categories.size()));
+
+                    }
+                    dataAccess.close();
+                    Log.i(TAG, "App initialized !");
+                    progressText.setText(getString(R.string.application_ready));
+                    Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, error);
+                    Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
+                }
+            });
+            return 0;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            this.progressBar.setProgress(progress[0]);
+            progressText.setText(getString(R.string.server_dialog) + " " + this.progressBar.getProgress() + "%");
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            super.onPostExecute(result);
+        }
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        final TextView progressText = (TextView) findViewById(R.id.progressText);
-        final ProgressBar progress=(ProgressBar) findViewById(R.id.progressBar);
+
+        TextView progressText = (TextView) findViewById(R.id.progressText);
+        ProgressBar progress = (ProgressBar) findViewById(R.id.progressBar);
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         dbHelper.upgradeDbIfNecessary();
 
-        final Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
 
         Log.i(TAG, "Initializing app");
         if (!SharedPrefUtil.areCategoriesInCache()) {
-            // Let's register categories and subcategories
-            Log.i(TAG, "No data in cache, getting categories...");
-            progress.setProgress(5);
-            progressText.setText(getString(R.string.server_dialog));
-            final ServerHandler server = new ServerHandler(this);
-
-            final Runnable r = new Runnable() {
-                public void run() {
-                    server.getCategories(new ResponseHandler() {
-                        @Override
-                        public void onSuccess(Object datas) {
-                            Log.i(TAG, "Got categories, registering in database...");
-                            progress.setProgress(30);
-                            progressText.setText(getString(R.string.storing_data));
-                            List<Category> categories = JsonUtil.parseJsonDatas((JSONArray) datas, Category.class);
-                            DataAccess dataAccess = new DataAccess(getBaseContext());
-                            dataAccess.open();
-                            for (int i = 0; i < categories.size(); i++) {
-                                Category category = categories.get(i);
-                                dataAccess.createData(category);
-
-                                List<SubCategory> subCategories = category.getSubCategoriesAsList();
-                                for(SubCategory subCategory : subCategories) {
-                                    subCategory.setCatId(category.getMongoID());
-                                    dataAccess.createData(subCategory);
-                                }
-                                progressText.setText(getString(R.string.storing_data) + " " + (i + 1) + "/" + categories.size());
-                                progress.setProgress(30 + (i + 1) * (70 / categories.size()));
-                            }
-                            dataAccess.close();
-                            Log.i(TAG, "App initialized !");
-                            progressText.setText(getString(R.string.application_ready));
-
-                            startActivity(intent);
-                        }
-
-                        @Override
-                        public void onError(String error) {
-                            Log.e(TAG, error);
-                            Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            };
-            r.run();
+            new AsyncDataSynchronization(progress, progressText).execute();
         } else {
             startActivity(intent);
         }
