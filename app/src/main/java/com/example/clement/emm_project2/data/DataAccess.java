@@ -61,7 +61,7 @@ public class DataAccess {
         String tableName = ReflectUtil.getDatabaseTableName(data);
         long insertId = database.insert(tableName, null,
                 values);
-        Log.d(TAG, "Inserted data "+data.toString()+ " id= "+insertId);
+        // Log.d(TAG, "Inserted data "+data.toString()+ " id= "+insertId);
 
         // 3. Insert ID in sharedPref
         SharedPrefUtil.registerDataInCache(data, context);
@@ -77,8 +77,8 @@ public class DataAccess {
         return (T)data;
     }
 
-    public <T extends AppData> List<T> getAllDatas(Class c) {
-        List<T> datas = new ArrayList<T>();
+    public <T extends AppData> ArrayList<T> getAllDatas(Class c) {
+        ArrayList<T> datas = new ArrayList<T>();
         T data = null;
         try {
            data = (T)c.newInstance();

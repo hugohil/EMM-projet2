@@ -28,7 +28,7 @@ import java.util.Set;
 
 public class MainActivity extends ActionBarActivity {
     private final String TAG = MainActivity.class.getSimpleName();
-    private List<Category> categories;
+    private ArrayList<Category> categories;
     private ListView listView;
     private CatListAdapter adapter;
     private DataAccess dataAccess;
@@ -38,9 +38,10 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         dataAccess = new DataAccess(getBaseContext());
 
-        listView = (ListView) findViewById(R.id.act_main_listView);
         categories = new ArrayList<Category>();
         adapter = new CatListAdapter(this, categories);
+        listView = (ListView) findViewById(R.id.act_main_listView);
+        listView.setAdapter(adapter);
 
 
         if(!SharedPrefUtil.areCategoriesInCache(this)) {
@@ -59,7 +60,7 @@ public class MainActivity extends ActionBarActivity {
             });
         } else {
             categories = dataAccess.getAllDatas(Category.class);
-            adapter.updateList(categories);
+            adapter.notifyDataSetChanged();
         }
 
 
@@ -74,8 +75,9 @@ public class MainActivity extends ActionBarActivity {
                 categories.add(cat);
                 dataAccess.createData(cat);
                 dataAccess.close();
+                Log.d(TAG, "" + categories.size());
             }
-            adapter.updateList(categories);
+            adapter.notifyDataSetChanged();
         } catch (Exception error) {
             Log.e(TAG, error.toString());
             Toast.makeText(getBaseContext(), error.toString(), Toast.LENGTH_SHORT).show();
