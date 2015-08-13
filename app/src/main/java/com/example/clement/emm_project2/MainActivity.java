@@ -1,19 +1,25 @@
 package com.example.clement.emm_project2;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.clement.emm_project2.adapters.CatListAdapter;
+import com.example.clement.emm_project2.adapters.drawer.DrawerAdapter;
+import com.example.clement.emm_project2.adapters.drawer.DrawerManager;
 import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.Category;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +30,46 @@ public class MainActivity extends ActionBarActivity {
     private ListView listView;
     private CatListAdapter adapter;
     private DataAccess dataAccess;
+
+    String TITLES[] = {"Preferences"};
+    int ICONS[] = {R.drawable.ic_action_settings};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        final DrawerManager drawerManager = new DrawerManager(TITLES, ICONS, this);
+        drawerManager.setItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            final GestureDetector mGestureDetector = new GestureDetector(MainActivity.this, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
+                }
+            });
+
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+                View child = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
+                if (child != null && mGestureDetector.onTouchEvent(motionEvent)) {
+                    drawerManager.closeDrawer();
+                    switch(recyclerView.getChildLayoutPosition(child)) {
+                        case 1:
+                            Intent intent = new Intent(MainActivity.this, PreferencesActivity.class);
+                            startActivity(intent);
+                            break;
+                    }
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+                //
+            }
+        });
+
         dataAccess = new DataAccess(getBaseContext());
 
         // Set listView adapter

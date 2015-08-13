@@ -11,4 +11,5 @@
     <string name="Welcome">Bienvenue</string>
     <string name="storing_data">Stockage des données</string>
     <string name="application_ready">Prêt</string>
+    <string name="title_activity_preferences">PreferencesActivity</string>
 </resources>
