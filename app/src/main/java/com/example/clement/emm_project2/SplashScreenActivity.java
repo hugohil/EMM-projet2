@@ -8,6 +8,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.clement.emm_project2.data.DataAccess;
+import com.example.clement.emm_project2.model.Category;
+import com.example.clement.emm_project2.server.ResponseHandler;
+import com.example.clement.emm_project2.server.ServerHandler;
+import com.example.clement.emm_project2.util.JsonUtil;
+import com.example.clement.emm_project2.util.SharedPrefUtil;
+
+import org.json.JSONArray;
+
+import java.util.ArrayList;
+import java.util.List;
 
 // TODO : remove ActionBarActivity and extend normal Activity
 public class SplashScreenActivity extends ActionBarActivity {
@@ -19,22 +32,42 @@ public class SplashScreenActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        TextView progressText = (TextView) findViewById(R.id.progressText);
-        ProgressBar progress=(ProgressBar) findViewById(R.id.progressBar);
+        final TextView progressText = (TextView) findViewById(R.id.progressText);
+        final ProgressBar progress=(ProgressBar) findViewById(R.id.progressBar);
 
         Log.d(TAG, "Initializing app");
+        if (!SharedPrefUtil.areCategoriesInCache(getBaseContext())) {
+            progress.setProgress(5);
+            progressText.setText(getString(R.string.server_dialog));
+            ServerHandler server = new ServerHandler(this);
+            server.getCategories(new ResponseHandler() {
+                @Override
+                public void onSuccess(Object datas) {
+                    progress.setProgress(30);
+                    progressText.setText(getString(R.string.storing_data));
+                    List<Category> categories = JsonUtil.parseJsonDatas((JSONArray) datas, Category.class);
+                    DataAccess dataAccess = new DataAccess(getBaseContext());
+                    dataAccess.open();
+                    for (int i = 0; i < categories.size(); i++) {
+                        dataAccess.createData(categories.get(i));
+                        progressText.setText(getString(R.string.storing_data) + " " + (i + 1) + "/" + categories.size());
+                        progress.setProgress(30 + (i + 1) * (70 / categories.size()));
+                    }
+                    dataAccess.close();
+                }
 
-
-        // TODO here: Load datas, initialize app... etc
-        for(int i = 1; i <=100 ; i++) {
-            progress.setProgress(i);
-            progressText.setText(i + " %");
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, error);
+                    Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         Log.d(TAG, "App Initialized");
 
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivity(intent);
     }
 
 

@@ -27,7 +27,7 @@ public class DataAccess {
 
     public DataAccess(Context context) {
         dbHelper = new DatabaseHelper(context);
-        context = context;
+        this.context = context;
     }
 
     public void open() {

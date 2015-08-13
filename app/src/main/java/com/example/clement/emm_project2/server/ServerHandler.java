@@ -13,11 +13,14 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.clement.emm_project2.R;
+import com.example.clement.emm_project2.model.Category;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * Created by perso on 10/08/15.
@@ -43,8 +46,8 @@ public class ServerHandler {
     }
 
     public void getCategories(final ResponseHandler handler){
-        progress.setMessage(context.getResources().getString(R.string.server_dialog));
-        progress.show();
+//        progress.setMessage(context.getResources().getString(R.string.server_dialog));
+//        progress.show();
         RequestQueue requestQueue = Volley.newRequestQueue(this.context);
         JsonArrayRequest jsonArrayReq = new JsonArrayRequest(Request.Method.GET,
                 API_BASE_URL + "categories",
@@ -52,7 +55,7 @@ public class ServerHandler {
                     @Override
                     public void onResponse(JSONArray response) {
                         handler.onSuccess(response);
-                        progress.hide();
+//                        progress.hide();
                     }
                 },
                 new Response.ErrorListener() {
@@ -60,7 +63,7 @@ public class ServerHandler {
                     public void onErrorResponse(VolleyError error) {
                         Log.d(TAG, error.toString());
                         handler.onError(error.toString());
-                        progress.hide();
+//                        progress.hide();
                     }
                 });
         requestQueue.add(jsonArrayReq);
