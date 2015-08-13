@@ -20,10 +20,11 @@ import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
     private final String TAG = MainActivity.class.getSimpleName();
-    private ArrayList<Category> categories = new ArrayList<Category>();;
+    private ArrayList<Category> categories = new ArrayList<Category>();
     private ListView listView;
     private CatListAdapter adapter;
     private DataAccess dataAccess;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
