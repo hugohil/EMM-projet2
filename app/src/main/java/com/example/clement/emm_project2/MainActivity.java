@@ -22,7 +22,7 @@ import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
     private final String TAG = MainActivity.class.getSimpleName();
-    private ArrayList<Category> categories = new ArrayList<Category>();;
+    private ArrayList<Category> categories = new ArrayList<Category>();
     private ListView listView;
     private CatListAdapter adapter;
     private DataAccess dataAccess;
@@ -63,6 +63,10 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
                 //
+            }
+            
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
             }
         });
 

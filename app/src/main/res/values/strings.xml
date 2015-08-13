@@ -11,6 +11,7 @@
     <string name="Welcome">Bienvenue</string>
     <string name="storing_data">Stockage des données</string>
     <string name="application_ready">Prêt</string>
+    <string name="title_activity_sub_cat">SubCatActivity</string>
     <string name="title_activity_preferences">PreferencesActivity</string>
     <string name="update_wifi_only">Mises à jour Wifi uniquement</string>
     <string name="update_on_launch">Mise à jour au démarrage</string>
