@@ -171,7 +171,7 @@ public class DataAccess {
             queryBuilder.setTables(ReflectUtil.getDatabaseTableName(data));
 
             for(int i = 0; i < args.length; i = i+2) {
-                queryBuilder.appendWhere(args[i]+ " = "+args[i+1]);
+                queryBuilder.appendWhere(args[i]+ " = \""+args[i+1] + "\"");
             }
             String[] fieldNames = ReflectUtil.getObjectFieldNames(data);
             Cursor cursor = queryBuilder.query(database, fieldNames,null, null, null, null, null);

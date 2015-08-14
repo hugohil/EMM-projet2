@@ -9,34 +9,40 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.clement.emm_project2.adapters.SubCatListAdapter;
+import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.SubCategory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class SubCatActivity extends ActionBarActivity {
     private ArrayList<SubCategory> subCats = new ArrayList<SubCategory>();
     private SubCatListAdapter adapter;
     private ListView listView;
+    private DataAccess da;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub_cat);
 
-        listView = (ListView) findViewById(R.id.act_subcat_list);
         adapter = new SubCatListAdapter(this, subCats);
+        listView = (ListView) findViewById(R.id.act_subcat_list);
         listView.setAdapter(adapter);
+        da = new DataAccess(getBaseContext());
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             TextView desc = (TextView) findViewById(R.id.act_subcat_desc);
             desc.setText(extras.getString("desc"));
             try{
-                ObjectMapper mapper = new ObjectMapper();
-                subCats = (ArrayList<SubCategory>) mapper.readValue(extras.getString("subcat"), ArrayList.class);
-                Log.d(SubCatActivity.class.getSimpleName(), ""+subCats.size());
+                da.open();
+                List<SubCategory> DBList = da.findDataWhere(SubCategory.class, "catId", extras.getString("catID"));
+                da.close();
+                subCats.addAll(DBList);
+                Log.d(SubCatActivity.class.getSimpleName(), "" + subCats.size());
                 adapter.notifyDataSetChanged();
 
             } catch(Exception e){
