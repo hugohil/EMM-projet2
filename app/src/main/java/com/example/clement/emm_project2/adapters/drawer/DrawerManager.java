@@ -7,9 +7,13 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.clement.emm_project2.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Clement on 13/08/15.
  */
+
 // Encapsulate drawer logic
 public class DrawerManager {
     private RecyclerView mRecyclerView;
@@ -17,10 +21,10 @@ public class DrawerManager {
     private RecyclerView.LayoutManager mLayoutManager;
     private DrawerLayout drawer;
 
-    public DrawerManager(String[] itemTitles, int[] icons, Activity activity) {
+    public DrawerManager(List<String> itemTitles, int[] icons, Activity activity) {
         this.mRecyclerView = (RecyclerView) activity.findViewById(R.id.RecyclerView);
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new DrawerAdapter(itemTitles, icons, activity);
+        mAdapter = new DrawerAdapter((ArrayList)itemTitles, icons, activity);
         mRecyclerView.setAdapter(mAdapter);
         mLayoutManager = new LinearLayoutManager(activity);
         mRecyclerView.setLayoutManager(mLayoutManager);

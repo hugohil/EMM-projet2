@@ -27,15 +27,17 @@ public class MainActivity extends ActionBarActivity {
     private CatListAdapter adapter;
     private DataAccess dataAccess;
 
-    String TITLES[] = {"Preferences"};
-    int ICONS[] = {R.drawable.ic_action_settings};
+    ArrayList<String> drawerTitles = new ArrayList<String>();
+    int drawerIcons[] = {R.drawable.ic_action_settings};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final DrawerManager drawerManager = new DrawerManager(TITLES, ICONS, this);
+        drawerTitles.add("Preferences");
+
+        final DrawerManager drawerManager = new DrawerManager(drawerTitles, drawerIcons, this);
         drawerManager.setItemTouchListener(new RecyclerView.OnItemTouchListener() {
             final GestureDetector mGestureDetector = new GestureDetector(MainActivity.this, new GestureDetector.SimpleOnGestureListener() {
                 @Override
@@ -65,9 +67,6 @@ public class MainActivity extends ActionBarActivity {
                 //
             }
             
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-            }
         });
 
         dataAccess = new DataAccess(getBaseContext());
