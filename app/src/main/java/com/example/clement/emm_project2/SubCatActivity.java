@@ -37,6 +37,7 @@ public class SubCatActivity extends ActionBarActivity {
         if(extras != null) {
             TextView desc = (TextView) findViewById(R.id.act_subcat_desc);
             desc.setText(extras.getString("desc"));
+            setTitle(extras.getString("title"));
             try{
                 da.open();
                 List<SubCategory> DBList = da.findDataWhere(SubCategory.class, "catId", extras.getString("catID"));
