@@ -1,6 +1,4 @@
-package com.example.clement.emm_project2.database;
-
-import android.graphics.Picture;
+package com.example.clement.emm_project2.data.database;
 
 /**
  * Created by Clement on 10/08/15.

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.clement.emm_project2.data.DataAccess;
-import com.example.clement.emm_project2.database.DatabaseHelper;
+import com.example.clement.emm_project2.data.database.DatabaseHelper;
 import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.model.SubCategory;
 import com.example.clement.emm_project2.server.ResponseHandler;

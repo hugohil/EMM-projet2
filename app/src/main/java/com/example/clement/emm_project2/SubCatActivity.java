@@ -14,7 +14,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.clement.emm_project2.adapters.SubCatListAdapter;
-import com.example.clement.emm_project2.adapters.drawer.DrawerManager;
 import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.model.SubCategory;
@@ -33,56 +32,10 @@ public class SubCatActivity extends ActionBarActivity {
     private SubCatListAdapter adapter;
     private ListView listView;
 
-    // Drawer settings
-    List<String> drawerTitles = new ArrayList<String>();
-    int drawerIcons[] = {R.drawable.ic_action_settings, };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub_cat);
-
-        drawerTitles.add("Preferences");
-
-        DataAccess dataAccess = new DataAccess(this);
-        dataAccess.open();
-        List<Category> categories = dataAccess.getAllDatas(Category.class);
-        for(Category cat : categories) {
-            drawerTitles.add(cat.getTitle());
-        }
-
-
-        final DrawerManager drawerManager = new DrawerManager(drawerTitles, drawerIcons, this);
-        drawerManager.setItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            final GestureDetector mGestureDetector = new GestureDetector(SubCatActivity.this, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onSingleTapUp(MotionEvent e) {
-                    return true;
-                }
-            });
-
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
-                View child = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
-                if (child != null && mGestureDetector.onTouchEvent(motionEvent)) {
-                    switch (recyclerView.getChildLayoutPosition(child)) {
-                        case 1:
-                            Intent intent = new Intent(SubCatActivity.this, PreferencesActivity.class);
-                            startActivity(intent);
-                            break;
-                    }
-                    drawerManager.closeDrawer();
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
-                //
-            }
-
-        });
 
 
         listView = (ListView) findViewById(R.id.act_subcat_list);
