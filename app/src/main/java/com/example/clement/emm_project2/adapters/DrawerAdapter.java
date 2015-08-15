@@ -1,66 +1,93 @@
 package com.example.clement.emm_project2.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.app.drawer.DrawerItem;
-import com.example.clement.emm_project2.app.drawer.DrawerSectionItem;
 import com.example.clement.emm_project2.app.drawer.DrawerSection;
+import com.example.clement.emm_project2.app.drawer.DrawerSectionItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Clement on 14/08/15.
  */
-public class DrawerAdapter extends ArrayAdapter<DrawerItem> {
+public class DrawerAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
+    private List<DrawerItem> items;
+    private Activity context;
 
-    public DrawerAdapter(Context context, int textViewResourceId, ArrayList<DrawerItem> items) {
-        super(context, textViewResourceId, items);
-        this.inflater = LayoutInflater.from(context);
+    public DrawerAdapter(Activity context, ArrayList<DrawerItem> items) {
+        this.context = context;
+        this.items = items;
+    }
+
+    @Override
+    public int getCount() {
+        Log.d(DrawerAdapter.class.getSimpleName(), "Count returned by getCount => "+items.size());
+        return items.size();
+    }
+
+    @Override
+    public DrawerItem getItem(int position) {
+        return items.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        // Maybe we could return something else there...
+        return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = null ;
-        DrawerItem menuItem = this.getItem(position);
+        View view = convertView;
+        DrawerItem menuItem = getItem(position);
+
+        if (inflater == null)
+            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
         if ( menuItem.getType() == DrawerSectionItem.ITEM_TYPE ) {
             view = getItemView(convertView, parent, menuItem );
         }
         else {
             view = getSectionView(convertView, parent, menuItem);
         }
+        Log.d(DrawerAdapter.class.getSimpleName(), "View returned by getView => "+view);
         return view ;
     }
 
     public View getItemView( View convertView, ViewGroup parentView, DrawerItem drawerItem) {
 
         DrawerSectionItem drawerSectionItem = (DrawerSectionItem) drawerItem;
-        NavMenuItemHolder navMenuItemHolder = null;
+        ItemHolder itemHolder = null;
 
         if (convertView == null) {
-            convertView = inflater.inflate( R.layout.drawer_item, parentView, false);
+            convertView = inflater.inflate(R.layout.drawer_item, parentView, false);
             TextView labelView = (TextView) convertView
                     .findViewById( R.id.navmenuitem_label );
 
-            navMenuItemHolder = new NavMenuItemHolder();
-            navMenuItemHolder.labelView = labelView ;
+            itemHolder = new ItemHolder();
+            itemHolder.labelView = labelView ;
 
-            convertView.setTag(navMenuItemHolder);
+            convertView.setTag(itemHolder);
         }
 
-        if ( navMenuItemHolder == null ) {
-            navMenuItemHolder = (NavMenuItemHolder) convertView.getTag();
+        if ( itemHolder == null ) {
+            itemHolder = (ItemHolder) convertView.getTag();
         }
 
-        navMenuItemHolder.labelView.setText(drawerSectionItem.getLabel());
+        itemHolder.labelView.setText(drawerSectionItem.getLabel());
 
         return convertView ;
     }
@@ -69,7 +96,7 @@ public class DrawerAdapter extends ArrayAdapter<DrawerItem> {
                                DrawerItem drawerItem) {
 
         DrawerSection drawerSection = (DrawerSection) drawerItem;
-        NavMenuSectionHolder navMenuItemHolder = null;
+        SectionHolder sectionHolder = null;
 
         if (convertView == null) {
             convertView = inflater.inflate( R.layout.drawer_section, parentView, false);
@@ -79,18 +106,18 @@ public class DrawerAdapter extends ArrayAdapter<DrawerItem> {
             ImageView iconView = (ImageView) convertView
                     .findViewById( R.id.navmenuitem_icon );
 
-            navMenuItemHolder = new NavMenuSectionHolder();
-            navMenuItemHolder.labelView = labelView ;
-            navMenuItemHolder.iconView = iconView ;
-            convertView.setTag(navMenuItemHolder);
+            sectionHolder = new SectionHolder();
+            sectionHolder.labelView = labelView ;
+            sectionHolder.iconView = iconView ;
+            convertView.setTag(sectionHolder);
         }
 
-        if ( navMenuItemHolder == null ) {
-            navMenuItemHolder = (NavMenuSectionHolder) convertView.getTag();
+        if ( sectionHolder == null ) {
+            sectionHolder = (SectionHolder) convertView.getTag();
         }
 
-        navMenuItemHolder.labelView.setText(drawerSection.getLabel());
-        navMenuItemHolder.iconView.setImageResource(drawerSection.getIcon());
+        sectionHolder.labelView.setText(drawerSection.getLabel());
+        sectionHolder.iconView.setImageResource(drawerSection.getIcon());
 
         return convertView ;
     }
@@ -110,12 +137,11 @@ public class DrawerAdapter extends ArrayAdapter<DrawerItem> {
         return getItem(position).isEnabled();
     }
 
-
-    private static class NavMenuItemHolder {
+    private static class ItemHolder {
         private TextView labelView;
     }
 
-    private class NavMenuSectionHolder {
+    private class SectionHolder {
         private TextView labelView;
         private ImageView iconView;
     }

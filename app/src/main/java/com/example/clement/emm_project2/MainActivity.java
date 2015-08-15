@@ -1,9 +1,11 @@
 package com.example.clement.emm_project2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.clement.emm_project2.adapters.CatListAdapter;
 import com.example.clement.emm_project2.app.drawer.DrawerActivity;
@@ -25,31 +27,33 @@ public class MainActivity extends DrawerActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // No need to setContentView since it is done in the superClass =)
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        ArrayList<DrawerItem> menuItems = new ArrayList<DrawerItem>() {{
-            add(DrawerSection.create(100, "Demos", "ic_action_settings", MainActivity.this));
-            add(DrawerSectionItem.create(101, "List/Detail (Fragment)", true));
-        }};
-
+        ArrayList<DrawerItem> menuItems = new ArrayList<DrawerItem>();
+        List<Category> dbCategories;
+        dataAccess = new DataAccess(this);
+        dataAccess.open();
+        dbCategories = dataAccess.getAllDatas(Category.class);
+        dataAccess.close();
+        menuItems.add(DrawerSection.create(200, "Catégories", "ic_action_bookmark", MainActivity.this));
+        int i = 1;
+        for(Category category : dbCategories) {
+            menuItems.add(DrawerSectionItem.create(categories.indexOf(category), category.getTitle(), true));
+            i++;
+        }
+        menuItems.add(DrawerSection.create(100, "Configuration", "ic_action_settings", MainActivity.this));
+        menuItems.add(DrawerSectionItem.create(101, "Preferences", true));
         setDrawerContent(menuItems);
-
-        dataAccess = new DataAccess(getBaseContext());
 
         // Set listView adapter
         adapter = new CatListAdapter(this, categories);
         listView = (ListView) findViewById(R.id.act_main_listView);
         listView.setAdapter(adapter);
 
-        // Getting categories
-        dataAccess.open();
-        List<Category> dbCategories =  dataAccess.getAllDatas(Category.class);
-        dataAccess.close();
-
-        // We need to use addAll here because with 'categories = dbCategories' adapter loses references to the list :/
+        // We need to use addAll here because with 'categories = dbCategories' adapter loses reference to the list :/
         categories.addAll(dbCategories);
-        Log.wtf(TAG, "Size=" + categories.size());
+        Log.d(TAG, "Size=" + categories.size());
         adapter.notifyDataSetChanged();
     }
 
@@ -78,5 +82,14 @@ public class MainActivity extends DrawerActivity {
     @Override
     protected int getLayoutResourceId() {
         return R.layout.activity_main;
+    }
+
+    @Override
+    protected void onNavItemSelected(int id) {
+        if(id < 100) {
+            // click on category
+            String mongoid = categories.get(id).getMongoID();
+            // Start new Intent there
+        }
     }
 }

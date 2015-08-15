@@ -16,4 +16,6 @@
     <string name="update_wifi_only">Mises à jour Wifi uniquement</string>
     <string name="update_on_launch">Mise à jour au démarrage</string>
     <string name="elephorm">Elephorm</string>
+    <string name="drawer_open">Ouvrir</string>
+    <string name="drawer_close">Fermer</string>
 </resources>

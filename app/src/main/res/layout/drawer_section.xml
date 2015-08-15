@@ -14,7 +14,7 @@
     <TextView
         android:id="@+id/navmenusection_label"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:text="Section"
         android:textSize="18sp"
         android:paddingLeft="5dp"
