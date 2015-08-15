@@ -11,13 +11,15 @@ import android.widget.TextView;
 import com.example.clement.emm_project2.adapters.SubCatListAdapter;
 import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.SubCategory;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.clement.emm_project2.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class SubCatActivity extends ActionBarActivity {
+
+    private static final String TAG = SubCatActivity.class.getSimpleName();
+
     private ArrayList<SubCategory> subCats = new ArrayList<SubCategory>();
     private SubCatListAdapter adapter;
     private ListView listView;
@@ -36,7 +38,8 @@ public class SubCatActivity extends ActionBarActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             TextView desc = (TextView) findViewById(R.id.act_subcat_desc);
-            desc.setText(extras.getString("desc"));
+            String html = StringUtil.html2Text(extras.getString("desc"));
+            desc.setText(html);
             setTitle(extras.getString("title"));
             try{
                 da.open();
@@ -45,7 +48,6 @@ public class SubCatActivity extends ActionBarActivity {
                 subCats.addAll(DBList);
                 Log.d(SubCatActivity.class.getSimpleName(), "" + subCats.size());
                 adapter.notifyDataSetChanged();
-
             } catch(Exception e){
                 Log.e(SubCatActivity.class.getSimpleName(), e.toString());
             }

@@ -1,11 +1,10 @@
-package com.example.clement.emm_project2.database;
+package com.example.clement.emm_project2.data.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.example.clement.emm_project2.app.App;
 import com.example.clement.emm_project2.util.SharedPrefUtil;
 
 /**

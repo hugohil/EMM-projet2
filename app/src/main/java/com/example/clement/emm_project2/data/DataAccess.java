@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
-import com.example.clement.emm_project2.database.DatabaseHelper;
+import com.example.clement.emm_project2.data.database.DatabaseHelper;
 import com.example.clement.emm_project2.model.AppData;
 import com.example.clement.emm_project2.util.ReflectUtil;
 import com.example.clement.emm_project2.util.SharedPrefUtil;

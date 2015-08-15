@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.clement.emm_project2.data.DataAccess;
-import com.example.clement.emm_project2.database.DatabaseHelper;
+import com.example.clement.emm_project2.data.database.DatabaseHelper;
 import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.model.SubCategory;
 import com.example.clement.emm_project2.server.ResponseHandler;
@@ -24,7 +24,6 @@ import org.json.JSONArray;
 
 import java.util.List;
 
-// TODO : remove ActionBarActivity and extend normal Activity
 public class SplashScreenActivity extends Activity {
     private final String TAG = SplashScreenActivity.class.getSimpleName();
 
@@ -45,6 +44,7 @@ public class SplashScreenActivity extends Activity {
             //UI Thread
             Log.i(TAG, "No data in cache, getting categories...");
             progressBar.setProgress(5);
+            progressText.setText(getString(R.string.server_dialog));
         }
 
         @Override
@@ -100,7 +100,6 @@ public class SplashScreenActivity extends Activity {
         protected void onPostExecute(Integer result) {
             super.onPostExecute(result);
         }
-
     }
 
     @Override

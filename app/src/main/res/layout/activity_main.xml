@@ -10,7 +10,6 @@
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <ListView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -18,15 +17,13 @@
         </ListView>
     </FrameLayout>
 
-
     <!-- The navigation drawer -->
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/RecyclerView"
-        android:layout_width="320dp"
+    <ListView android:id="@+id/left_drawer"
+        android:background="@android:color/white"
+        android:layout_width="240dp"
         android:layout_height="match_parent"
-        android:layout_gravity="left"
-        android:background="#ffffff"
-        android:scrollbars="vertical">
-
-    </android.support.v7.widget.RecyclerView>
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:divider="@color/primary"
+        android:dividerHeight="0dp"/>
 </android.support.v4.widget.DrawerLayout>
