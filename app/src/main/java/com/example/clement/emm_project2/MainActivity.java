@@ -1,11 +1,8 @@
 package com.example.clement.emm_project2;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.clement.emm_project2.adapters.CatListAdapter;
 import com.example.clement.emm_project2.app.drawer.DrawerActivity;
@@ -31,30 +28,23 @@ public class MainActivity extends DrawerActivity {
         super.onCreate(savedInstanceState);
 
         ArrayList<DrawerItem> menuItems = new ArrayList<DrawerItem>();
+        menuItems.add(DrawerSection.create(100, "Configuration", "ic_action_settings", MainActivity.this));
+        menuItems.add(DrawerSectionItem.create(101, "Preferences", true));
+        setDrawerContent(menuItems);
+
+        // Get categories
         List<Category> dbCategories;
         dataAccess = new DataAccess(this);
         dataAccess.open();
         dbCategories = dataAccess.getAllDatas(Category.class);
         dataAccess.close();
-        menuItems.add(DrawerSection.create(200, "Catégories", "ic_action_bookmark", MainActivity.this));
-        int i = 1;
-        for(Category category : dbCategories) {
-            menuItems.add(DrawerSectionItem.create(categories.indexOf(category), category.getTitle(), true));
-            i++;
-        }
-        menuItems.add(DrawerSection.create(100, "Configuration", "ic_action_settings", MainActivity.this));
-        menuItems.add(DrawerSectionItem.create(101, "Preferences", true));
-        setDrawerContent(menuItems);
+        categories.addAll(dbCategories);
 
         // Set listView adapter
         adapter = new CatListAdapter(this, categories);
         listView = (ListView) findViewById(R.id.act_main_listView);
         listView.setAdapter(adapter);
-
-        // We need to use addAll here because with 'categories = dbCategories' adapter loses reference to the list :/
-        categories.addAll(dbCategories);
-        Log.d(TAG, "Size=" + categories.size());
-        adapter.notifyDataSetChanged();
+//        adapter.notifyDataSetChanged();
     }
 
     @Override

@@ -18,4 +18,5 @@
     <string name="elephorm">Elephorm</string>
     <string name="drawer_open">Ouvrir</string>
     <string name="drawer_close">Fermer</string>
+    <string name="drawer_menu">Menu</string>
 </resources>

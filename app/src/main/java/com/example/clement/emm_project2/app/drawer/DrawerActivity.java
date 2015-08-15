@@ -55,13 +55,15 @@ public abstract class DrawerActivity extends ActionBarActivity {
                 R.string.drawer_open, // Menu
                 R.string.drawer_close
         ) {
+            public String drawerTitle = getSupportActionBar().getTitle().toString();
+
             public void onDrawerClosed(View view) {
-//                getActionBar().setTitle(mTitle);
+                getSupportActionBar().setTitle(drawerTitle);
                 invalidateOptionsMenu();
             }
 
             public void onDrawerOpened(View drawerView) {
-//                getActionBar().setTitle(mDrawerTitle);
+                getSupportActionBar().setTitle(R.string.drawer_menu);
                 invalidateOptionsMenu();
             }
         };

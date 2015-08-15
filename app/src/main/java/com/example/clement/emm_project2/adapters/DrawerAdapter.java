@@ -34,7 +34,6 @@ public class DrawerAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        Log.d(DrawerAdapter.class.getSimpleName(), "Count returned by getCount => "+items.size());
         return items.size();
     }
 
@@ -63,7 +62,6 @@ public class DrawerAdapter extends BaseAdapter {
         else {
             view = getSectionView(convertView, parent, menuItem);
         }
-        Log.d(DrawerAdapter.class.getSimpleName(), "View returned by getView => "+view);
         return view ;
     }
 

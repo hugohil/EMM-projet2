@@ -1,7 +1,8 @@
 package com.example.clement.emm_project2;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,31 +10,55 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.clement.emm_project2.adapters.SubCatListAdapter;
+import com.example.clement.emm_project2.app.drawer.DrawerActivity;
+import com.example.clement.emm_project2.app.drawer.DrawerItem;
+import com.example.clement.emm_project2.app.drawer.DrawerSection;
+import com.example.clement.emm_project2.app.drawer.DrawerSectionItem;
 import com.example.clement.emm_project2.data.DataAccess;
+import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.model.SubCategory;
 import com.example.clement.emm_project2.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubCatActivity extends ActionBarActivity {
+public class SubCatActivity extends DrawerActivity {
 
     private static final String TAG = SubCatActivity.class.getSimpleName();
 
     private ArrayList<SubCategory> subCats = new ArrayList<SubCategory>();
     private SubCatListAdapter adapter;
     private ListView listView;
-    private DataAccess da;
+    private DataAccess dataAccess;
+    private List<Category> categories = new ArrayList<Category>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sub_cat);
 
         adapter = new SubCatListAdapter(this, subCats);
         listView = (ListView) findViewById(R.id.act_subcat_list);
         listView.setAdapter(adapter);
-        da = new DataAccess(getBaseContext());
+        dataAccess = new DataAccess(getBaseContext());
+
+
+        // All this needs to be in an Async task (activity is doin' to much work on his main Thread ... Skipps maaaany frames)
+        ArrayList<DrawerItem> menuItems = new ArrayList<DrawerItem>();
+        List<Category> dbCategories;
+        dataAccess = new DataAccess(this);
+        dataAccess.open();
+        dbCategories = dataAccess.getAllDatas(Category.class);
+        dataAccess.close();
+        menuItems.add(DrawerSection.create(200, "Catégories", "ic_action_bookmark", SubCatActivity.this));
+        int i = 1;
+        for(Category category : dbCategories) {
+            menuItems.add(DrawerSectionItem.create(dbCategories.indexOf(category), category.getTitle(), true));
+            i++;
+        }
+        menuItems.add(DrawerSection.create(100, "Configuration", "ic_action_settings", SubCatActivity.this));
+        menuItems.add(DrawerSectionItem.create(101, "Preferences", true));
+        setDrawerContent(menuItems);
+        categories.addAll(dbCategories);
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
@@ -42,9 +67,9 @@ public class SubCatActivity extends ActionBarActivity {
             desc.setText(html);
             setTitle(extras.getString("title"));
             try{
-                da.open();
-                List<SubCategory> DBList = da.findDataWhere(SubCategory.class, "catId", extras.getString("catID"));
-                da.close();
+                dataAccess.open();
+                List<SubCategory> DBList = dataAccess.findDataWhere(SubCategory.class, "catId", extras.getString("catID"));
+                dataAccess.close();
                 subCats.addAll(DBList);
                 Log.d(SubCatActivity.class.getSimpleName(), "" + subCats.size());
                 adapter.notifyDataSetChanged();
@@ -74,5 +99,23 @@ public class SubCatActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected int getLayoutResourceId() {
+        return R.layout.activity_sub_cat;
+    }
+
+    @Override
+    protected void onNavItemSelected(int id) {
+        if(id < 100 ){
+            // Click on categories
+            Category category = categories.get(id);
+            Intent i = new Intent(this, SubCatActivity.class);
+            i.putExtra("desc", category.getDescription());
+            i.putExtra("title", category.getTitle());
+            i.putExtra("catID", category.getMongoID());
+            this.startActivity(i);
+        }
     }
 }

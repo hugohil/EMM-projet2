@@ -6,39 +6,36 @@
     android:elevation="7dp">
 
     <!-- The main content view -->
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <FrameLayout
+        android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        tools:context="com.example.clement.emm_project2.SubCatActivity">
-
-        <TextView
-            android:id="@+id/act_subcat_desc"
-            android:layout_width="wrap_content"
-            android:lines="7"
-            android:layout_height="wrap_content"/>
+        android:layout_height="match_parent">
 
         <ListView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="385dp"
             android:id="@+id/act_subcat_list"
             android:layout_below="@+id/act_subcat_desc"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
-    </RelativeLayout>
+            android:layout_alignParentStart="true"
+            android:layout_gravity="center_horizontal|bottom" />
+
+        <TextView
+            android:id="@+id/act_subcat_desc"
+            android:layout_width="339dp"
+            android:lines="7"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top" />
+    </FrameLayout>
 
     <!-- The navigation drawer -->
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/RecyclerView"
-        android:layout_width="320dp"
+    <ListView android:id="@+id/left_drawer"
+        android:background="@android:color/white"
+        android:layout_width="240dp"
         android:layout_height="match_parent"
-        android:layout_gravity="left"
-        android:background="#ffffff"
-        android:scrollbars="vertical">
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:divider="@color/primary"
+        android:dividerHeight="0dp"/>
 
-    </android.support.v7.widget.RecyclerView>
 </android.support.v4.widget.DrawerLayout>
