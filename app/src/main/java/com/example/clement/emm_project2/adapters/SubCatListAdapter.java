@@ -7,16 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.clement.emm_project2.FormationsActivity;
+import com.example.clement.emm_project2.activities.FormationsActivity;
 import com.example.clement.emm_project2.R;
-import com.example.clement.emm_project2.SubCatActivity;
 import com.example.clement.emm_project2.model.SubCategory;
 import com.example.clement.emm_project2.util.StringUtil;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 

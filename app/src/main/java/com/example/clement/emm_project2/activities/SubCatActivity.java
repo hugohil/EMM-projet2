@@ -1,4 +1,4 @@
-package com.example.clement.emm_project2;
+package com.example.clement.emm_project2.activities;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.adapters.SubCatListAdapter;
 import com.example.clement.emm_project2.app.drawer.DrawerActivity;
 import com.example.clement.emm_project2.app.drawer.DrawerItem;

@@ -1,9 +1,11 @@
-package com.example.clement.emm_project2;
+package com.example.clement.emm_project2.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.example.clement.emm_project2.R;
 
 
 public class PreferencesActivity extends ActionBarActivity {

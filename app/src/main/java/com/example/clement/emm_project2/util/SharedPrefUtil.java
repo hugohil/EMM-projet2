@@ -2,7 +2,6 @@ package com.example.clement.emm_project2.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.app.App;

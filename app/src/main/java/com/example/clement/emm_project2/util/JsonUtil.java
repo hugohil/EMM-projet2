@@ -1,11 +1,9 @@
 package com.example.clement.emm_project2.util;
 
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.clement.emm_project2.SplashScreenActivity;
+import com.example.clement.emm_project2.activities.SplashScreenActivity;
 import com.example.clement.emm_project2.model.AppData;
-import com.example.clement.emm_project2.model.Category;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONArray;

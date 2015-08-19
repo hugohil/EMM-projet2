@@ -1,4 +1,4 @@
-package com.example.clement.emm_project2;
+package com.example.clement.emm_project2.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,13 +11,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.data.database.DatabaseHelper;
 import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.model.Formation;
 import com.example.clement.emm_project2.model.SubCategory;
-import com.example.clement.emm_project2.server.ResponseHandler;
-import com.example.clement.emm_project2.server.ServerHandler;
+import com.example.clement.emm_project2.app.server.ResponseHandler;
+import com.example.clement.emm_project2.app.server.ServerHandler;
 import com.example.clement.emm_project2.util.JsonUtil;
 import com.example.clement.emm_project2.util.SharedPrefUtil;
 

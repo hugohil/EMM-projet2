@@ -1,9 +1,10 @@
-package com.example.clement.emm_project2;
+package com.example.clement.emm_project2.activities;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.ListView;
 
+import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.adapters.CatListAdapter;
 import com.example.clement.emm_project2.app.drawer.DrawerActivity;
 import com.example.clement.emm_project2.app.drawer.DrawerItem;
