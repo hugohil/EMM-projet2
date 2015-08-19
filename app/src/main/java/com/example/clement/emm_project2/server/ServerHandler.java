@@ -29,13 +29,11 @@ public class ServerHandler {
     private Context context;
     private static ServerHandler instance;
     private final String TAG = ServerHandler.class.getSimpleName();
-    private ProgressDialog progress;
 
     public static final String API_BASE_URL = "http://eas.elephorm.com/api/v1/";
 
     public ServerHandler(Context context){
         this.context = context;
-        progress = new ProgressDialog(this.context);
     }
 
     public static synchronized ServerHandler getInstance(Context context){
@@ -46,8 +44,6 @@ public class ServerHandler {
     }
 
     public void getCategories(final ResponseHandler handler){
-//        progress.setMessage(context.getResources().getString(R.string.server_dialog));
-//        progress.show();
         RequestQueue requestQueue = Volley.newRequestQueue(this.context);
         JsonArrayRequest jsonArrayReq = new JsonArrayRequest(Request.Method.GET,
                 API_BASE_URL + "categories",
@@ -55,7 +51,6 @@ public class ServerHandler {
                     @Override
                     public void onResponse(JSONArray response) {
                         handler.onSuccess(response);
-//                        progress.hide();
                     }
                 },
                 new Response.ErrorListener() {
@@ -63,7 +58,26 @@ public class ServerHandler {
                     public void onErrorResponse(VolleyError error) {
                         Log.d(TAG, error.toString());
                         handler.onError(error.toString());
-//                        progress.hide();
+                    }
+                });
+        requestQueue.add(jsonArrayReq);
+    }
+
+    public void getFormations(final String subCatId, final ResponseHandler handler) {
+        RequestQueue requestQueue = Volley.newRequestQueue(this.context);
+        JsonArrayRequest jsonArrayReq = new JsonArrayRequest(Request.Method.GET,
+                API_BASE_URL + "subcategories/" + subCatId + "/trainings",
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        handler.onSuccess(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d(TAG, error.toString());
+                        handler.onError(error.toString());
                     }
                 });
         requestQueue.add(jsonArrayReq);

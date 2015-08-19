@@ -35,16 +35,13 @@ public class MainActivity extends DrawerActivity {
         // Get categories
         List<Category> dbCategories;
         dataAccess = new DataAccess(this);
-        dataAccess.open();
         dbCategories = dataAccess.getAllDatas(Category.class);
-        dataAccess.close();
         categories.addAll(dbCategories);
 
         // Set listView adapter
         adapter = new CatListAdapter(this, categories);
         listView = (ListView) findViewById(R.id.act_main_listView);
         listView.setAdapter(adapter);
-//        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -76,10 +73,6 @@ public class MainActivity extends DrawerActivity {
 
     @Override
     protected void onNavItemSelected(int id) {
-        if(id < 100) {
-            // click on category
-            String mongoid = categories.get(id).getMongoID();
-            // Start new Intent there
-        }
+
     }
 }

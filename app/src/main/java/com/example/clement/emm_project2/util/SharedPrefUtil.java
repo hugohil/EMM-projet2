@@ -18,7 +18,7 @@ public class SharedPrefUtil {
 
     private final static String TAG = SharedPrefUtil.class.getSimpleName();
 
-    public static void registerDataInCache(AppData data) {
+    public static void registerDataIdInCache(AppData data) {
         Context context = App.getAppContext();
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
                 Context.MODE_PRIVATE);
@@ -32,6 +32,23 @@ public class SharedPrefUtil {
 
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putStringSet(data.getClass().getSimpleName(), loadedIds);
+        editor.commit();
+    }
+
+    public static void registerFormationsOfSubcategory(String subCatId) {
+        Context context = App.getAppContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
+                Context.MODE_PRIVATE);
+        Set<String> loadedSubCatFormations = sharedPref.getStringSet(context.getString(R.string.formations_loaded_subcat), null);
+        if(loadedSubCatFormations == null) {
+            loadedSubCatFormations = new HashSet<String>();
+        } else if(loadedSubCatFormations.contains(subCatId)) {
+            throw new RuntimeException("Data id is already present in cache !!!");
+        }
+        loadedSubCatFormations.add(subCatId);
+
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putStringSet(context.getString(R.string.formations_loaded_subcat), loadedSubCatFormations);
         editor.commit();
     }
 
@@ -57,11 +74,12 @@ public class SharedPrefUtil {
         return true;
     }
 
-    public static boolean isSubCategoryInCache(String id) {
+    public static boolean areFormationsOfSubCategoryInCache(String id) {
+        // TODO: check here if formations of the subcategory have been loaded...
         Context context = App.getAppContext();
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
                 Context.MODE_PRIVATE);
-        Set<String> loadedIds = sharedPref.getStringSet(context.getString(R.string.subCategory), null);
+        Set<String> loadedIds = sharedPref.getStringSet(context.getString(R.string.formations_loaded_subcat), null);
         if(loadedIds == null || !loadedIds.contains(id)) {
             return false;
         }

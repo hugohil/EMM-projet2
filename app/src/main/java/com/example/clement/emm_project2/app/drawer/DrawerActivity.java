@@ -55,10 +55,10 @@ public abstract class DrawerActivity extends ActionBarActivity {
                 R.string.drawer_open, // Menu
                 R.string.drawer_close
         ) {
+            // Save precedent Title if we need to use it later
             public String drawerTitle = getSupportActionBar().getTitle().toString();
 
             public void onDrawerClosed(View view) {
-                getSupportActionBar().setTitle(drawerTitle);
                 invalidateOptionsMenu();
             }
 

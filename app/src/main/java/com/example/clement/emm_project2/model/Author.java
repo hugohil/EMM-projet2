@@ -14,6 +14,12 @@ public class Author extends AppData {
     @JsonProperty("fullname")
     private String fullName;
 
+    @JsonProperty("picture_large")
+    private String pictureLarge;
+
+    @JsonProperty("picture_small")
+    private String pictureSmall;
+
     private String link;
 
     private Map<String, Image> picture;
@@ -42,7 +48,24 @@ public class Author extends AppData {
         this.picture = picture;
     }
 
+    public String getPictureLarge() {
+        return pictureLarge;
+    }
+
+    public void setPictureLarge(String pictureLarge) {
+        this.pictureLarge = pictureLarge;
+    }
+
+    public String getPictureSmall() {
+        return pictureSmall;
+    }
+
+    public void setPictureSmall(String pictureSmall) {
+        this.pictureSmall = pictureSmall;
+    }
+
     public String toString() {
         return "Author = [fullname: "+ this.fullName + ", link: "+ this.link + "]";
     }
+
 }

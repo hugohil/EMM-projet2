@@ -30,15 +30,17 @@ public class DataAccess {
         this.context = context;
     }
 
-    public void open() {
+    private void open() {
         database = dbHelper.getWritableDatabase();
     }
 
-    public void close() {
+    private void close() {
         dbHelper.close();
     }
 
     public <T extends AppData> T createData(AppData data) {
+        this.open();
+
         // 1. Build ContentValues
         ContentValues values = new ContentValues();
 
@@ -64,7 +66,7 @@ public class DataAccess {
         // Log.d(TAG, "Inserted data "+data.toString()+ " id= "+insertId);
 
         // 3. Insert ID in sharedPref
-        SharedPrefUtil.registerDataInCache(data);
+        SharedPrefUtil.registerDataIdInCache(data);
 
         // 4. Get & return created data
         Cursor cursor = database.query(tableName,
@@ -74,10 +76,12 @@ public class DataAccess {
         if(cursor != null) {
             data = cursorToData(cursor, data.getClass());
         }
+        this.close();
         return (T)data;
     }
 
     public <T extends AppData> ArrayList<T> getAllDatas(Class c) {
+        this.open();
         ArrayList<T> datas = new ArrayList<T>();
         T data = null;
         try {
@@ -98,6 +102,7 @@ public class DataAccess {
         }
         // make sure to close the cursor
         cursor.close();
+        this.close();
         return datas;
 
     }
@@ -138,6 +143,7 @@ public class DataAccess {
     }
 
     public <T extends AppData> T getDataById(Class c, Long id) {
+        this.open();
         T data = null;
         try {
             data = (T)c.newInstance();
@@ -153,6 +159,7 @@ public class DataAccess {
         if(cursor != null) {
             data = cursorToData(cursor, data.getClass());
         }
+        this.close();
         return (T)data;
     }
 
@@ -160,6 +167,7 @@ public class DataAccess {
         if(args.length % 2 != 0) {
             throw new IllegalArgumentException("Arguments must be a pair number ! (property, value)");
         } else {
+            this.open();
             List<T> datas = new ArrayList<T>();
             T data = null;
             try {
@@ -184,6 +192,7 @@ public class DataAccess {
             }
             // make sure to close the cursor
             cursor.close();
+            this.close();
             return datas;
         }
     }

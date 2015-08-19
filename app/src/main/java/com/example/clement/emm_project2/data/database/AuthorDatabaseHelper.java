@@ -10,7 +10,8 @@ public class AuthorDatabaseHelper {
     public static final String COLUMN_MONGOID = "mongoid";
     public static final String COLUMN_FULLNAME = "fullname";
     public static final String COLUMN_LINK = "link";
-    public static final String COLUMN_PICTURE = "picture";
+    public static final String COLUMN_PICTURE_LARGE = "pictureLarge";
+    public static final String COLUMN_PICTURE_SMALL = "pictureSmall";
 
     public static final String[] ALL_COLUMNS = {
             AuthorDatabaseHelper.COLUMN_ID,
@@ -25,7 +26,8 @@ public class AuthorDatabaseHelper {
             + COLUMN_MONGOID + " text not null, "
             + COLUMN_FULLNAME +" text not null, "
             + COLUMN_LINK +" text,"
-            + COLUMN_PICTURE+ " blob"
+            + COLUMN_PICTURE_LARGE + " text,"
+            + COLUMN_PICTURE_SMALL + "text"
             +");";
 
 

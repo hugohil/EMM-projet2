@@ -55,7 +55,7 @@ public class CatListAdapter extends ArrayAdapter<Category> {
                 // i.putExtra("subcat", cat.getSubCategories());
                 i.putExtra("desc", cat.getDescription());
                 i.putExtra("title", cat.getTitle());
-                i.putExtra("catID", cat.getMongoID());
+                i.putExtra("catId", cat.getMongoID());
                 act.startActivity(i);
                 // call finish() current activity loads the next one much faster but disable the back button
                 // act.finish();

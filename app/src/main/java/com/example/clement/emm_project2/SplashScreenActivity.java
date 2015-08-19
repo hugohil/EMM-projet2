@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.data.database.DatabaseHelper;
 import com.example.clement.emm_project2.model.Category;
+import com.example.clement.emm_project2.model.Formation;
 import com.example.clement.emm_project2.model.SubCategory;
 import com.example.clement.emm_project2.server.ResponseHandler;
 import com.example.clement.emm_project2.server.ServerHandler;
@@ -55,27 +56,44 @@ public class SplashScreenActivity extends Activity {
                 public void onSuccess(Object datas) {
                     Log.i(TAG, "Got categories, registering in database...");
 
-                    publishProgress(20);
+                    publishProgress(10);
 
                     List<Category> categories = JsonUtil.parseJsonDatas((JSONArray) datas, Category.class);
 
-                    DataAccess dataAccess = new DataAccess(getBaseContext());
-                    dataAccess.open();
+                    final DataAccess dataAccess = new DataAccess(getBaseContext());
                     for (int i = 0; i < categories.size(); i++) {
                         Category category = categories.get(i);
                         dataAccess.createData(category);
 
-                        List<SubCategory> subCategories = category.getSubCategoriesAsList();
-                        for (SubCategory subCategory : subCategories) {
+                        final List<SubCategory> subCategories = category.getSubCategoriesAsList();
+                        for (final SubCategory subCategory : subCategories) {
                             subCategory.setCatId(category.getMongoID());
                             dataAccess.createData(subCategory);
+
+                            server.getFormations(subCategory.getMongoID(), new ResponseHandler() {
+                                @Override
+                                public void onSuccess(Object datas) {
+                                    Log.i(TAG, "Got Formation, registering in database...");
+                                    List<Formation> formations = JsonUtil.parseJsonDatas((JSONArray) datas, Formation.class);
+                                    for (int k = 0; k < formations.size(); k++) {
+                                        Formation formation = formations.get(k);
+                                        formation.setSubCatId(subCategory.getMongoID()); 
+                                        dataAccess.createData(formation);
+                                    }
+
+                                }
+
+                                @Override
+                                public void onError(String error) {
+                                    Log.wtf(TAG, error);
+                                }
+                            });
                         }
 
                         final int j = i;
-                        publishProgress(0 + (j + 1) * (80 / categories.size()));
+                        publishProgress(0 + (j + 1) * (90 / categories.size()));
 
                     }
-                    dataAccess.close();
                     Log.i(TAG, "App initialized !");
                     progressText.setText(getString(R.string.application_ready));
                     Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
@@ -84,7 +102,7 @@ public class SplashScreenActivity extends Activity {
 
                 @Override
                 public void onError(String error) {
-                    Log.e(TAG, error);
+                    Log.wtf(TAG, error);
                     Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                 }
             });

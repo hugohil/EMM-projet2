@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Clement on 11/08/15.
@@ -53,12 +54,16 @@ public class ReflectUtil {
     public static void setObjectFieldValue(Object o, Field field, Object fieldValue) {
         Method m = null;
         boolean isFieldList = false;
+        boolean isFieldMap = false;
         try {
             if(Collection.class.isAssignableFrom(field.getType())) {
                 // Field type is a List<T>, we need to look for the specific getter
-                // Maybe we'll need to define other special cases here
                 m = o.getClass().getDeclaredMethod("set" + StringUtil.capitalize(field.getName()), TypeReference.class, String.class);
                 isFieldList = true;
+            } else if(Map.class.isAssignableFrom(field.getType())) {
+                // Field type is a Map<T>, we need to look for the specific getter
+                m = o.getClass().getDeclaredMethod("set" + StringUtil.capitalize(field.getName()), TypeReference.class, String.class);
+                isFieldMap = true;
             } else {
                 m = o.getClass().getDeclaredMethod("set" + StringUtil.capitalize(field.getName()), field.getType());
             }
@@ -75,16 +80,21 @@ public class ReflectUtil {
             try {
                 if(m.getParameterTypes()[0].equals(boolean.class)) {
                     fieldValue = fieldValue == "true" ? true : false;
+                } else if (m.getParameterTypes()[0].equals(Float.class)) {
+                    fieldValue = (Float)fieldValue;
                 }
+
                 if(isFieldList) {
                     m.invoke(o, new TypeReference<List<Object>> () {},fieldValue);
+                } else if(isFieldMap) {
+                    m.invoke(o, new TypeReference<Map<Object, Object>>() {}, fieldValue);
                 } else {
                     m.invoke(o, fieldValue);
                 }
             } catch(Exception e) {
                 Log.e(TAG, "error while trying to invoke setter of property '"
                         + field.getName()
-                        +"\n=> "
+                        +"'\n=> "
                         +e.getMessage().toString());
             }
         }

@@ -1,7 +1,5 @@
 package com.example.clement.emm_project2;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +18,8 @@ import com.example.clement.emm_project2.model.SubCategory;
 import com.example.clement.emm_project2.util.StringUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class SubCatActivity extends DrawerActivity {
@@ -46,14 +46,17 @@ public class SubCatActivity extends DrawerActivity {
         ArrayList<DrawerItem> menuItems = new ArrayList<DrawerItem>();
         List<Category> dbCategories;
         dataAccess = new DataAccess(this);
-        dataAccess.open();
         dbCategories = dataAccess.getAllDatas(Category.class);
-        dataAccess.close();
+        Collections.sort(dbCategories, new Comparator<Category>() {
+            public int compare(Category c1, Category c2) {
+                String t1 = c1.getTitle().toUpperCase();
+                String t2 = c2.getTitle().toUpperCase();
+                return t1.compareTo(t2);
+            }
+        });
         menuItems.add(DrawerSection.create(200, "Catégories", "ic_action_bookmark", SubCatActivity.this));
-        int i = 1;
         for(Category category : dbCategories) {
             menuItems.add(DrawerSectionItem.create(dbCategories.indexOf(category), category.getTitle(), true));
-            i++;
         }
         menuItems.add(DrawerSection.create(100, "Configuration", "ic_action_settings", SubCatActivity.this));
         menuItems.add(DrawerSectionItem.create(101, "Preferences", true));
@@ -62,21 +65,31 @@ public class SubCatActivity extends DrawerActivity {
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
-            TextView desc = (TextView) findViewById(R.id.act_subcat_desc);
-            String html = StringUtil.html2Text(extras.getString("desc"));
-            desc.setText(html);
-            setTitle(extras.getString("title"));
-            try{
-                dataAccess.open();
-                List<SubCategory> DBList = dataAccess.findDataWhere(SubCategory.class, "catId", extras.getString("catID"));
-                dataAccess.close();
-                subCats.addAll(DBList);
-                Log.d(SubCatActivity.class.getSimpleName(), "" + subCats.size());
-                adapter.notifyDataSetChanged();
-            } catch(Exception e){
-                Log.e(SubCatActivity.class.getSimpleName(), e.toString());
-            }
+            bindView(extras.getString("desc"), extras.getString("title"), extras.getString("catId"));
+        } else {
+            throw new RuntimeException("No intent extras ! Cannot find targeted category !! ");
         }
+    }
+
+    public void bindView(String description, String title, String catId) {
+        TextView desc = (TextView) findViewById(R.id.act_subcat_desc);
+        String html = StringUtil.html2Text(description); // Needs to be done in DataAccess?
+        desc.setText(html);
+        setTitle(title);
+
+        // Set subcategories list
+        List<SubCategory> DBList = dataAccess.findDataWhere(SubCategory.class, "catId", catId);
+        Collections.sort(DBList, new Comparator<SubCategory>() {
+            public int compare(SubCategory c1, SubCategory c2) {
+                String t1 = c1.getTitle().toUpperCase();
+                String t2 = c2.getTitle().toUpperCase();
+                return t1.compareTo(t2);
+            }
+        });
+        Log.d(TAG, "DbList size : " + DBList.size());
+        subCats.clear();
+        subCats.addAll(DBList);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -88,9 +101,6 @@ public class SubCatActivity extends DrawerActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -111,11 +121,8 @@ public class SubCatActivity extends DrawerActivity {
         if(id < 100 ){
             // Click on categories
             Category category = categories.get(id);
-            Intent i = new Intent(this, SubCatActivity.class);
-            i.putExtra("desc", category.getDescription());
-            i.putExtra("title", category.getTitle());
-            i.putExtra("catID", category.getMongoID());
-            this.startActivity(i);
+            bindView(category.getDescription(), category.getTitle(), category.getMongoID());
+            getSupportActionBar().setTitle(category.getTitle());
         }
     }
 }

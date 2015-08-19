@@ -1,10 +1,12 @@
 package com.example.clement.emm_project2.model;
 
-import android.media.Image;
+import android.util.Log;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -21,104 +23,65 @@ public class Formation extends AppData {
     @JsonProperty("subtitle")
     private String subtitle;
 
-    /*
-     * Specific rss feed URL
-     */
-    @JsonProperty("guid")
-    private String guid;
+    @JsonProperty("product_url")
+    private String productUrl;
+
+    @JsonProperty("ean13")
+    private String ean;
+
+    @JsonProperty("price")
+    private Float price;
 
     @JsonProperty("description")
     private String description;
 
-    @JsonProperty("pubdate")
-    private Date pubDate;
-
-    @JsonProperty("link")
-    private String link;
-
-    /*
-     * ean code of the formation (nmuber under barcode)
-     */
-    @JsonProperty("ean")
-    private String ean;
-
-    /*
-     * Total duration in seconds
-     */
     @JsonProperty("duration")
-    private float duration;
+    private int duration;
 
-    @JsonProperty("category")
-    private Category category;
+    @JsonProperty("objectives")
+    private String objectives;
 
-    @JsonProperty("subcategory")
-    private SubCategory subCategory;
-
-    @JsonProperty("image")
-    private Image image;
-
-    /*
-     * Link to QCM page
-     */
-    @JsonProperty("qcm")
-    private String qcm;
-
-    /*
-     * Images of the formation
-     * First index: Type (thumbs/Landscapes)
-     * Second index: Size (small, medium, big)
-     */
-    @JsonProperty("images")
-    private Map<String, Map<String, Image>> images;
-
-    /*
-     * Formation teasing video
-     */
-    @JsonProperty("teaser")
-    private TeaserVideo teaser;
-
-    @JsonProperty("price")
-    private float price;
-
-    /*
-     * Can be a list of String, let's see the data...
-     */
     @JsonProperty("prerequisites")
     private String prerequisites;
 
-    /*
-     * Idem
-     */
-    @JsonProperty("objectives")
-    private String objectives;
+    @JsonProperty("qcm")
+    private String qcm;
+
+    @JsonProperty("teaser_text")
+    private String teaserText;
+
+    @JsonProperty("category")
+    private String catId;
+
+    @JsonProperty("subcategory")
+    private String subCatId;
+
+    @JsonProperty("teaser")
+    private String teaser;
+
+    @JsonProperty("publishedDate")
+    private String publishedDate;
+
+    @JsonProperty("poster")
+    private String poster;
 
     @JsonProperty("authors")
     private List<Author> authors;
 
-    /*
-     * Ratings of the formation (indexes : average [ average rating ] / Count [ ratings nb ])
-     */
+    @JsonProperty("images")
+    private Map<String, Map<String, String>> images;
+
+    @JsonProperty("free")
+    private boolean free;
+
     @JsonProperty("rating")
     private Map<String, Float> rating;
 
-    /*
-     * Total number of videos in the formation
-     */
-    @JsonProperty("videocount")
+    @JsonProperty("video_count")
     private int videoCount;
 
-    /*
-     * Last formation update date
-     */
-    @JsonProperty("updatedAt")
-    private Date updatedAt;
-
-    @JsonProperty("updatedAt")
+    @JsonProperty("active")
     private boolean active;
-
-    @JsonProperty("items")
-    private List<Item> items;
-
 
     public String getTitle() {
         return title;
@@ -136,12 +99,20 @@ public class Formation extends AppData {
         this.subtitle = subtitle;
     }
 
-    public String getGuid() {
-        return guid;
+    public String getProductUrl() {
+        return productUrl;
     }
 
-    public void setGuid(String guid) {
-        this.guid = guid;
+    public void setProductUrl(String productUrl) {
+        this.productUrl = productUrl;
+    }
+
+    public Float getPrice() {
+        return price;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
     }
 
     public String getDescription() {
@@ -152,100 +123,12 @@ public class Formation extends AppData {
         this.description = description;
     }
 
-    public Date getPubDate() {
-        return pubDate;
-    }
-
-    public void setPubDate(Date pubDate) {
-        this.pubDate = pubDate;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
-    }
-
-    public String getEan() {
-        return ean;
-    }
-
-    public void setEan(String ean) {
-        this.ean = ean;
-    }
-
-    public float getDuration() {
+    public int getDuration() {
         return duration;
     }
 
-    public void setDuration(float duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public SubCategory getSubCategory() {
-        return subCategory;
-    }
-
-    public void setSubCategory(SubCategory subCategory) {
-        this.subCategory = subCategory;
-    }
-
-    public Image getImage() {
-        return image;
-    }
-
-    public void setImage(Image image) {
-        this.image = image;
-    }
-
-    public String getQcm() {
-        return qcm;
-    }
-
-    public void setQcm(String qcm) {
-        this.qcm = qcm;
-    }
-
-    public Map<String, Map<String, Image>> getImages() {
-        return images;
-    }
-
-    public void setImages(Map<String, Map<String, Image>> images) {
-        this.images = images;
-    }
-
-    public TeaserVideo getTeaser() {
-        return teaser;
-    }
-
-    public void setTeaser(TeaserVideo teaser) {
-        this.teaser = teaser;
-    }
-
-    public float getPrice() {
-        return price;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
-    }
-
-    public String getPrerequisites() {
-        return prerequisites;
-    }
-
-    public void setPrerequisites(String prerequisites) {
-        this.prerequisites = prerequisites;
     }
 
     public String getObjectives() {
@@ -256,20 +139,142 @@ public class Formation extends AppData {
         this.objectives = objectives;
     }
 
-    public List<Author> getAuthors() {
-        return authors;
+    public String getPrerequisites() {
+        return prerequisites;
     }
 
-    public void setAuthors(List<Author> authors) {
-        this.authors = authors;
+    public void setPrerequisites(String prerequisites) {
+        this.prerequisites = prerequisites;
     }
 
-    public Map<String, Float> getRating() {
-        return rating;
+    public String getQcm() {
+        return qcm;
     }
 
-    public void setRating(Map<String, Float> rating) {
-        this.rating = rating;
+    public void setQcm(String qcm) {
+        this.qcm = qcm;
+    }
+
+    public String getTeaserText() {
+        return teaserText;
+    }
+
+    public void setTeaserText(String teaserText) {
+        this.teaserText = teaserText;
+    }
+
+    public String getCatId() {
+        return catId;
+    }
+
+    public void setCatId(String catId) {
+        this.catId = catId;
+    }
+
+    public String getSubCatId() {
+        return subCatId;
+    }
+
+    public void setSubCatId(String subCatId) {
+        this.subCatId = subCatId;
+    }
+
+    public String getTeaser() {
+        return teaser;
+    }
+
+    public void setTeaser(String teaser) {
+        this.teaser = teaser;
+    }
+
+    public String getPublishedDate() {
+        return publishedDate;
+    }
+
+    public void setPublishedDate(String publishedDate) {
+        this.publishedDate = publishedDate;
+    }
+
+    public String getPoster() {
+        return poster;
+    }
+
+    public void setPoster(String poster) {
+        this.poster = poster;
+    }
+
+    public String getAuthors() {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(this.authors);
+        } catch (JsonProcessingException e){
+            Log.d(Author.class.getSimpleName(), e.toString());
+            return null;
+        }
+    }
+
+    public <T> T setAuthors(final TypeReference<T> type, String authors) {
+        T data = null;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            data = mapper.readValue(authors, type);
+            this.authors = (List<Author>) data;
+        } catch (Exception e){
+            Log.d(Author.class.getSimpleName(), e.toString());
+        }
+        return data;
+    }
+
+    public String getImages() {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(this.images);
+        } catch (JsonProcessingException e){
+            Log.d(Category.class.getSimpleName(), e.toString());
+            return null;
+        }
+    }
+
+    public <T> T setImages(final TypeReference<T> type, String images) {
+        T data = null;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            data = mapper.readValue(images, type);
+            this.images = (Map<String, Map<String, String>>) data;
+        } catch (Exception e){
+            Log.d(Category.class.getSimpleName(), e.toString());
+        }
+        return data;
+    }
+
+    public boolean getFree() {
+        return free;
+    }
+
+    public void setFree(boolean free) {
+        this.free = free;
+    }
+
+    public String getRating() {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(this.rating);
+        } catch (JsonProcessingException e){
+            Log.d(Category.class.getSimpleName(), e.toString());
+            return null;
+        }
+    }
+
+    public <T> T setRating(final TypeReference<T> type, String rating) {
+        T data = null;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            data = mapper.readValue(rating, type);
+            this.rating = (Map<String, Float>) data;
+        } catch (Exception e){
+            Log.d(Category.class.getSimpleName(), e.toString());
+        }
+        return data;
     }
 
     public int getVideoCount() {
@@ -280,15 +285,7 @@ public class Formation extends AppData {
         this.videoCount = videoCount;
     }
 
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public boolean isActive() {
+    public boolean getActive() {
         return active;
     }
 
@@ -296,11 +293,13 @@ public class Formation extends AppData {
         this.active = active;
     }
 
-    public List<Item> getItems() {
-        return items;
+    public String getEan() {
+        return ean;
     }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
+    public void setEan(String ean) {
+        this.ean = ean;
     }
+
+
 }

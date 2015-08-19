@@ -19,4 +19,6 @@
     <string name="drawer_open">Ouvrir</string>
     <string name="drawer_close">Fermer</string>
     <string name="drawer_menu">Menu</string>
+    <string name="title_activity_formations">FormationsActivity</string>
+    <string name="formations_loaded_subcat">formationsLoadedSubcat</string>
 </resources>

@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.clement.emm_project2.model.Formation;
 import com.example.clement.emm_project2.util.SharedPrefUtil;
 
 /**
@@ -13,7 +14,7 @@ import com.example.clement.emm_project2.util.SharedPrefUtil;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 36;
+    private static final int DATABASE_VERSION = 62;
 
     // Database Name
     private static final String DATABASE_NAME = "elephormDB";
@@ -27,6 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(AuthorDatabaseHelper.CREATE_TABLE_STATEMENT);
         db.execSQL(CategoryDatabaseHelper.CREATE_TABLE_STATEMENT);
         db.execSQL(SubCategoryDatabaseHelper.CREATE_TABLE_STATEMENT);
+        db.execSQL(FormationDatabaseHelper.CREATE_TABLE_STATEMENT);
     }
 
     @Override
@@ -37,6 +39,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + AuthorDatabaseHelper.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + CategoryDatabaseHelper.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + SubCategoryDatabaseHelper.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + FormationDatabaseHelper.TABLE_NAME);
+
 
         SharedPrefUtil.clearAllDataInCache();
         onCreate(db);
