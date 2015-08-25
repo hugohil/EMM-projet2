@@ -30,13 +30,13 @@ public class FormationDatabaseHelper {
     public static final String COLUMN_RATING = "rating";
     public static final String COLUMN_VIDEO_COUNT = "videoCount";
     public static final String COLUMN_ACTIVE = "active";
-
-    public static final String[] ALL_COLUMNS = {
-            AuthorDatabaseHelper.COLUMN_ID,
-            AuthorDatabaseHelper.COLUMN_MONGOID,
-            AuthorDatabaseHelper.COLUMN_FULLNAME,
-            AuthorDatabaseHelper.COLUMN_LINK
-    };
+    public static final String COLUMN_TYPE = "type";
+    public static final String COLUMN_CAN_DOWNLOAD = "canDownload";
+    public static final String COLUMN_V = "v";
+    public static final String COLUMN_UPDATED_AT = "updatedAt";
+    public static final String COLUMN_ITEMS = "items";
+    public static final String COLUMN_CHILDREN = "children";
+    public static final String COLUMN_TEASER_INFO = "teaserInfo";
 
     public static final String CREATE_TABLE_STATEMENT = "create table "
             + TABLE_NAME + "("
@@ -63,6 +63,13 @@ public class FormationDatabaseHelper {
             + COLUMN_FREE + " integer,"
             + COLUMN_RATING + " text,"
             + COLUMN_VIDEO_COUNT + " integer,"
-            + COLUMN_ACTIVE + " integer"
+            + COLUMN_ACTIVE + " integer,"
+            + COLUMN_TYPE + " text,"
+            + COLUMN_CAN_DOWNLOAD + " integer,"
+            + COLUMN_V + " text,"
+            + COLUMN_UPDATED_AT + " text,"
+            + COLUMN_ITEMS + " text,"
+            + COLUMN_CHILDREN + " text,"
+            + COLUMN_TEASER_INFO + " text"
             +");";
 }

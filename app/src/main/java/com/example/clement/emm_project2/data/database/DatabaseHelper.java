@@ -12,8 +12,10 @@ import com.example.clement.emm_project2.util.SharedPrefUtil;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    private static final String TAG = DatabaseHelper.class.getSimpleName();
+
     // Database Version
-    private static final int DATABASE_VERSION = 62;
+    private static final int DATABASE_VERSION = 78;
 
     // Database Name
     private static final String DATABASE_NAME = "elephormDB";
@@ -28,6 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CategoryDatabaseHelper.CREATE_TABLE_STATEMENT);
         db.execSQL(SubCategoryDatabaseHelper.CREATE_TABLE_STATEMENT);
         db.execSQL(FormationDatabaseHelper.CREATE_TABLE_STATEMENT);
+        db.execSQL(ItemDatabaseHelper.CREATE_TABLE_STATEMENT);
     }
 
     @Override
@@ -39,6 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + CategoryDatabaseHelper.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + SubCategoryDatabaseHelper.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + FormationDatabaseHelper.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + ItemDatabaseHelper.TABLE_NAME);
 
 
         SharedPrefUtil.clearAllDataInCache();
@@ -52,4 +56,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             onUpgrade(db, versionNb, DATABASE_VERSION);
         }
     }
+
+    public void dropAllDatas() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + AuthorDatabaseHelper.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + CategoryDatabaseHelper.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + SubCategoryDatabaseHelper.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + FormationDatabaseHelper.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + ItemDatabaseHelper.TABLE_NAME);
+        SharedPrefUtil.clearAllDataInCache();
+        onCreate(db);
+    }
+
+    /*
+     * Allows us to handle database I/O with transaction. This way, if an exceptions popped, we can rollback the whole s***
+     */
+    public void withTransaction(Runnable runnable) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+
+        try {
+            runnable.run();
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            // Here we don't commit the transaction if an error occured
+            Log.wtf(TAG, "Database transaction failed. Rollbacked. \n StackTrace : "+e.getMessage());
+        } finally {
+            db.endTransaction();
+        }
+    }
+
 }

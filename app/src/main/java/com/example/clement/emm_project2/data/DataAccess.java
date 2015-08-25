@@ -100,7 +100,6 @@ public class DataAccess {
             datas.add(data);
             cursor.moveToNext();
         }
-        // make sure to close the cursor
         cursor.close();
         this.close();
         return datas;
@@ -165,7 +164,7 @@ public class DataAccess {
 
     public <T extends AppData> List<T> findDataWhere(Class c, String... args) {
         if(args.length % 2 != 0) {
-            throw new IllegalArgumentException("Arguments must be a pair number ! (property, value)");
+            throw new IllegalArgumentException("Arguments of findDataWhere must be a pair number ! (property, value)");
         } else {
             this.open();
             List<T> datas = new ArrayList<T>();

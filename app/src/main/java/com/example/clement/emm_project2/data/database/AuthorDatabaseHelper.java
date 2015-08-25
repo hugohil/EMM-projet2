@@ -13,13 +13,6 @@ public class AuthorDatabaseHelper {
     public static final String COLUMN_PICTURE_LARGE = "pictureLarge";
     public static final String COLUMN_PICTURE_SMALL = "pictureSmall";
 
-    public static final String[] ALL_COLUMNS = {
-            AuthorDatabaseHelper.COLUMN_ID,
-            AuthorDatabaseHelper.COLUMN_MONGOID,
-            AuthorDatabaseHelper.COLUMN_FULLNAME,
-            AuthorDatabaseHelper.COLUMN_LINK
-    };
-
     public static final String CREATE_TABLE_STATEMENT = "create table "
             + TABLE_NAME + "("
             + COLUMN_ID + " integer primary key autoincrement, "

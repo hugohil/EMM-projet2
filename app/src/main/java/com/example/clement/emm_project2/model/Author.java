@@ -22,7 +22,8 @@ public class Author extends AppData {
 
     private String link;
 
-    private Map<String, Image> picture;
+    @JsonProperty("picture")
+    private String picture;
 
     public String getFullName() {
         return fullName;
@@ -40,11 +41,11 @@ public class Author extends AppData {
         this.link = link;
     }
 
-    public Map<String, Image> getPicture() {
+    public String getPicture() {
         return picture;
     }
 
-    public void setPicture(Map<String, Image> picture) {
+    public void setPicture(String picture) {
         this.picture = picture;
     }
 
