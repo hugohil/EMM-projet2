@@ -28,39 +28,36 @@ import java.util.concurrent.Executors;
  */
 public class ImageLoader {
 
-    MemoryCache memoryCache=new MemoryCache();
+    MemoryCache memoryCache = new MemoryCache();
     FileCache fileCache;
-    private Map<ImageView, String> imageViews=Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
+    private Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
     ExecutorService executorService;
 
     public ImageLoader(Context context){
-        fileCache=new FileCache(context);
-        executorService=Executors.newFixedThreadPool(5);
+        fileCache = new FileCache(context);
+        executorService = Executors.newFixedThreadPool(5);
     }
 
     int stub_id;
-    public void DisplayImage(String url, int loader, ImageView imageView)
-    {
+    public void DisplayImage(String url, int loader, ImageView imageView) {
         stub_id = loader;
         imageViews.put(imageView, url);
         Bitmap bitmap = memoryCache.get(url);
-        if(bitmap!=null)
+        if(bitmap != null)
             imageView.setImageBitmap(bitmap);
         else {
             queuePhoto(url, imageView);
-//            imageView.setScaleType(ImageView.ScaleType.MATRIX);
+//          imageView.setScaleType(ImageView.ScaleType.MATRIX);
             imageView.setImageResource(loader);
         }
     }
 
-    private void queuePhoto(String url, ImageView imageView)
-    {
-        PhotoToLoad p=new PhotoToLoad(url, imageView);
+    private void queuePhoto(String url, ImageView imageView) {
+        PhotoToLoad p = new PhotoToLoad(url, imageView);
         executorService.submit(new PhotosLoader(p));
     }
 
-    private Bitmap getBitmap(String url)
-    {
+    private Bitmap getBitmap(String url) {
         File f=fileCache.getFile(url);
 
         //from SD cache
@@ -82,7 +79,7 @@ public class ImageLoader {
             os.close();
             bitmap = decodeFile(f);
             return bitmap;
-        } catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }
@@ -97,6 +94,7 @@ public class ImageLoader {
             BitmapFactory.decodeStream(new FileInputStream(f),null,o);
 
             //Find the correct scale value. It should be the power of 2.
+            // TODO : Set here image scale and size
             final int REQUIRED_SIZE=70;
             int width_tmp=o.outWidth, height_tmp=o.outHeight;
             int scale=1;
@@ -117,8 +115,7 @@ public class ImageLoader {
     }
 
     //Task for the queue
-    private class PhotoToLoad
-    {
+    private class PhotoToLoad {
         public String url;
         public ImageView imageView;
         public PhotoToLoad(String u, ImageView i){
@@ -155,8 +152,7 @@ public class ImageLoader {
     }
 
     //Used to display bitmap in the UI thread
-    class BitmapDisplayer implements Runnable
-    {
+    class BitmapDisplayer implements Runnable {
         Bitmap bitmap;
         PhotoToLoad photoToLoad;
         public BitmapDisplayer(Bitmap b, PhotoToLoad p){bitmap=b;photoToLoad=p;}

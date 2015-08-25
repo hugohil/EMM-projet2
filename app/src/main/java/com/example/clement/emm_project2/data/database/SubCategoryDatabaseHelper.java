@@ -15,19 +15,6 @@ public class SubCategoryDatabaseHelper {
     public static final String COLUMN_CATID = "catID";
     public static final String COLUMN_V = "v";
 
-    public static final String[] ALL_COLUMNS = {
-            SubCategoryDatabaseHelper.COLUMN_ID,
-            SubCategoryDatabaseHelper.COLUMN_MONGOID,
-            SubCategoryDatabaseHelper.COLUMN_TID,
-            SubCategoryDatabaseHelper.COLUMN_TITLE,
-            SubCategoryDatabaseHelper.COLUMN_DESCRIPTION,
-            SubCategoryDatabaseHelper.COLUMN_IMAGEURL,
-            SubCategoryDatabaseHelper.COLUMN_ACTIVE,
-            SubCategoryDatabaseHelper.COLUMN_CATID,
-            SubCategoryDatabaseHelper.COLUMN_V
-
-    };
-
     public static final String CREATE_TABLE_STATEMENT = "create table "
             + TABLE_NAME + "("
             + COLUMN_ID + " integer primary key autoincrement, "

@@ -42,7 +42,6 @@ public class SubCatActivity extends DrawerActivity {
         listView.setAdapter(adapter);
         dataAccess = new DataAccess(getBaseContext());
 
-
         // All this needs to be in an Async task (activity is doin' to much work on his main Thread ... Skipps maaaany frames)
         ArrayList<DrawerItem> menuItems = new ArrayList<DrawerItem>();
         List<Category> dbCategories;
@@ -87,7 +86,6 @@ public class SubCatActivity extends DrawerActivity {
                 return t1.compareTo(t2);
             }
         });
-        Log.d(TAG, "DbList size : " + DBList.size());
         subCats.clear();
         subCats.addAll(DBList);
         adapter.notifyDataSetChanged();

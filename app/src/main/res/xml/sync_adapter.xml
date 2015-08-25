@@ -1,0 +1,8 @@
+<sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
+    android:contentAuthority="com.example.clement.emm_project2.datasync.provider"
+    android:accountType="example.com"
+    android:userVisible="true"
+    android:syncable="true"
+    android:allowParallelSyncs="false"
+    android:isAlwaysSyncable="false"
+    android:supportsUploading="true"/>

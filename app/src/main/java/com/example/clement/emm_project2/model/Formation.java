@@ -2,6 +2,7 @@ package com.example.clement.emm_project2.model;
 
 import android.util.Log;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -17,6 +18,10 @@ public class Formation extends AppData {
     /*
      * Represents a formation item as described in the api doc
      */
+    public enum FORMATION_TYPE {
+        book, chapter, video
+    }
+
     @JsonProperty("title")
     private String title;
 
@@ -28,6 +33,9 @@ public class Formation extends AppData {
 
     @JsonProperty("ean13")
     private String ean;
+
+    @JsonProperty("type")
+    private FORMATION_TYPE type;
 
     @JsonProperty("price")
     private Float price;
@@ -43,6 +51,9 @@ public class Formation extends AppData {
 
     @JsonProperty("prerequisites")
     private String prerequisites;
+
+    @JsonProperty("can_download")
+    private boolean canDownload;
 
     @JsonProperty("qcm")
     private String qcm;
@@ -82,6 +93,78 @@ public class Formation extends AppData {
 
     @JsonProperty("active")
     private boolean active;
+
+    @JsonProperty("__v")
+    private String v;
+
+    @JsonProperty("updatedAt")
+    private String updatedAt;
+
+    @JsonProperty("items")
+    private List<Item> items;
+
+    @JsonProperty("children")
+    private String[] children;
+
+    // THIS FIELD AIN'T EVEN IN THE API ! W T F ?
+    @JsonProperty("teaser_info")
+    private String teaserInfo;
+
+    public String getTeaserInfo() {
+        return teaserInfo;
+    }
+
+    public void setTeaserInfo(String teaserInfo) {
+        this.teaserInfo = teaserInfo;
+    }
+
+    public String[] getChildren() {
+        return children;
+    }
+
+    public void setChildren(String[] children) {
+        this.children = children;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getV() {
+        return v;
+    }
+
+    public void setV(String v) {
+        this.v = v;
+    }
+
+    public boolean getCanDownload() {
+        return canDownload;
+    }
+
+    public void setCanDownload(boolean canDownload) {
+        this.canDownload = canDownload;
+    }
+
+    public FORMATION_TYPE getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = FORMATION_TYPE.valueOf(type);
+    }
 
     public String getTitle() {
         return title;
@@ -300,6 +383,4 @@ public class Formation extends AppData {
     public void setEan(String ean) {
         this.ean = ean;
     }
-
-
 }

@@ -15,19 +15,6 @@ public class CategoryDatabaseHelper {
     public static final String COLUMN_SUBCATEGORIES = "subcategories";
     public static final String COLUMN_V = "v";
 
-
-
-    public static final String[] ALL_COLUMNS = {
-            CategoryDatabaseHelper.COLUMN_ID,
-            CategoryDatabaseHelper.COLUMN_MONGOID,
-            CategoryDatabaseHelper.COLUMN_TID,
-            CategoryDatabaseHelper.COLUMN_TITLE,
-            CategoryDatabaseHelper.COLUMN_DESCRIPTION,
-            CategoryDatabaseHelper.COLUMN_IMAGEURL,
-            CategoryDatabaseHelper.COLUMN_ACTIVE,
-            CategoryDatabaseHelper.COLUMN_SUBCATEGORIES
-    };
-
     public static final String CREATE_TABLE_STATEMENT = "create table "
             + TABLE_NAME + "("
             + COLUMN_ID + " integer primary key autoincrement, "

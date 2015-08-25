@@ -12,6 +12,10 @@ import java.util.Set;
 
 /**
  * Created by Clement on 12/08/15.
+ * This class help us know which data has been synchronized
+ * Since we are running sync in a transaction, plenty of methods here are useless : either all datas are here
+ * or nothing has been synchronized
+ * TODO : refactor this class (trash useless methods) and set an unique variable indicating if datas are synced
  */
 public class SharedPrefUtil {
 

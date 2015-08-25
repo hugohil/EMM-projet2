@@ -3,6 +3,7 @@ package com.example.clement.emm_project2.app.server;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -66,10 +67,16 @@ public class ServerHandler {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.wtf(TAG, "Error getting formations for " +subCatId);
                         Log.d(TAG, error.toString());
                         handler.onError(error.toString());
                     }
                 });
+        // Here we can have TimeOut error so let's set the timeout manually
+        jsonArrayReq.setRetryPolicy(new DefaultRetryPolicy(
+                30000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(jsonArrayReq);
     }
 }

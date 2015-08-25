@@ -1,5 +1,6 @@
 package com.example.clement.emm_project2.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.ListView;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends DrawerActivity {
+
     private final String TAG = MainActivity.class.getSimpleName();
     private ArrayList<Category> categories = new ArrayList<Category>();
     private ListView listView;
@@ -54,12 +56,8 @@ public class MainActivity extends DrawerActivity {
 
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -74,6 +72,14 @@ public class MainActivity extends DrawerActivity {
 
     @Override
     protected void onNavItemSelected(int id) {
-
+        // When we'll have categories in drawer, just check if id > 200
+        // If so start intent with the good cat id @see subCatActivity onNavItemSelected
+        Intent intent;
+        switch(id) {
+            case 101: intent = new Intent(this, PreferencesActivity.class);
+                startActivity(intent);
+                break;
+            default: break;
+        }
     }
 }
