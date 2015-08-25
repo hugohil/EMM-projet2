@@ -50,6 +50,7 @@ public class SplashScreenActivity extends Activity {
         // If none => run sync manually
         // Then, get app preferences, and compare last sync date with sheduled date / period (run sync if necessary)
         if (!SharedPrefUtil.areCategoriesInCache()) {
+            Log.d(TAG, "trying to run sync");
             Account account = SyncUtil.CreateSyncAccount(this);
             ContentResolver.requestSync(account,"com.example.clement.emm_project2.datasync.provider", new Bundle());
         } else {

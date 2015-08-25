@@ -15,7 +15,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = DatabaseHelper.class.getSimpleName();
 
     // Database Version
-    private static final int DATABASE_VERSION = 78;
+    private static final int DATABASE_VERSION = 79;
 
     // Database Name
     private static final String DATABASE_NAME = "elephormDB";
@@ -74,7 +74,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void withTransaction(Runnable runnable) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
-
+        Log.d(TAG, "beginning transaction");
         try {
             runnable.run();
             db.setTransactionSuccessful();
