@@ -8,11 +8,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.adapters.FormationListAdapter;
 import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.Formation;
+import com.example.clement.emm_project2.util.SharedPrefUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,17 +27,31 @@ public class FormationsActivity extends ActionBarActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private Switch favorite;
+    private SharedPrefUtil sharedPref = new SharedPrefUtil();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formations);
 
+        favorite = (Switch) findViewById(R.id.act_formation_fav_switch);
+
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
-            String subCatId = extras.getString("subCatId");
+            final String subCatId = extras.getString("subCatId");
             List<Formation> formations = dataAccess.findDataWhere(Formation.class, "subCatId", subCatId);
 
+            favorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        // TODO: register formation ID instead of subcategory ID, with formation name instead of this class name.
+                        sharedPref.addFavoriteFormation(getClass().getSimpleName(), subCatId);
+                    } else {
+                        sharedPref.removeFavoriteFormation(getClass().getSimpleName(), subCatId);
+                    }
+                }
+            });
 
             mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
             mRecyclerView.setHasFixedSize(true);

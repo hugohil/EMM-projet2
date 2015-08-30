@@ -2,6 +2,7 @@ package com.example.clement.emm_project2.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.app.App;
@@ -77,6 +78,42 @@ public class SharedPrefUtil {
         return true;
     }
 
+    public static void addFavoriteFormation(String className, String formationID){
+        Context context = App.getAppContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.favoritesFormations),
+                Context.MODE_PRIVATE);
+        Set<String> favoritesIDs = sharedPref.getStringSet(className, null);
+        if(favoritesIDs == null) {
+            favoritesIDs = new HashSet<String>();
+        } else if(favoritesIDs.contains(formationID)) {
+            Log.d(TAG, "Data id is already present in cache !!!");
+            return;
+        }
+        favoritesIDs.add(formationID);
+
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.apply();
+        Log.d(TAG, favoritesIDs.toString());
+    }
+
+    public void removeFavoriteFormation(String className, String formationID) {
+        Context context = App.getAppContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.favoritesFormations),
+                Context.MODE_PRIVATE);
+        Set<String> favoritesIDs = sharedPref.getStringSet(className, null);
+        if(favoritesIDs == null) {
+            Log.d(TAG, "Data id is not present in cache, cannot remove.");
+            return;
+        }
+        if(favoritesIDs.contains(formationID)) {
+            favoritesIDs.remove(formationID);
+        }
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putStringSet(className, favoritesIDs);
+        editor.apply();
+        Log.d(TAG, favoritesIDs.toString());
+    }
+
     public static boolean areFormationsOfSubCategoryInCache(String id) {
         // TODO: check here if formations of the subcategory have been loaded...
         Context context = App.getAppContext();
@@ -94,5 +131,4 @@ public class SharedPrefUtil {
         context.getSharedPreferences(context.getString(R.string.cached_datas),
                 Context.MODE_PRIVATE).edit().clear().commit();
     }
-
 }
