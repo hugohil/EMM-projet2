@@ -2,13 +2,19 @@ package com.example.clement.emm_project2.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.example.clement.emm_project2.R;
+import com.example.clement.emm_project2.activities.FormationsActivity;
 import com.example.clement.emm_project2.app.App;
+import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.AppData;
+import com.example.clement.emm_project2.model.SubCategory;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -21,6 +27,8 @@ import java.util.Set;
 public class SharedPrefUtil {
 
     private final static String TAG = SharedPrefUtil.class.getSimpleName();
+    private static List<SubCategory> favoritesFormations = new ArrayList<SubCategory>();
+    private DataAccess da = new DataAccess(App.getAppContext());
 
     public static void registerDataIdInCache(AppData data) {
         Context context = App.getAppContext();
@@ -56,6 +64,26 @@ public class SharedPrefUtil {
         editor.commit();
     }
 
+    public void initFavoriteFormation(){
+        Context context = App.getAppContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.favoritesFormations),
+                Context.MODE_PRIVATE);
+        HashSet<String> favoritesIDs = new HashSet<String>(sharedPref.getStringSet(context.getString(R.string.favoritesFormations), new HashSet<String>()));
+        if(favoritesIDs.size() < 1) {
+            Log.d(TAG, "No favorite formation present in cache, cannot register.");
+            return;
+        }
+
+        for(String id : favoritesIDs){
+            List<SubCategory> fav = da.findDataWhere(SubCategory.class, "mongoid", id);
+            if(fav.size() > 0){
+                Log.d(TAG, fav.get(0).toString());
+                favoritesFormations.add(fav.get(0));
+            }
+        }
+        Log.d(TAG, favoritesFormations.toString());
+    }
+
     public static boolean isDataInCache(AppData data) {
         Context context = App.getAppContext();
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
@@ -78,11 +106,11 @@ public class SharedPrefUtil {
         return true;
     }
 
-    public static void addFavoriteFormation(String className, String formationID){
+    public static void addFavoriteFormation(String formationID){
         Context context = App.getAppContext();
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.favoritesFormations),
                 Context.MODE_PRIVATE);
-        Set<String> favoritesIDs = sharedPref.getStringSet(className, null);
+        HashSet<String> favoritesIDs = new HashSet<String>(sharedPref.getStringSet(context.getString(R.string.favoritesFormations), new HashSet<String>()));
         if(favoritesIDs == null) {
             favoritesIDs = new HashSet<String>();
         } else if(favoritesIDs.contains(formationID)) {
@@ -92,16 +120,17 @@ public class SharedPrefUtil {
         favoritesIDs.add(formationID);
 
         SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putStringSet(context.getString(R.string.favoritesFormations), favoritesIDs);
         editor.apply();
         Log.d(TAG, favoritesIDs.toString());
     }
 
-    public void removeFavoriteFormation(String className, String formationID) {
+    public void removeFavoriteFormation(String formationID) {
         Context context = App.getAppContext();
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.favoritesFormations),
                 Context.MODE_PRIVATE);
-        Set<String> favoritesIDs = sharedPref.getStringSet(className, null);
-        if(favoritesIDs == null) {
+        HashSet<String> favoritesIDs = new HashSet<String>(sharedPref.getStringSet(context.getString(R.string.favoritesFormations), new HashSet<String>()));
+        if(favoritesIDs.size() < 1) {
             Log.d(TAG, "Data id is not present in cache, cannot remove.");
             return;
         }
@@ -109,7 +138,7 @@ public class SharedPrefUtil {
             favoritesIDs.remove(formationID);
         }
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putStringSet(className, favoritesIDs);
+        editor.putStringSet(context.getString(R.string.favoritesFormations), favoritesIDs);
         editor.apply();
         Log.d(TAG, favoritesIDs.toString());
     }
@@ -132,5 +161,27 @@ public class SharedPrefUtil {
                 Context.MODE_PRIVATE).edit().clear().commit();
         context.getSharedPreferences(context.getString(R.string.favoritesFormations),
                 Context.MODE_PRIVATE).edit().clear().commit();
+        favoritesFormations.clear();
+    }
+
+    public static boolean areFavoriteFormations() {
+        Context context = App.getAppContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.favoritesFormations),
+                Context.MODE_PRIVATE);
+        HashSet<String> favoriteIDs = new HashSet<String>(sharedPref.getStringSet(context.getString(R.string.favoritesFormations), new HashSet<String>()));
+        return favoriteIDs.size() > 0;
+    }
+
+    public List<SubCategory> getFavoritesFormations() {
+        Log.d(TAG, favoritesFormations.toString());
+        return favoritesFormations;
+    }
+
+    public boolean isFormationFavorited(String formationID) {
+        Context context = App.getAppContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.favoritesFormations),
+                Context.MODE_PRIVATE);
+        HashSet<String> favoriteIDs = new HashSet<String>(sharedPref.getStringSet(context.getString(R.string.favoritesFormations), new HashSet<String>()));
+        return favoriteIDs.contains(formationID);
     }
 }
