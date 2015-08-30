@@ -130,5 +130,7 @@ public class SharedPrefUtil {
         Context context = App.getAppContext();
         context.getSharedPreferences(context.getString(R.string.cached_datas),
                 Context.MODE_PRIVATE).edit().clear().commit();
+        context.getSharedPreferences(context.getString(R.string.favoritesFormations),
+                Context.MODE_PRIVATE).edit().clear().commit();
     }
 }
