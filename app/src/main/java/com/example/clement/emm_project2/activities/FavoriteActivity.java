@@ -40,9 +40,10 @@ public class FavoriteActivity extends DrawerActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_favorite);
 
         adapter = new SubCatListAdapter(this, subCats);
-        listView = (ListView) findViewById(R.id.act_subcat_list);
+        listView = (ListView) findViewById(R.id.act_fav_list);
         listView.setAdapter(adapter);
         dataAccess = new DataAccess(getBaseContext());
 
