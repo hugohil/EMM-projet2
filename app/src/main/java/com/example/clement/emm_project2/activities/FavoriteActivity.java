@@ -112,13 +112,15 @@ public class FavoriteActivity extends DrawerActivity {
 
     @Override
     protected void onNavItemSelected(int id) {
-        Category cat = categories.get(id);
+        if(id < 100 ) {
+            Category cat = categories.get(id);
 
-        Intent i = new Intent(this, SubCatActivity.class);
-        i.putExtra("desc", cat.getDescription());
-        i.putExtra("title", cat.getTitle());
-        i.putExtra("catId", cat.getMongoID());
+            Intent i = new Intent(this, SubCatActivity.class);
+            i.putExtra("desc", cat.getDescription());
+            i.putExtra("title", cat.getTitle());
+            i.putExtra("catId", cat.getMongoID());
 
-        startActivity(i);
+            startActivity(i);
+        }
     }
 }
