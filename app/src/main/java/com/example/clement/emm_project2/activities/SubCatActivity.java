@@ -1,5 +1,6 @@
 package com.example.clement.emm_project2.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import com.example.clement.emm_project2.app.drawer.DrawerSectionItem;
 import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.model.SubCategory;
+import com.example.clement.emm_project2.util.SharedPrefUtil;
 import com.example.clement.emm_project2.util.StringUtil;
 
 import java.util.ArrayList;
@@ -54,6 +56,10 @@ public class SubCatActivity extends DrawerActivity {
                 return t1.compareTo(t2);
             }
         });
+        if(SharedPrefUtil.areFavoriteFormations()) {
+            menuItems.add(DrawerSection.create(300, "Navigation", "ic_action_label", this));
+            menuItems.add(DrawerSectionItem.create(301, "Favoris", true));
+        }
         menuItems.add(DrawerSection.create(200, "Catégories", "ic_action_bookmark", SubCatActivity.this));
         for(Category category : dbCategories) {
             menuItems.add(DrawerSectionItem.create(dbCategories.indexOf(category), category.getTitle(), true));
@@ -122,6 +128,10 @@ public class SubCatActivity extends DrawerActivity {
             Category category = categories.get(id);
             bindView(category.getDescription(), category.getTitle(), category.getMongoID());
             getSupportActionBar().setTitle(category.getTitle());
+        }
+        if(id > 300){
+            Intent i = new Intent(this, FavoriteActivity.class);
+            startActivity(i);
         }
     }
 }
