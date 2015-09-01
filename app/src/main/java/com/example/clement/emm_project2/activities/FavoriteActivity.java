@@ -1,14 +1,11 @@
 package com.example.clement.emm_project2.activities;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.adapters.SubCatListAdapter;
@@ -20,7 +17,6 @@ import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.model.SubCategory;
 import com.example.clement.emm_project2.util.SharedPrefUtil;
-import com.example.clement.emm_project2.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,7 +36,6 @@ public class FavoriteActivity extends DrawerActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favorite);
 
         adapter = new SubCatListAdapter(this, subCats);
         listView = (ListView) findViewById(R.id.act_fav_list);
@@ -112,7 +107,7 @@ public class FavoriteActivity extends DrawerActivity {
 
     @Override
     protected int getLayoutResourceId() {
-        return R.layout.activity_sub_cat;
+        return R.layout.activity_favorite;
     }
 
     @Override

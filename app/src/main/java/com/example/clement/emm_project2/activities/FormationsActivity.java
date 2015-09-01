@@ -1,7 +1,6 @@
 package com.example.clement.emm_project2.activities;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,7 +41,6 @@ public class FormationsActivity extends DrawerActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_formations);
 
         dataAccess = new DataAccess(this);
         categories = dataAccess.getAllDatas(Category.class);
@@ -135,7 +133,7 @@ public class FormationsActivity extends DrawerActivity {
     }
 
     protected int getLayoutResourceId() {
-        return R.layout.activity_sub_cat;
+        return R.layout.activity_formations;
     }
 
     @Override
