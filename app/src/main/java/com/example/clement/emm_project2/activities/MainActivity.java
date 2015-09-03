@@ -2,6 +2,7 @@ package com.example.clement.emm_project2.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.ListView;
 
@@ -34,7 +35,10 @@ public class MainActivity extends DrawerActivity {
         menuItems.add(DrawerSection.create(100, "Configuration", "ic_action_settings", MainActivity.this));
         menuItems.add(DrawerSectionItem.create(101, "Preferences", true));
         setDrawerContent(menuItems);
+        displayCategories();
+    }
 
+    private void displayCategories() {
         // Get categories
         List<Category> dbCategories;
         dataAccess = new DataAccess(this);

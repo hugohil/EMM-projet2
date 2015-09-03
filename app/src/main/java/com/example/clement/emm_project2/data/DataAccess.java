@@ -30,17 +30,15 @@ public class DataAccess {
         this.context = context;
     }
 
-    private void open() {
+    public void open() {
         database = dbHelper.getWritableDatabase();
     }
 
-    private void close() {
+    public void close() {
         dbHelper.close();
     }
 
     public <T extends AppData> T createData(AppData data) {
-        this.open();
-
         // 1. Build ContentValues
         ContentValues values = new ContentValues();
 
@@ -76,7 +74,6 @@ public class DataAccess {
         if(cursor != null) {
             data = cursorToData(cursor, data.getClass());
         }
-        this.close();
         return (T)data;
     }
 

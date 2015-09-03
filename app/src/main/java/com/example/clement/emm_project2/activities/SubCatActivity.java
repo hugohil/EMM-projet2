@@ -42,8 +42,6 @@ public class SubCatActivity extends DrawerActivity {
         adapter = new SubCatListAdapter(this, subCats);
         listView = (ListView) findViewById(R.id.act_subcat_list);
         listView.setAdapter(adapter);
-        dataAccess = new DataAccess(getBaseContext());
-
         // All this needs to be in an Async task (activity is doin' to much work on his main Thread ... Skipps maaaany frames)
         ArrayList<DrawerItem> menuItems = new ArrayList<DrawerItem>();
         List<Category> dbCategories;

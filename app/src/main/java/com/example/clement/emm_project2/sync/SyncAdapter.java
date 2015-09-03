@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,7 @@ import com.example.clement.emm_project2.util.JsonUtil;
 
 import org.json.JSONArray;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +35,7 @@ import java.util.List;
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     private static final String TAG = SyncAdapter.class.getSimpleName();
+    public static final String SYNC_FINISHED = "doneSync";
 
     public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -61,34 +64,25 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     @Override
                     public void onSuccess(Object datas) {
                         List<Category> categories = JsonUtil.parseJsonDatas((JSONArray) datas, Category.class);
+                        handleCategories(categories);
+                    }
 
-                        final DataAccess dataAccess = new DataAccess(App.getAppContext());
+                    private void handleCategories(List<Category> categories) {
+                        DataAccess dataAccess = new DataAccess(App.getAppContext());
+                        dataAccess.open();
                         for (Category category : categories) {
                             dataAccess.createData(category);
-
-                            final List<SubCategory> subCategories = category.getSubCategoriesAsList();
-                            for (final SubCategory subCategory : subCategories) {
+                            List<SubCategory> subCategories = category.getSubCategoriesAsList();
+                            for (SubCategory subCategory : subCategories) {
                                 subCategory.setCatId(category.getMongoID());
                                 dataAccess.createData(subCategory);
-
-                                server.getFormations(subCategory.getMongoID(), new ResponseHandler() {
-                                    @Override
-                                    public void onSuccess(Object datas) {
-                                        List<Formation> formations = JsonUtil.parseJsonDatas((JSONArray) datas, Formation.class);
-                                        for (Formation formation : formations) {
-                                            formation.setSubCatId(subCategory.getMongoID());
-                                            dataAccess.createData(formation);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onError(String error) {
-                                        Log.wtf(TAG, error);
-                                    }
-                                });
                             }
                         }
+                        dataAccess.close();
+                        Log.d(TAG, "Reached last category, launching activity");
                         Log.i(TAG, "App initialized !");
+                        Intent i = new Intent(SYNC_FINISHED);
+                        App.getAppContext().sendBroadcast(i);
                     }
 
                     @Override
@@ -98,5 +92,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 });
             }
         });
+
     }
 }

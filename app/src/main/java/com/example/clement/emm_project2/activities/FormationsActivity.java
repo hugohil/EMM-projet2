@@ -1,5 +1,6 @@
 package com.example.clement.emm_project2.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,14 +14,20 @@ import android.widget.Switch;
 
 import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.adapters.FormationListAdapter;
+import com.example.clement.emm_project2.app.App;
 import com.example.clement.emm_project2.app.drawer.DrawerActivity;
 import com.example.clement.emm_project2.app.drawer.DrawerItem;
 import com.example.clement.emm_project2.app.drawer.DrawerSection;
 import com.example.clement.emm_project2.app.drawer.DrawerSectionItem;
+import com.example.clement.emm_project2.app.server.ResponseHandler;
+import com.example.clement.emm_project2.app.server.ServerHandler;
 import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.model.Formation;
+import com.example.clement.emm_project2.util.JsonUtil;
 import com.example.clement.emm_project2.util.SharedPrefUtil;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +37,7 @@ import java.util.List;
 public class FormationsActivity extends DrawerActivity {
 
     private static final String TAG = FormationsActivity.class.getSimpleName();
+    private final Context context = this;
     private DataAccess dataAccess;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -37,6 +45,7 @@ public class FormationsActivity extends DrawerActivity {
     private Switch favoriteSwitch;
     private SharedPrefUtil sharedPref = new SharedPrefUtil();
     private List<Category> categories = new ArrayList<Category>();
+    private List<Formation> subCatFormations = new ArrayList<Formation>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +55,42 @@ public class FormationsActivity extends DrawerActivity {
         categories = dataAccess.getAllDatas(Category.class);
         favoriteSwitch = (Switch) findViewById(R.id.act_formation_fav_switch);
 
+        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(context);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mAdapter = new FormationListAdapter((ArrayList<Formation>)subCatFormations);
+        mRecyclerView.setAdapter(mAdapter);
+
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             final String subCatId = extras.getString("subCatId");
-            List<Formation> formations = dataAccess.findDataWhere(Formation.class, "subCatId", subCatId);
+            ServerHandler server = new ServerHandler(App.getAppContext());
+            server.getFormations(subCatId, new ResponseHandler() {
+                @Override
+                public void onSuccess(Object datas) {
+                    // 1. Registering
+                    Log.d(TAG, "DATAS ======>"+datas);
+                    List<Formation> formations = JsonUtil.parseJsonDatas((JSONArray) datas, Formation.class);
+                    Log.d(TAG, "FORMATIONS SIZE AFTER DESERIALIZATION" + formations.size());
+                    dataAccess.open();
+                    for (Formation formation : formations) {
+                        formation.setSubCatId(subCatId);
+                        dataAccess.createData(formation);
+                    }
+                    dataAccess.close();
+
+                    // 2. Getting
+                    List<Formation> dbFormations = dataAccess.findDataWhere(Formation.class, "subCatId", subCatId);
+                    subCatFormations.addAll(dbFormations);
+                    mAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onError(String error) {
+                    Log.wtf(TAG, error);
+                }
+            });
 
             if(sharedPref.isFormationFavorited(subCatId)){
                 favoriteSwitch.setChecked(true);
@@ -66,18 +107,6 @@ public class FormationsActivity extends DrawerActivity {
                 }
             });
 
-            mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-            mRecyclerView.setHasFixedSize(true);
-            mLayoutManager = new LinearLayoutManager(this);
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mAdapter = new FormationListAdapter((ArrayList<Formation>)formations);
-            mRecyclerView.setAdapter(mAdapter);
-
-            // Code to Add an item with default animation
-            //((MyRecyclerViewAdapter) mAdapter).addItem(obj, index);
-
-            // Code to remove an item with default animation
-            //((MyRecyclerViewAdapter) mAdapter).deleteItem(index);
         } else {
             throw new RuntimeException("No intent extras ! Cannot find targeted category !! ");
         }
@@ -128,12 +157,12 @@ public class FormationsActivity extends DrawerActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        ((FormationListAdapter) mAdapter).setOnItemClickListener(new FormationListAdapter.FormationClickListener() {
+        /*((FormationListAdapter) mAdapter).setOnItemClickListener(new FormationListAdapter.FormationClickListener() {
             @Override
             public void onItemClick(int position, View v) {
                 Log.i(TAG, " Clicked on Item " + position);
             }
-        });
+        });*/
     }
 
     protected int getLayoutResourceId() {
