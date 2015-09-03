@@ -50,7 +50,6 @@ public class CatListAdapter extends ArrayAdapter<Category> {
             public void onClick(View v) {
                 Activity act = (Activity) getContext();
                 Intent i = new Intent(act, SubCatActivity.class);
-                // i.putExtra("subcat", cat.getSubCategories());
                 i.putExtra("desc", cat.getDescription());
                 i.putExtra("title", cat.getTitle());
                 i.putExtra("catId", cat.getMongoID());

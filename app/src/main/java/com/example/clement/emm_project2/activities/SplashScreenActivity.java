@@ -33,6 +33,7 @@ import java.util.List;
 public class SplashScreenActivity extends Activity {
     private final String TAG = SplashScreenActivity.class.getSimpleName();
 
+    private SharedPrefUtil sharedPref = new SharedPrefUtil();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +45,7 @@ public class SplashScreenActivity extends Activity {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         dbHelper.upgradeDbIfNecessary();
 
-        Intent intent = new Intent(this, MainActivity.class);
+        sharedPref.initFavoriteFormation();
 
         // TODO : check last sync date
         // If none => run sync manually
@@ -52,9 +53,15 @@ public class SplashScreenActivity extends Activity {
         if (!SharedPrefUtil.areCategoriesInCache()) {
             Log.d(TAG, "trying to run sync");
             Account account = SyncUtil.CreateSyncAccount(this);
-            ContentResolver.requestSync(account,"com.example.clement.emm_project2.datasync.provider", new Bundle());
+            ContentResolver.requestSync(account, "com.example.clement.emm_project2.datasync.provider", new Bundle());
         } else {
-            startActivity(intent);
+            if(SharedPrefUtil.areFavoriteFormations()){
+                Intent intent = new Intent(this, FavoriteActivity.class);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            }
         }
 
     }
