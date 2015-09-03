@@ -60,6 +60,7 @@ public abstract class DrawerActivity extends ActionBarActivity {
 
             public void onDrawerClosed(View view) {
                 invalidateOptionsMenu();
+                resetTitle();
             }
 
             public void onDrawerOpened(View drawerView) {
@@ -69,6 +70,8 @@ public abstract class DrawerActivity extends ActionBarActivity {
         };
         drawerLayout.setDrawerListener(drawerToggle);
     }
+
+    protected abstract void resetTitle();
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {

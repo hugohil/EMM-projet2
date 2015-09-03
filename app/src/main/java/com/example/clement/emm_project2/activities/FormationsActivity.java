@@ -104,6 +104,11 @@ public class FormationsActivity extends DrawerActivity {
     }
 
     @Override
+    protected void resetTitle(){
+        getSupportActionBar().setTitle(R.string.app_name);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_formations, menu);

@@ -34,6 +34,7 @@ public class SubCatActivity extends DrawerActivity {
     private ListView listView;
     private DataAccess dataAccess;
     private List<Category> categories = new ArrayList<Category>();
+    private String title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +72,16 @@ public class SubCatActivity extends DrawerActivity {
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
-            bindView(extras.getString("desc"), extras.getString("title"), extras.getString("catId"));
+            title = extras.getString("title");
+            bindView(extras.getString("desc"), title, extras.getString("catId"));
         } else {
             throw new RuntimeException("No intent extras ! Cannot find targeted category !! ");
         }
+    }
+
+    @Override
+    protected void resetTitle(){
+        getSupportActionBar().setTitle(title);
     }
 
     public void bindView(String description, String title, String catId) {

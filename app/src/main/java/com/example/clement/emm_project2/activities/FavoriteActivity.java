@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
 import com.example.clement.emm_project2.R;
@@ -36,6 +37,7 @@ public class FavoriteActivity extends DrawerActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.favorite_title);
 
         adapter = new SubCatListAdapter(this, subCats);
         listView = (ListView) findViewById(R.id.act_fav_list);
@@ -64,6 +66,11 @@ public class FavoriteActivity extends DrawerActivity {
         categories.addAll(dbCategories);
 
         bindView();
+    }
+
+    @Override
+    protected void resetTitle(){
+        getSupportActionBar().setTitle(R.string.favorite_title);
     }
 
     @Override
