@@ -3,7 +3,6 @@
     android:id="@+id/DrawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:label="@string/favorite_title"
     android:elevation="7dp">
 
     <!-- The main content view -->
