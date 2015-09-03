@@ -48,8 +48,6 @@ public class SplashScreenActivity extends Activity {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         dbHelper.upgradeDbIfNecessary();
 
-        sharedPref.initFavoriteFormation();
-
         // TODO : check last sync date
         // If none => run sync manually
         // Then, get app preferences, and compare last sync date with sheduled date / period (run sync if necessary)
