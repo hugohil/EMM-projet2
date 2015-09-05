@@ -148,12 +148,19 @@
                 android:id="@+id/formationInfoContainer">
 
                 <TextView
+                    android:paddingTop="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="Small Text"
                     android:id="@+id/formationDescription"
                     android:layout_gravity="center_horizontal" />
+
+                <VideoView
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:id="@+id/formationTeaser" />
             </LinearLayout>
 
 

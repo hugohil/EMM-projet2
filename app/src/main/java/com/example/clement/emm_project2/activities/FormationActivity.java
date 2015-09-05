@@ -2,13 +2,16 @@ package com.example.clement.emm_project2.activities;
 
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.app.App;
@@ -73,6 +76,14 @@ public class FormationActivity extends AppCompatActivity {
         price.setText(formation.getPrice() + " €");
         lessonCount.setText(formation.getLessonNumber()+ " Leçons");
         description.setText(StringUtil.html2Text(formation.getDescription()));
+
+        VideoView videoView = (VideoView)findViewById(R.id.formationTeaser);
+        videoView.setVideoURI(Uri.parse("http://eas.elephorm.com/videos/"+ formation.getTeaser()));
+
+        MediaController controller = new MediaController(this);
+        controller.setAnchorView(videoView);
+        controller.setMediaPlayer(videoView);
+        videoView.setMediaController(controller);
 
 //        try {
 //            String url = formation.getTeaserInfo().get("video_url");
