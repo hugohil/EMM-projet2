@@ -65,7 +65,7 @@ public class FormationsActivity extends DrawerActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             final String subCatId = extras.getString("subCatId");
-            Log.d(TAG, "SUBCAT ID=> "+ subCatId);
+            Log.d(TAG, "SUBCAT ID => "+ subCatId);
             ServerHandler server = new ServerHandler(App.getAppContext());
             server.getFormations(subCatId, new ResponseHandler() {
                 @Override

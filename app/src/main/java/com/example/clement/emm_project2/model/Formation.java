@@ -2,8 +2,7 @@ package com.example.clement.emm_project2.model;
 
 import android.util.Log;
 
-import com.example.clement.emm_project2.util.FormationDeserializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.clement.emm_project2.util.FormationCustomDeserializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -16,7 +15,7 @@ import java.util.Map;
 /**
  * Created by Clement on 10/08/15.
  */
-@JsonDeserialize(using = FormationDeserializer.class)
+@JsonDeserialize(using = FormationCustomDeserializer.class)
 public class Formation extends AppData {
     /*
      * Represents a formation item as described in the api doc
@@ -299,26 +298,12 @@ public class Formation extends AppData {
         this.poster = poster;
     }
 
-    public String getAuthors() {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.writeValueAsString(this.authors);
-        } catch (JsonProcessingException e){
-            Log.d(Author.class.getSimpleName(), e.toString());
-            return null;
-        }
+    public List<Author> getAuthors() {
+        return authors;
     }
 
-    public <T> T setAuthors(final TypeReference<T> type, String authors) {
-        T data = null;
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            data = mapper.readValue(authors, type);
-            this.authors = (List<Author>) data;
-        } catch (Exception e){
-            Log.d(Author.class.getSimpleName(), e.toString());
-        }
-        return data;
+    public void setAuthors(List<Author> authors) {
+        this.authors = authors;
     }
 
     public Map<String, Map<String, String>> getImages() {
