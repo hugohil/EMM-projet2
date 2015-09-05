@@ -83,7 +83,7 @@ public class FormationsActivity extends DrawerActivity {
 
                     // 2. Getting
                     List<Formation> dbFormations = dataAccess.findDataWhere(Formation.class, "subCatId", subCatId);
-                    subCatFormations.addAll(dbFormations);
+                    subCatFormations.addAll(formations);
                     mAdapter.notifyDataSetChanged();
                 }
 

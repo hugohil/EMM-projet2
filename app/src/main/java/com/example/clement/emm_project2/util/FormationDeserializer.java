@@ -1,11 +1,6 @@
 package com.example.clement.emm_project2.util;
 
-import android.util.Log;
-
-import com.example.clement.emm_project2.model.Author;
 import com.example.clement.emm_project2.model.Formation;
-import com.example.clement.emm_project2.model.Item;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -15,12 +10,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.MapType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
-import org.json.JSONException;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
