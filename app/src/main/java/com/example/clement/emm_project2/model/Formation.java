@@ -106,7 +106,7 @@ public class Formation extends AppData {
     private List<Item> items;
 
     @JsonProperty("children")
-    private String[] children;
+    private List<String> children;
 
     @JsonProperty("teaser_info")
     private Object teaserInfo;
@@ -130,11 +130,11 @@ public class Formation extends AppData {
         this.teaserInfo = teaserInfo;
     }
 
-    public String[] getChildren() {
+    public List<String> getChildren() {
         return children;
     }
 
-    public void setChildren(String[] children) {
+    public void setChildren(List<String> children) {
         this.children = children;
     }
 
@@ -322,26 +322,12 @@ public class Formation extends AppData {
         this.free = free;
     }
 
-    public String getRating() {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.writeValueAsString(this.rating);
-        } catch (JsonProcessingException e){
-            Log.d(Category.class.getSimpleName(), e.toString());
-            return null;
-        }
+    public Map<String, Float> getRating() {
+        return this.rating;
     }
 
-    public <T> T setRating(final TypeReference<T> type, String rating) {
-        T data = null;
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            data = mapper.readValue(rating, type);
-            this.rating = (Map<String, Float>) data;
-        } catch (Exception e){
-            Log.d(Category.class.getSimpleName(), e.toString());
-        }
-        return data;
+    public void setRating(Map<String, Float> rating) {
+        this.rating = rating;
     }
 
     public int getVideoCount() {

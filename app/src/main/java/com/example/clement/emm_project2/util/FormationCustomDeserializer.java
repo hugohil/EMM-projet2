@@ -55,6 +55,7 @@ public class FormationCustomDeserializer extends JsonDeserializer<Formation> {
         String poster = node.get("poster").asText();
         //            int __v;
 
+
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<Map<String,Map<String, String>>> typeRefImages = new TypeReference<Map<String,Map<String, String>>>(){};
         Map<String, Map<String, String>> images = mapper.readValue(node.get("images").traverse(), typeRefImages);
@@ -64,6 +65,12 @@ public class FormationCustomDeserializer extends JsonDeserializer<Formation> {
 
         TypeReference<List<Item>> typeRefItems = new TypeReference<List<Item>>(){};
         List<Item> items = mapper.convertValue(node.get("items"), typeRefItems);
+
+        TypeReference<Map<String, Float>> typeRerating = new TypeReference<Map<String, Float>>(){};
+        Map<String, Float> rating = mapper.readValue(node.get("rating").traverse(), typeRerating);
+
+        TypeReference<List<String>> typechildren = new TypeReference<List<String>>(){};
+        List<String> children = mapper.readValue(node.get("children").traverse(), typechildren);
 
         boolean free = node.get("free").asBoolean();
         String updatedAt = node.get("updatedAt").asText();
@@ -97,7 +104,9 @@ public class FormationCustomDeserializer extends JsonDeserializer<Formation> {
         formation.setObjectives(objectives);
         formation.setPrerequisites(prerequisites);
         formation.setAuthors(authors);
-//        formation.setItems(items);
+        formation.setItems(items);
+        formation.setRating(rating);
+        formation.setChildren(children);
 
         return formation;
     }

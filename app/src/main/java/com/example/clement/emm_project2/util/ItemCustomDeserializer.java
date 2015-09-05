@@ -28,15 +28,24 @@ public class ItemCustomDeserializer extends JsonDeserializer<Item> {
 
         String title = node.get("title").asText();
         String type = node.get("type").asText();
-        int nid = node.get("nid").asInt();
-        int nbCredits = node.get("nb_credits").asInt();
+        int nid = 0;
+        if(node.get("nid") != null) {
+            nid = node.get("nid").asInt();
+        }
+        int nbCredits = 0;
+        if(node.get("nb_credits") != null) {
+            nbCredits = node.get("nb_credits").asInt();
+        }
         String fieldPoster = "";
         if(node.get("field_poster") != null) {
             fieldPoster = node.get("field_poster").asText();
         }
         String mongoId = node.get("_id").asText();
         boolean free = node.get("free").asBoolean();
-        boolean active = node.get("active").asBoolean();
+        boolean active = true;
+        if(node.get("active") != null) {
+            active = node.get("active").asBoolean();
+        }
         List<Map<String, Object>> fieldFiles;
         List<Map<String, Object>> fieldVignette;
         List<Map<String, Object>> fieldVideo;

@@ -61,28 +61,21 @@ public class FormationsActivity extends DrawerActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new FormationListAdapter((ArrayList<Formation>)subCatFormations);
         mRecyclerView.setAdapter(mAdapter);
+        final Context context = this;
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
-            final String subCatId = extras.getString("subCatId");
-            Log.d(TAG, "SUBCAT ID => "+ subCatId);
+            final String subCatId= extras.getString("subCatId");
             ServerHandler server = new ServerHandler(App.getAppContext());
             server.getFormations(subCatId, new ResponseHandler() {
                 @Override
                 public void onSuccess(Object datas) {
-                    // 1. Registering
-                    Log.d(TAG, "DATAS ======>"+datas);
                     List<Formation> formations = JsonUtil.parseJsonDatas((JSONArray) datas, Formation.class);
-                    Log.d(TAG, "FORMATIONS SIZE AFTER DESERIALIZATION" + formations.size());
-                   /* dataAccess.open();
-                    for (Formation formation : formations) {
-                        formation.setSubCatId(subCatId);
-                        dataAccess.createData(formation);
+                    if(formations.size() == 1) { // needs to be done before starting this activity
+                        Intent intent = new Intent(context, FormationActivity.class);
+                        intent.putExtra("ean", formations.get(0).getEan());
+                        context.startActivity(intent);
                     }
-                    dataAccess.close();*/
-
-                    // 2. Getting
-                    List<Formation> dbFormations = dataAccess.findDataWhere(Formation.class, "subCatId", subCatId);
                     subCatFormations.addAll(formations);
                     mAdapter.notifyDataSetChanged();
                 }
