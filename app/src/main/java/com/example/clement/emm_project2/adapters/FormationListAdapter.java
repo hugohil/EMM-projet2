@@ -29,13 +29,13 @@ public class FormationListAdapter extends RecyclerView.Adapter<FormationListAdap
             implements View
             .OnClickListener {
         TextView formationName;
-        TextView dateTime;
+        TextView objectives;
         ImageView formationPoster;
 
         public FormationHolder(View itemView) {
             super(itemView);
-            formationName = (TextView) itemView.findViewById(R.id.textView);
-            dateTime = (TextView) itemView.findViewById(R.id.textView2);
+            formationName = (TextView) itemView.findViewById(R.id.formation_card_title);
+            objectives = (TextView) itemView.findViewById(R.id.formation_card_objectives);
             formationPoster = (ImageView) itemView.findViewById(R.id.formationImage);
             Log.i(TAG, "Adding Listener");
             itemView.setOnClickListener(this);
@@ -69,7 +69,9 @@ public class FormationListAdapter extends RecyclerView.Adapter<FormationListAdap
     public void onBindViewHolder(FormationHolder holder, int position) {
         Formation formation = formations.get(position);
         holder.formationName.setText(formation.getTitle());
-        holder.dateTime.setText(formation.getDescription());
+        if(formation.getObjectives() != "null"){
+            holder.objectives.setText(formation.getObjectives());
+        }
 
         // Loader image - will be shown before loading image
         int loader = R.drawable.logo; // Change this to loader img :)

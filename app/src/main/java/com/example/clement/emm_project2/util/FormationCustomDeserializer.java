@@ -88,6 +88,7 @@ public class FormationCustomDeserializer extends JsonDeserializer<Formation> {
         formation.setProductUrl(productUrl);
         formation.setEan(ean13);
         formation.setType(type);
+        formation.setObjectives(objectives);
         formation.setPrice(price);
         formation.setDescription(description);
         formation.setDuration(duration);
