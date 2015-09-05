@@ -1,5 +1,7 @@
 package com.example.clement.emm_project2.activities;
 
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -70,6 +72,25 @@ public class FormationActivity extends AppCompatActivity {
         duration.setText(StringUtil.formatDuration(formation.getDuration()));
         price.setText(formation.getPrice() + " €");
         lessonCount.setText(formation.getLessonNumber()+ " Leçons");
+
+        
+        try {
+            String url = formation.getTeaserInfo().get("video_url");
+            Log.d(TAG, "URL ==> " + url);
+            final MediaPlayer mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mediaPlayer.setDataSource("http://eas.elephorm.com/videos/tutoriel-audacity/teaser-de-la-formation-audacity");
+            mediaPlayer.prepareAsync(); // might take long! (for buffering, etc)
+
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mediaPlayer.start();
+                }
+            });
+        } catch(Exception e) {
+            Log.d(TAG, e.getMessage());
+        }
 
     }
 

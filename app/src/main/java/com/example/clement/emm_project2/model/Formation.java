@@ -109,7 +109,7 @@ public class Formation extends AppData {
     private List<String> children;
 
     @JsonProperty("teaser_info")
-    private Object teaserInfo;
+    private Map<String, String> teaserInfo;
 
     @JsonProperty("url_path")
     private String urlPath;
@@ -122,11 +122,11 @@ public class Formation extends AppData {
         this.urlPath = urlPath;
     }
 
-    public Object getTeaserInfo() {
+    public Map<String, String> getTeaserInfo() {
         return teaserInfo;
     }
 
-    public void setTeaserInfo(Object teaserInfo) {
+    public void setTeaserInfo(Map<String, String> teaserInfo) {
         this.teaserInfo = teaserInfo;
     }
 

@@ -61,7 +61,8 @@
         android:weightSum="1"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:background="@color/cardview_light_background">
+        android:background="@color/cardview_light_background"
+        android:id="@+id/linearLayout">
 
         <ImageView
             android:layout_width="30dp"

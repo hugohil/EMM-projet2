@@ -60,6 +60,9 @@ public class FormationCustomDeserializer extends JsonDeserializer<Formation> {
         TypeReference<Map<String,Map<String, String>>> typeRefImages = new TypeReference<Map<String,Map<String, String>>>(){};
         Map<String, Map<String, String>> images = mapper.readValue(node.get("images").traverse(), typeRefImages);
 
+        TypeReference<Map<String,String>> typeRefTeaserInfo = new TypeReference<Map<String, String>>(){};
+        Map<String, String> teaserInfo = mapper.readValue(node.get("teaser_info").traverse(), typeRefTeaserInfo);
+
         TypeReference<List<Author>> typeRefAuthors = new TypeReference<List<Author>>(){};
         List<Author> authors = mapper.readValue(node.get("authors").traverse(), typeRefAuthors);
 
@@ -107,6 +110,7 @@ public class FormationCustomDeserializer extends JsonDeserializer<Formation> {
         formation.setItems(items);
         formation.setRating(rating);
         formation.setChildren(children);
+        formation.setTeaserInfo(teaserInfo);
 
         return formation;
     }
