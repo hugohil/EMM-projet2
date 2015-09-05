@@ -61,36 +61,36 @@ public class FormationActivity extends AppCompatActivity {
         TextView duration = (TextView) findViewById(R.id.formationDuration);
         TextView price = (TextView) findViewById(R.id.formationPrice);
         TextView lessonCount = (TextView) findViewById(R.id.lessonCount);
+        TextView description = (TextView) findViewById(R.id.formationDescription);
 
 
 
         ImageLoader imgLoader = new ImageLoader(App.getAppContext());
         imgLoader.DisplayImage(formation.getPoster(), loader, imageView);
-
         title.setText(formation.getTitle());
         subTitle.setText(formation.getSubtitle());
         duration.setText(StringUtil.formatDuration(formation.getDuration()));
         price.setText(formation.getPrice() + " €");
         lessonCount.setText(formation.getLessonNumber()+ " Leçons");
+        description.setText(StringUtil.html2Text(formation.getDescription()));
 
-
-        /*try {
-            String url = formation.getTeaserInfo().get("video_url");
-            Log.d(TAG, "URL ==> " + url);
-            final MediaPlayer mediaPlayer = new MediaPlayer();
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.setDataSource("http://eas.elephorm.com/videos/tutoriel-audacity/teaser-de-la-formation-audacity");
-            mediaPlayer.prepareAsync(); // might take long! (for buffering, etc)
-
-            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    mediaPlayer.start();
-                }
-            });
-        } catch(Exception e) {
-            Log.d(TAG, e.getMessage());
-        }*/
+//        try {
+//            String url = formation.getTeaserInfo().get("video_url");
+//            Log.d(TAG, "URL ==> " + url);
+//            final MediaPlayer mediaPlayer = new MediaPlayer();
+//            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//            mediaPlayer.setDataSource("http://eas.elephorm.com/videos/tutoriel-audacity/teaser-de-la-formation-audacity");
+//            mediaPlayer.prepareAsync(); // might take long! (for buffering, etc)
+//
+//            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//                @Override
+//                public void onPrepared(MediaPlayer mp) {
+//                    mediaPlayer.start();
+//                }
+//            });
+//        } catch(Exception e) {
+//            Log.d(TAG, e.getMessage());
+//        }
 
     }
 
