@@ -47,12 +47,12 @@ public class FormationListAdapter extends RecyclerView.Adapter<FormationListAdap
         }
     }
 
-    public void setOnItemClickListener(FormationClickListener clickListener) {
-        this.cardClickListener = clickListener;
-    }
-
     public FormationListAdapter(ArrayList<Formation> formations) {
         this.formations = formations;
+    }
+
+    public void setOnCardClickListener(FormationClickListener clickListener) {
+        this.cardClickListener = clickListener;
     }
 
     @Override
@@ -96,7 +96,11 @@ public class FormationListAdapter extends RecyclerView.Adapter<FormationListAdap
         return formations.size();
     }
 
+    public String getFormationEan(int position) {
+        return formations.get(position).getEan();
+    }
+
     public interface FormationClickListener {
-        public void onItemClick(int position, View v);
+        void onItemClick(int position, View v);
     }
 }

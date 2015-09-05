@@ -40,7 +40,7 @@ public class FormationsActivity extends DrawerActivity {
     private final Context context = this;
     private DataAccess dataAccess;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private FormationListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private Switch favoriteSwitch;
     private SharedPrefUtil sharedPref = new SharedPrefUtil();
@@ -61,6 +61,14 @@ public class FormationsActivity extends DrawerActivity {
         mLayoutManager = new LinearLayoutManager(context);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new FormationListAdapter((ArrayList<Formation>)subCatFormations);
+        mAdapter.setOnCardClickListener(new FormationListAdapter.FormationClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                String formationEan = mAdapter.getFormationEan(position);
+                redirectToSingleView(formationEan);
+
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
         final Context context = this;
 
@@ -75,9 +83,7 @@ public class FormationsActivity extends DrawerActivity {
                 public void onSuccess(Object datas) {
                     List<Formation> formations = JsonUtil.parseJsonDatas((JSONArray) datas, Formation.class);
                     if(formations.size() == 1) { // needs to be done before starting this activity
-                        Intent intent = new Intent(context, FormationActivity.class);
-                        intent.putExtra("ean", formations.get(0).getEan());
-                        context.startActivity(intent);
+                        redirectToSingleView(formations.get(0).getEan());
                     }
                     subCatFormations.addAll(formations);
                     mAdapter.notifyDataSetChanged();
@@ -127,6 +133,12 @@ public class FormationsActivity extends DrawerActivity {
         menuItems.add(DrawerSection.create(100, "Configuration", "ic_action_settings", this));
         menuItems.add(DrawerSectionItem.create(101, "Preferences", true));
         setDrawerContent(menuItems);
+    }
+
+    private void redirectToSingleView(String formationEan) {
+        Intent intent = new Intent(context, FormationActivity.class);
+        intent.putExtra("ean", formationEan);
+        context.startActivity(intent);
     }
 
     @Override

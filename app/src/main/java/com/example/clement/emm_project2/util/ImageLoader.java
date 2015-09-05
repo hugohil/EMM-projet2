@@ -145,7 +145,7 @@ public class ImageLoader {
             if(bitmap!=null) {
                 photoToLoad.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 photoToLoad.imageView.setImageBitmap(bitmap);
-            } else 
+            } else
                 photoToLoad.imageView.setImageResource(stub_id);
         }
     }
