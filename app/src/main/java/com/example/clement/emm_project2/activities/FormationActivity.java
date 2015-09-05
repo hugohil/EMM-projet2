@@ -5,13 +5,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.app.App;
 import com.example.clement.emm_project2.app.server.ResponseHandler;
 import com.example.clement.emm_project2.app.server.ServerHandler;
 import com.example.clement.emm_project2.model.Formation;
+import com.example.clement.emm_project2.util.ImageLoader;
 import com.example.clement.emm_project2.util.JsonUtil;
+import com.example.clement.emm_project2.util.StringUtil;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -48,7 +52,24 @@ public class FormationActivity extends AppCompatActivity {
     }
 
     private void displayFormation(Formation formation){
-        Log.d(TAG, formation.toString());
+        int loader = R.drawable.logo; // Change this to loader img :)
+        TextView title = (TextView) findViewById(R.id.formationTitle);
+        TextView subTitle = (TextView) findViewById(R.id.formationSubtitle);
+        ImageView imageView = (ImageView) findViewById(R.id.formationPoster);
+        TextView duration = (TextView) findViewById(R.id.formationDuration);
+        TextView price = (TextView) findViewById(R.id.formationPrice);
+        TextView lessonCount = (TextView) findViewById(R.id.lessonCount);
+
+
+
+        ImageLoader imgLoader = new ImageLoader(App.getAppContext());
+        imgLoader.DisplayImage(formation.getPoster(), loader, imageView);
+
+        title.setText(formation.getTitle());
+        subTitle.setText(formation.getSubtitle());
+        duration.setText(StringUtil.formatDuration(formation.getDuration()));
+        price.setText(formation.getPrice() + " €");
+        lessonCount.setText(formation.getLessonNumber()+ " Leçons");
 
     }
 

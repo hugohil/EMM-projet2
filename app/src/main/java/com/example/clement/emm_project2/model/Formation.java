@@ -353,4 +353,14 @@ public class Formation extends AppData {
     public void setEan(String ean) {
         this.ean = ean;
     }
+
+    public int getLessonNumber() {
+        int count = 0;
+        for(Item item : this.items) {
+            if(item.getChildrens().size() == 0){
+                count ++;
+            }
+        }
+        return count;
+    }
 }
