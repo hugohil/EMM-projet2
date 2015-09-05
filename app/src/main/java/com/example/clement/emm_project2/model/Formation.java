@@ -2,11 +2,13 @@ package com.example.clement.emm_project2.model;
 
 import android.util.Log;
 
+import com.example.clement.emm_project2.util.FormationDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.List;
 import java.util.Map;
@@ -14,6 +16,7 @@ import java.util.Map;
 /**
  * Created by Clement on 10/08/15.
  */
+@JsonDeserialize(using = FormationDeserializer.class)
 public class Formation extends AppData {
     /*
      * Represents a formation item as described in the api doc
@@ -106,15 +109,25 @@ public class Formation extends AppData {
     @JsonProperty("children")
     private String[] children;
 
-    // THIS FIELD AIN'T EVEN IN THE API ! W T F ?
     @JsonProperty("teaser_info")
-    private String teaserInfo;
+    private Object teaserInfo;
 
-    public String getTeaserInfo() {
+    @JsonProperty("url_path")
+    private String urlPath;
+
+    public String getUrlPath() {
+        return urlPath;
+    }
+
+    public void setUrlPath(String urlPath) {
+        this.urlPath = urlPath;
+    }
+
+    public Object getTeaserInfo() {
         return teaserInfo;
     }
 
-    public void setTeaserInfo(String teaserInfo) {
+    public void setTeaserInfo(Object teaserInfo) {
         this.teaserInfo = teaserInfo;
     }
 
@@ -308,26 +321,12 @@ public class Formation extends AppData {
         return data;
     }
 
-    public String getImages() {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.writeValueAsString(this.images);
-        } catch (JsonProcessingException e){
-            Log.d(Category.class.getSimpleName(), e.toString());
-            return null;
-        }
+    public Map<String, Map<String, String>> getImages() {
+        return images;
     }
 
-    public <T> T setImages(final TypeReference<T> type, String images) {
-        T data = null;
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            data = mapper.readValue(images, type);
-            this.images = (Map<String, Map<String, String>>) data;
-        } catch (Exception e){
-            Log.d(Category.class.getSimpleName(), e.toString());
-        }
-        return data;
+    public void setImages(Map<String, Map<String, String>> images) {
+        this.images = images;
     }
 
     public boolean getFree() {

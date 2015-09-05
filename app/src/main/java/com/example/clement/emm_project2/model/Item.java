@@ -2,6 +2,7 @@ package com.example.clement.emm_project2.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -16,7 +17,7 @@ public class Item extends AppData {
     private String title;
 
     @JsonProperty("field_video")
-    private Map<String, String> fieldVideo; // WWTFFF????
+    private ArrayList<Map<String, String>> fieldVideo;
 
     @JsonProperty("duration")
     private Float duration;
@@ -25,17 +26,68 @@ public class Item extends AppData {
     private String fieldPoster;
 
     @JsonProperty("field_vignette")
-    private Map<String, String> fieldVignette; // WWTFFF????
+    private ArrayList<Map<String, Object>> fieldVignette;
 
-
-    @JsonProperty("field_fichier")
-    private Map<String, String> fieldFichier; // WWTFFF????
+    @JsonProperty("field_files")
+    private  String[] fieldFiles;
 
     @JsonProperty("free")
     private boolean free;
 
+    @JsonProperty("nid")
+    private int nid;
+
     @JsonProperty("children")
     private String[] children;
+
+    @JsonProperty("nb_credits")
+    private Float nbCredits;
+
+    @JsonProperty("active")
+    private boolean active;
+
+    @JsonProperty("url_path")
+    private String urlPath;
+
+    public String getUrlPath() {
+        return urlPath;
+    }
+
+    public void setUrlPath(String urlPath) {
+        this.urlPath = urlPath;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Float getNbCredits() {
+        return nbCredits;
+    }
+
+    public void setNbCredits(Float nbCredits) {
+        this.nbCredits = nbCredits;
+    }
+
+    public int getNid() {
+        return nid;
+    }
+
+    public void setNid(int nid) {
+        this.nid = nid;
+    }
+
+    public String[] getFieldFiles() {
+        return fieldFiles;
+    }
+
+    public void setFieldFiles(String[] fieldFiles) {
+        this.fieldFiles = fieldFiles;
+    }
 
     public String getType() {
         return type;
@@ -53,11 +105,11 @@ public class Item extends AppData {
         this.title = title;
     }
 
-    public Map<String, String> getFieldVideo() {
+    public ArrayList<Map<String, String>> getFieldVideo() {
         return fieldVideo;
     }
 
-    public void setFieldVideo(Map<String, String> fieldVideo) {
+    public void setFieldVideo(ArrayList<Map<String, String>> fieldVideo) {
         this.fieldVideo = fieldVideo;
     }
 
@@ -77,20 +129,12 @@ public class Item extends AppData {
         this.fieldPoster = fieldPoster;
     }
 
-    public Map<String, String> getFieldVignette() {
+    public ArrayList<Map<String, Object>> getFieldVignette() {
         return fieldVignette;
     }
 
-    public void setFieldVignette(Map<String, String> fieldVignette) {
+    public void setFieldVignette(ArrayList<Map<String, Object>> fieldVignette) {
         this.fieldVignette = fieldVignette;
-    }
-
-    public Map<String, String> getFieldFichier() {
-        return fieldFichier;
-    }
-
-    public void setFieldFichier(Map<String, String> fieldFichier) {
-        this.fieldFichier = fieldFichier;
     }
 
     public boolean getFree() {

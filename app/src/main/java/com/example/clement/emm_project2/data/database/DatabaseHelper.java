@@ -15,7 +15,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = DatabaseHelper.class.getSimpleName();
 
     // Database Version
-    private static final int DATABASE_VERSION = 81;
+    private static final int DATABASE_VERSION = 84;
 
     // Database Name
     private static final String DATABASE_NAME = "elephormDB";

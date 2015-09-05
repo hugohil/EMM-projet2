@@ -37,6 +37,8 @@ public class FormationDatabaseHelper {
     public static final String COLUMN_ITEMS = "items";
     public static final String COLUMN_CHILDREN = "children";
     public static final String COLUMN_TEASER_INFO = "teaserInfo";
+    public static final String COLUMN_URL_PATH = "urlPath";
+
 
     public static final String CREATE_TABLE_STATEMENT = "create table "
             + TABLE_NAME + "("
@@ -59,7 +61,7 @@ public class FormationDatabaseHelper {
             + COLUMN_PUBLISHED_DATE + " text,"
             + COLUMN_POSTER + " text,"
             + COLUMN_AUTHORS + " text,"
-            + COLUMN_IMAGES + " text,"
+            + COLUMN_IMAGES + " blob,"
             + COLUMN_FREE + " integer,"
             + COLUMN_RATING + " text,"
             + COLUMN_VIDEO_COUNT + " integer,"
@@ -70,6 +72,7 @@ public class FormationDatabaseHelper {
             + COLUMN_UPDATED_AT + " text,"
             + COLUMN_ITEMS + " text,"
             + COLUMN_CHILDREN + " text,"
-            + COLUMN_TEASER_INFO + " text"
+            + COLUMN_TEASER_INFO + " text, "
+            + COLUMN_URL_PATH + " text"
             +");";
 }

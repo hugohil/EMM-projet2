@@ -50,7 +50,8 @@ public class SubCatListAdapter extends ArrayAdapter<SubCategory> {
             vHeader.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Do nothing here, we don't want to trigger an action when clicking on an header
+                // Do nothing here, we don't want to trigger an action when clicking on an header
+
                 }
             });
         }

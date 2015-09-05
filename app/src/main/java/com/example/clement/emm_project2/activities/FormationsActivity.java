@@ -65,6 +65,7 @@ public class FormationsActivity extends DrawerActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             final String subCatId = extras.getString("subCatId");
+            Log.d(TAG, "SUBCAT ID=> "+ subCatId);
             ServerHandler server = new ServerHandler(App.getAppContext());
             server.getFormations(subCatId, new ResponseHandler() {
                 @Override
@@ -73,12 +74,12 @@ public class FormationsActivity extends DrawerActivity {
                     Log.d(TAG, "DATAS ======>"+datas);
                     List<Formation> formations = JsonUtil.parseJsonDatas((JSONArray) datas, Formation.class);
                     Log.d(TAG, "FORMATIONS SIZE AFTER DESERIALIZATION" + formations.size());
-                    dataAccess.open();
+                   /* dataAccess.open();
                     for (Formation formation : formations) {
                         formation.setSubCatId(subCatId);
                         dataAccess.createData(formation);
                     }
-                    dataAccess.close();
+                    dataAccess.close();*/
 
                     // 2. Getting
                     List<Formation> dbFormations = dataAccess.findDataWhere(Formation.class, "subCatId", subCatId);
