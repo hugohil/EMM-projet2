@@ -27,7 +27,7 @@
         <activity
             android:name=".activities.SplashScreenActivity"
             android:label="@string/app_name"
-            android:noHistory="true">
+            android:noHistory="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -66,7 +66,7 @@
         <service
             android:name=".sync.SyncService"
             android:exported="true"
-            android:process=":sync">
+            android:process=":sync" >
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
@@ -79,6 +79,10 @@
         <activity
             android:name=".activities.FavoriteActivity"
             android:label="@string/title_activity_favorite" >
+        </activity>
+        <activity
+            android:name=".activities.FormationActivity"
+            android:label="@string/title_activity_formation" >
         </activity>
     </application>
 

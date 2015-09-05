@@ -16,6 +16,16 @@ public class StringUtil {
     }
 
     public static boolean startsWithSameLetter(String s1, String s2) {
-        return s1.substring(0,1).equals(s2.substring(0,1));
+        return s1.substring(0, 1).equals(s2.substring(0, 1));
     }
+
+    public static String formatDuration(int seconds) {
+        int hours = seconds / 3600;
+        int minutes = (seconds % 3600) / 60;
+
+        return String.format("%02dh%02d", hours, minutes);
+    }
+
+
+
 }

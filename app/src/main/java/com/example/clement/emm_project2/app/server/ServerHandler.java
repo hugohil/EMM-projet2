@@ -9,9 +9,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Created by perso on 10/08/15.
@@ -78,5 +80,31 @@ public class ServerHandler {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(jsonArrayReq);
+    }
+
+    public void getFormation(final String eanCode, final ResponseHandler handler) {
+        RequestQueue requestQueue = Volley.newRequestQueue(this.context);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                API_BASE_URL + "trainings/" + eanCode,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        handler.onSuccess(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.wtf(TAG, "Error getting formation for ean code" +eanCode);
+                        Log.d(TAG, error.toString());
+                        handler.onError(error.toString());
+                    }
+                });
+        // Here we can have TimeOut error so let's set the timeout manually
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                30000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(jsonObjectRequest);
     }
 }

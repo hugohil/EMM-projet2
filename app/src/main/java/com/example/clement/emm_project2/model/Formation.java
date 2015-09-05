@@ -2,8 +2,7 @@ package com.example.clement.emm_project2.model;
 
 import android.util.Log;
 
-import com.example.clement.emm_project2.util.FormationDeserializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.clement.emm_project2.util.FormationCustomDeserializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -16,7 +15,7 @@ import java.util.Map;
 /**
  * Created by Clement on 10/08/15.
  */
-@JsonDeserialize(using = FormationDeserializer.class)
+@JsonDeserialize(using = FormationCustomDeserializer.class)
 public class Formation extends AppData {
     /*
      * Represents a formation item as described in the api doc
@@ -107,7 +106,7 @@ public class Formation extends AppData {
     private List<Item> items;
 
     @JsonProperty("children")
-    private String[] children;
+    private List<String> children;
 
     @JsonProperty("teaser_info")
     private Object teaserInfo;
@@ -131,11 +130,11 @@ public class Formation extends AppData {
         this.teaserInfo = teaserInfo;
     }
 
-    public String[] getChildren() {
+    public List<String> getChildren() {
         return children;
     }
 
-    public void setChildren(String[] children) {
+    public void setChildren(List<String> children) {
         this.children = children;
     }
 
@@ -299,26 +298,12 @@ public class Formation extends AppData {
         this.poster = poster;
     }
 
-    public String getAuthors() {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.writeValueAsString(this.authors);
-        } catch (JsonProcessingException e){
-            Log.d(Author.class.getSimpleName(), e.toString());
-            return null;
-        }
+    public List<Author> getAuthors() {
+        return authors;
     }
 
-    public <T> T setAuthors(final TypeReference<T> type, String authors) {
-        T data = null;
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            data = mapper.readValue(authors, type);
-            this.authors = (List<Author>) data;
-        } catch (Exception e){
-            Log.d(Author.class.getSimpleName(), e.toString());
-        }
-        return data;
+    public void setAuthors(List<Author> authors) {
+        this.authors = authors;
     }
 
     public Map<String, Map<String, String>> getImages() {
@@ -337,26 +322,12 @@ public class Formation extends AppData {
         this.free = free;
     }
 
-    public String getRating() {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.writeValueAsString(this.rating);
-        } catch (JsonProcessingException e){
-            Log.d(Category.class.getSimpleName(), e.toString());
-            return null;
-        }
+    public Map<String, Float> getRating() {
+        return this.rating;
     }
 
-    public <T> T setRating(final TypeReference<T> type, String rating) {
-        T data = null;
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            data = mapper.readValue(rating, type);
-            this.rating = (Map<String, Float>) data;
-        } catch (Exception e){
-            Log.d(Category.class.getSimpleName(), e.toString());
-        }
-        return data;
+    public void setRating(Map<String, Float> rating) {
+        this.rating = rating;
     }
 
     public int getVideoCount() {
@@ -381,5 +352,15 @@ public class Formation extends AppData {
 
     public void setEan(String ean) {
         this.ean = ean;
+    }
+
+    public int getLessonNumber() {
+        int count = 0;
+        for(Item item : this.items) {
+            if(item.getChildrens().size() == 0){
+                count ++;
+            }
+        }
+        return count;
     }
 }
