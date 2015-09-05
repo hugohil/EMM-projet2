@@ -73,8 +73,8 @@ public class FormationActivity extends AppCompatActivity {
         price.setText(formation.getPrice() + " €");
         lessonCount.setText(formation.getLessonNumber()+ " Leçons");
 
-        
-        try {
+
+        /*try {
             String url = formation.getTeaserInfo().get("video_url");
             Log.d(TAG, "URL ==> " + url);
             final MediaPlayer mediaPlayer = new MediaPlayer();
@@ -90,7 +90,7 @@ public class FormationActivity extends AppCompatActivity {
             });
         } catch(Exception e) {
             Log.d(TAG, e.getMessage());
-        }
+        }*/
 
     }
 

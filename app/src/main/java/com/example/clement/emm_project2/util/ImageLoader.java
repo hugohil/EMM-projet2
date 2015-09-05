@@ -43,11 +43,11 @@ public class ImageLoader {
         stub_id = loader;
         imageViews.put(imageView, url);
         Bitmap bitmap = memoryCache.get(url);
-        if(bitmap != null)
+        if (bitmap != null) {
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageBitmap(bitmap);
-        else {
+        } else {
             queuePhoto(url, imageView);
-//          imageView.setScaleType(ImageView.ScaleType.MATRIX);
             imageView.setImageResource(loader);
         }
     }
@@ -73,7 +73,7 @@ public class ImageLoader {
             conn.setConnectTimeout(30000);
             conn.setReadTimeout(30000);
             conn.setInstanceFollowRedirects(true);
-            InputStream is=conn.getInputStream();
+            InputStream is = conn.getInputStream();
             OutputStream os = new FileOutputStream(f);
             ImageUtil.CopyStream(is, os);
             os.close();
@@ -88,27 +88,9 @@ public class ImageLoader {
     //decodes image and scales it to reduce memory consumption
     private Bitmap decodeFile(File f){
         try {
-            //decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(new FileInputStream(f),null,o);
-
-            //Find the correct scale value. It should be the power of 2.
-            // TODO : Set here image scale and size
-            final int REQUIRED_SIZE=70;
-            int width_tmp=o.outWidth, height_tmp=o.outHeight;
-            int scale=1;
-            while(true){
-                if(width_tmp/2<REQUIRED_SIZE || height_tmp/2<REQUIRED_SIZE)
-                    break;
-                width_tmp/=2;
-                height_tmp/=2;
-                scale*=2;
-            }
-
             //decode with inSampleSize
             BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize=scale;
+            o2.inSampleSize=1;
             return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
         } catch (FileNotFoundException e) {}
         return null;
@@ -160,9 +142,10 @@ public class ImageLoader {
         {
             if(imageViewReused(photoToLoad))
                 return;
-            if(bitmap!=null)
+            if(bitmap!=null) {
+                photoToLoad.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 photoToLoad.imageView.setImageBitmap(bitmap);
-            else
+            } else 
                 photoToLoad.imageView.setImageResource(stub_id);
         }
     }
