@@ -26,4 +26,5 @@
     <string name="title_activity_favorite">FavoriteActivity</string>
     <string name="favorite_title">Formations favorites</string>
     <string name="loading">Chargement des données</string>
+    <string name="formation_img_accessibility_desc">Image de la formation</string>
 </resources>

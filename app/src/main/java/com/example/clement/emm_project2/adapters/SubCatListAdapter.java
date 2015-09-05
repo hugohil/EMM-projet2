@@ -64,6 +64,7 @@ public class SubCatListAdapter extends ArrayAdapter<SubCategory> {
                 Activity act = (Activity) getContext();
                 Intent i = new Intent(act, FormationsActivity.class);
                 i.putExtra("subCatId", subcat.getMongoID());
+                i.putExtra("subCatTitle", subcat.getTitle());
                 act.startActivity(i);
             }
         });

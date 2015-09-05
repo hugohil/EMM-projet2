@@ -46,6 +46,7 @@ public class FormationsActivity extends DrawerActivity {
     private SharedPrefUtil sharedPref = new SharedPrefUtil();
     private List<Category> categories = new ArrayList<Category>();
     private List<Formation> subCatFormations = new ArrayList<Formation>();
+    private String title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,8 @@ public class FormationsActivity extends DrawerActivity {
         if(extras != null) {
             final String subCatId = extras.getString("subCatId");
             Log.d(TAG, "SUBCAT ID=> "+ subCatId);
+            title = extras.getString("subCatTitle");
+            setTitle(title);
             ServerHandler server = new ServerHandler(App.getAppContext());
             server.getFormations(subCatId, new ResponseHandler() {
                 @Override
@@ -135,7 +138,7 @@ public class FormationsActivity extends DrawerActivity {
 
     @Override
     protected void resetTitle(){
-        getSupportActionBar().setTitle(R.string.app_name);
+        getSupportActionBar().setTitle(title);
     }
 
     @Override

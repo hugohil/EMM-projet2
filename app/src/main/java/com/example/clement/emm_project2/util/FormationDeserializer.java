@@ -31,7 +31,7 @@ public class FormationDeserializer extends JsonDeserializer<Formation> {
         Float price = node.get("price").floatValue();
         String description = node.get("description").asText();
         int duration = node.get("duration").asInt();
-        ////            String objectives = node.get("objectives").asText();
+        String objectives = node.get("objectives").asText();
         ////        String prerequisites;
         boolean canDownload = node.get("can_download").asBoolean();
         String qcm = node.get("qcm").asText();
@@ -63,6 +63,7 @@ public class FormationDeserializer extends JsonDeserializer<Formation> {
         formation.setProductUrl(productUrl);
         formation.setEan(ean13);
         formation.setType(type);
+        formation.setObjectives(objectives);
         formation.setPrice(price);
         formation.setDescription(description);
         formation.setDuration(duration);

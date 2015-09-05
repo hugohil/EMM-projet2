@@ -3,14 +3,14 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+              android:padding="5dp">
 
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         android:layout_gravity="center"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
-        android:layout_margin="5dp"
+        android:layout_height="wrap_content"
         card_view:cardCornerRadius="2dp"
         card_view:contentPadding="10dp">
 
@@ -21,28 +21,38 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:scaleType="centerCrop" />
-
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/formation_img_accessibility_desc"/>
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@+id/formationImage">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom|left"
+            android:background="#50000000"
+            >
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/formation_card_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:layout_alignParentTop="true"/>
+                android:textSize="28sp"
+                android:layout_above="@+id/formation_card_objectives"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:textColor="#FFFFFF"
+                android:paddingLeft="10dp"/>
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/formation_card_objectives"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_below="@+id/textView"/>
-
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:textColor="#FFFFFF"
+                android:paddingLeft="10dp"/>
         </RelativeLayout>
-    </android.support.v7.widget.CardView>
 
+
+    </android.support.v7.widget.CardView>
 </LinearLayout>
