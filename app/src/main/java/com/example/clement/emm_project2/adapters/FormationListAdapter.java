@@ -74,7 +74,7 @@ public class FormationListAdapter extends RecyclerView.Adapter<FormationListAdap
         }
 
         // Loader image - will be shown before loading image
-        int loader = R.drawable.logo; // Change this to loader img :)
+        int loader = R.drawable.loader; // Change this to loader img :)
 
         ImageView imageView = holder.formationPoster;
         ImageLoader imgLoader = new ImageLoader(App.getAppContext());

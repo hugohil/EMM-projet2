@@ -22,6 +22,7 @@ import java.util.ArrayList;
 public class CatListAdapter extends ArrayAdapter<Category> {
     private static class ViewHolder{
         TextView title;
+        TextView subCatNumber;
         RelativeLayout layout;
     }
 
@@ -36,6 +37,7 @@ public class CatListAdapter extends ArrayAdapter<Category> {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.category_row, parent, false);
             viewHolder.title = (TextView) convertView.findViewById(R.id.cat_row_title);
+            viewHolder.subCatNumber = (TextView) convertView.findViewById(R.id.cat_row_subcat_number);
             viewHolder.layout = (RelativeLayout) convertView.findViewById(R.id.cat_row_layout);
             convertView.setTag(viewHolder);
         } else {
@@ -45,6 +47,7 @@ public class CatListAdapter extends ArrayAdapter<Category> {
         final Category cat = getItem(position);
 
         viewHolder.title.setText(cat.getTitle());
+        viewHolder.subCatNumber.setText(cat.getSubCategoriesAsList().size() + "");
         viewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

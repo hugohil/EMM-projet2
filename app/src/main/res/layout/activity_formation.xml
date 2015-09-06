@@ -5,12 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:parallax_factor="1.9"
-    tools:context=".FormationActivity" >
+    tools:context=".FormationActivity"
+    android:id="@+id/mainScrollView">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/primary">
 
         <ImageView
             android:layout_width="match_parent"
@@ -61,7 +64,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_below="@+id/formationPoster"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -70,11 +73,12 @@
             android:layout_alignParentEnd="true"
             android:background="#FFFFFF"
             android:textColor="#000000"
-            android:id="@+id/linearLayout">
+            android:id="@+id/linearLayout"
+            android:gravity="center_horizontal">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:id="@+id/imageView2"
@@ -84,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:paddingLeft="5dp"
                 android:textColor="#000000"
                 android:id="@+id/formationDuration"
@@ -92,8 +96,8 @@
                 android:gravity="left|center_vertical"/>
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="10dp"
                 android:id="@+id/imageView3"
@@ -104,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:paddingLeft="5dp"
                 android:textColor="#000000"
                 android:id="@+id/formationPrice"
@@ -112,8 +116,8 @@
                 android:gravity="left|center_vertical"/>
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="10dp"
                 android:id="@+id/imageView4"
@@ -123,14 +127,47 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:paddingLeft="5dp"
                 android:textColor="#000000"
                 android:id="@+id/lessonCount"
                 android:layout_weight="0.15"
                 android:gravity="left|center_vertical"/>
-
         </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:weightSum="1"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:background="@android:color/background_light"
+            android:gravity="center_horizontal">
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/formationRating"
+                android:numStars="5"
+                android:stepSize="0.25"
+                android:gravity="center"
+                style="@style/customRatingBar"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/formationRatingCount"
+                android:text="(2 avis)"
+                android:paddingLeft="5dp">
+
+            </TextView>
+        </LinearLayout>
+
+
+
 
         <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
@@ -146,23 +183,16 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:background="@color/cardview_light_background"
-                android:id="@+id/formationInfoContainer">
-
-                <RatingBar
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/formationRating"
-                    android:numStars="5"
-                    android:stepSize="0.25"
-                    android:layout_marginLeft="15dp"
-                    android:gravity="center"/>
+                android:id="@+id/formationInfoContainer"
+                android:gravity="center">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="80dp"
                     android:orientation="horizontal"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentRight="true">
+                    android:layout_alignParentRight="true"
+                    android:paddingTop="5dp">
 
 
                     <de.hdodenhof.circleimageview.CircleImageView
@@ -235,5 +265,4 @@
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
-
 </com.nirhart.parallaxscroll.views.ParallaxScrollView>
