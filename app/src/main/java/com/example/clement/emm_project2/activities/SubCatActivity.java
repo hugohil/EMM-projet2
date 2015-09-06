@@ -19,6 +19,7 @@ import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.model.SubCategory;
 import com.example.clement.emm_project2.util.SharedPrefUtil;
 import com.example.clement.emm_project2.util.StringUtil;
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -83,7 +84,7 @@ public class SubCatActivity extends DrawerActivity {
     }
 
     public void bindView(String description, String title, String catId) {
-        TextView desc = (TextView) findViewById(R.id.act_subcat_desc);
+        ExpandableTextView desc = (ExpandableTextView) findViewById(R.id.act_subcat_desc);
         String html = StringUtil.html2Text(description); // Needs to be done in DataAccess?
         desc.setText(html);
         setTitle(title);
