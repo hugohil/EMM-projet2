@@ -82,9 +82,6 @@ public class FormationsActivity extends DrawerActivity {
                 @Override
                 public void onSuccess(Object datas) {
                     List<Formation> formations = JsonUtil.parseJsonDatas((JSONArray) datas, Formation.class);
-                    if(formations.size() == 1) { // needs to be done before starting this activity
-                        redirectToSingleView(formations.get(0).getEan());
-                    }
                     subCatFormations.addAll(formations);
                     mAdapter.notifyDataSetChanged();
                 }
