@@ -65,6 +65,7 @@ public class SharedPrefUtil {
     }
 
     public void initFavoriteFormation(){
+        favoritesFormations.clear();
         Context context = App.getAppContext();
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.favoritesFormations),
                 Context.MODE_PRIVATE);
