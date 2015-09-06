@@ -42,7 +42,6 @@ public class FormationsActivity extends DrawerActivity {
     private RecyclerView mRecyclerView;
     private FormationListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private Switch favoriteSwitch;
     private SharedPrefUtil sharedPref = new SharedPrefUtil();
     private List<Category> categories = new ArrayList<Category>();
     private List<Formation> subCatFormations = new ArrayList<Formation>();
@@ -54,7 +53,6 @@ public class FormationsActivity extends DrawerActivity {
 
         dataAccess = new DataAccess(this);
         categories = dataAccess.getAllDatas(Category.class);
-        favoriteSwitch = (Switch) findViewById(R.id.act_formation_fav_switch);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -89,21 +87,6 @@ public class FormationsActivity extends DrawerActivity {
                 @Override
                 public void onError(String error) {
                     Log.wtf(TAG, error);
-                }
-            });
-
-            if(sharedPref.isFormationFavorited(subCatId)){
-                favoriteSwitch.setChecked(true);
-            }
-
-            favoriteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        // TODO: register formation ID instead of subcategory ID, with formation name instead of this class name.
-                        sharedPref.addFavoriteFormation(subCatId);
-                    } else {
-                        sharedPref.removeFavoriteFormation(subCatId);
-                    }
                 }
             });
 
