@@ -11,21 +11,52 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="385dp"
-            android:id="@+id/act_subcat_list"
-            android:layout_below="@+id/act_subcat_desc"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_gravity="center_horizontal|bottom" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/scrollView">
 
-        <TextView
-            android:id="@+id/act_subcat_desc"
-            android:layout_width="339dp"
-            android:lines="7"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|top" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.ms.square.android.expandabletextview.ExpandableTextView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/act_subcat_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    expandableTextView:maxCollapsedLines="6"
+                    expandableTextView:animDuration="200"
+                    android:background="#FFFFFF">
+                    <TextView
+                        android:id="@id/expandable_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="#666666" />
+                    <ImageButton
+                        android:id="@id/expand_collapse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:layout_gravity="right|bottom"
+                        android:background="@android:color/transparent"/>
+
+                </com.ms.square.android.expandabletextview.ExpandableTextView>
+
+                <ListView
+                    android:layout_width="wrap_content"
+                    android:layout_height="385dp"
+                    android:id="@+id/act_subcat_list"
+                    android:layout_gravity="center_horizontal|bottom" />
+            </LinearLayout>
+        </ScrollView>
+
     </FrameLayout>
 
     <!-- The navigation drawer -->
