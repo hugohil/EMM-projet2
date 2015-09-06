@@ -1,6 +1,5 @@
 package com.example.clement.emm_project2.activities;
 
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,10 +7,10 @@ import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -23,8 +22,8 @@ import com.example.clement.emm_project2.model.Formation;
 import com.example.clement.emm_project2.util.ImageLoader;
 import com.example.clement.emm_project2.util.JsonUtil;
 import com.example.clement.emm_project2.util.StringUtil;
-import com.github.pedrovgs.DraggableView;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
+import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 
 import org.json.JSONObject;
 
@@ -60,7 +59,7 @@ public class FormationActivity extends AppCompatActivity {
     }
 
     private void displayFormation(Formation formation){
-        int loader = R.drawable.logo; // Change this to loader img :)
+        int loader = R.drawable.loader;
         TextView title = (TextView) findViewById(R.id.formationTitle);
         TextView subTitle = (TextView) findViewById(R.id.formationSubtitle);
         ImageView imageView = (ImageView) findViewById(R.id.formationPoster);
@@ -69,6 +68,7 @@ public class FormationActivity extends AppCompatActivity {
         TextView lessonCount = (TextView) findViewById(R.id.lessonCount);
         ExpandableTextView description = (ExpandableTextView) findViewById(R.id.formationDescription);
         RatingBar rating = (RatingBar) findViewById(R.id.formationRating);
+        TextView ratingCount = (TextView) findViewById(R.id.formationRatingCount);
         CircleImageView authorPicture = (CircleImageView) findViewById(R.id.formationAuthorPicture);
         TextView authorInfo = (TextView) findViewById(R.id.formationAuthorInfo);
         TextView authorName = (TextView) findViewById(R.id.formationAuthorName);
@@ -88,6 +88,7 @@ public class FormationActivity extends AppCompatActivity {
             rating.setStepSize(0.10f);
             rating.setIsIndicator(true);
         }
+        ratingCount.setText("("+Math.round(formation.getRating().get("count"))+ " " + getString(R.string.rate) + ")");
 
         imgLoader.DisplayImage(formation.getAuthors().get(0).getPictureSmall(), loader, authorPicture);
         authorInfo.setText(getString(R.string.yourTeacher) + " "+ formation.getTitle());
@@ -102,6 +103,8 @@ public class FormationActivity extends AppCompatActivity {
         controller.setAnchorView(videoView);
         controller.setMediaPlayer(videoView);
         videoView.setMediaController(controller);
+
+        ((ParallaxScrollView)findViewById(R.id.mainScrollView)).fullScroll(ScrollView.FOCUS_UP);
 
         /*Intent intent = new Intent(Intent.ACTION_VIEW );
         intent.setDataAndType(Uri.parse("http://eas.elephorm.com/videos/" + formation.getTeaser()), "video*//*");
