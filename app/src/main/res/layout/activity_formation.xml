@@ -258,6 +258,17 @@
 
                 </com.ms.square.android.expandabletextview.ExpandableTextView>
 
+                <Button
+                    android:id="@+id/startFormation"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="@string/begin_formation"
+                    android:background="@color/primary"
+                    android:drawableLeft="@drawable/ic_action_play_circle_outline"
+                    android:textSize="24sp"
+                    android:onClick="startFormation"/>
+
                 <VideoView
                     android:layout_width="match_parent"
                     android:layout_height="300dp"

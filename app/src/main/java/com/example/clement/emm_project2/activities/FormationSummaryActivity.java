@@ -1,5 +1,6 @@
 package com.example.clement.emm_project2.activities;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.RatingBar;
@@ -29,9 +31,10 @@ import org.json.JSONObject;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class FormationActivity extends AppCompatActivity {
+public class FormationSummaryActivity extends AppCompatActivity {
 
-    private final static String TAG = FormationActivity.class.getSimpleName();
+    private final static String TAG = FormationSummaryActivity.class.getSimpleName();
+    private Formation formation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,7 @@ public class FormationActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Object datas) {
                     Formation formation = JsonUtil.parseJsonData((JSONObject) datas, Formation.class);
+                    getSupportActionBar().setTitle(formation.getTitle());
                     displayFormation(formation);
                 }
 
@@ -56,9 +60,18 @@ public class FormationActivity extends AppCompatActivity {
                 }
             });
         }
+
+
+    }
+
+    public void startFormation(View v) {
+        Intent intent = new Intent(this, FormationDetailActivity.class);
+        intent.putExtra("ean", formation.getEan());
+        startActivity(intent);
     }
 
     private void displayFormation(Formation formation){
+        this.formation = formation;
         int loader = R.drawable.loader;
         TextView title = (TextView) findViewById(R.id.formationTitle);
         TextView subTitle = (TextView) findViewById(R.id.formationSubtitle);
@@ -88,7 +101,11 @@ public class FormationActivity extends AppCompatActivity {
             rating.setStepSize(0.10f);
             rating.setIsIndicator(true);
         }
-        ratingCount.setText("("+Math.round(formation.getRating().get("count"))+ " " + getString(R.string.rate) + ")");
+        Float ratingCountFloat = formation.getRating().get("count");
+        if(ratingCountFloat == null){
+            ratingCountFloat = 0.0f;
+        }
+        ratingCount.setText("("+Math.round(ratingCountFloat)+ " " + getString(R.string.rate) + ")");
 
         imgLoader.DisplayImage(formation.getAuthors().get(0).getPictureSmall(), loader, authorPicture);
         authorInfo.setText(getString(R.string.yourTeacher) + " "+ formation.getTitle());
