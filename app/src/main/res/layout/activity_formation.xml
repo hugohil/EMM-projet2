@@ -17,6 +17,7 @@
             android:layout_height="200dp"
             android:gravity="center"
             android:textSize="50sp"
+            android:text="PARALLAXED"
             android:id="@+id/formationPoster"
             tools:ignore="HardcodedText" />
 
@@ -96,7 +97,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="10dp"
                 android:id="@+id/imageView3"
-                android:src="@drawable/ic_action_attach_money"
+                android:src="@drawable/ic_action_lock_outline"
                 />
 
             <TextView
@@ -147,6 +148,15 @@
                 android:background="@color/cardview_light_background"
                 android:id="@+id/formationInfoContainer">
 
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/formationRating"
+                    android:numStars="5"
+                    android:stepSize="0.25"
+                    android:layout_marginLeft="15dp"
+                    android:gravity="center"/>
+
                 <TextView
                     android:paddingTop="10dp"
                     android:paddingLeft="15dp"
@@ -162,8 +172,6 @@
                     android:layout_height="300dp"
                     android:id="@+id/formationTeaser" />
             </LinearLayout>
-
-
         </ScrollView>
     </LinearLayout>
 

@@ -1,15 +1,17 @@
 package com.example.clement.emm_project2.activities;
 
-import android.media.AudioManager;
-import android.media.MediaPlayer;
+import android.content.res.Configuration;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -21,11 +23,9 @@ import com.example.clement.emm_project2.model.Formation;
 import com.example.clement.emm_project2.util.ImageLoader;
 import com.example.clement.emm_project2.util.JsonUtil;
 import com.example.clement.emm_project2.util.StringUtil;
+import com.github.pedrovgs.DraggableView;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.List;
 
 public class FormationActivity extends AppCompatActivity {
 
@@ -65,6 +65,7 @@ public class FormationActivity extends AppCompatActivity {
         TextView price = (TextView) findViewById(R.id.formationPrice);
         TextView lessonCount = (TextView) findViewById(R.id.lessonCount);
         TextView description = (TextView) findViewById(R.id.formationDescription);
+        RatingBar rating = (RatingBar) findViewById(R.id.formationRating);
 
 
 
@@ -73,35 +74,26 @@ public class FormationActivity extends AppCompatActivity {
         title.setText(formation.getTitle());
         subTitle.setText(formation.getSubtitle());
         duration.setText(StringUtil.formatDuration(formation.getDuration()));
-        price.setText(formation.getPrice() + " €");
-        lessonCount.setText(formation.getLessonNumber()+ " Leçons");
-        description.setText(StringUtil.html2Text(formation.getDescription()));
+        price.setText(StringUtil.truncatePrice(formation.getPrice()) + " €");
+        lessonCount.setText(formation.getLessonNumber() + " Leçons");
+        description.setText(Html.fromHtml(formation.getDescription()));
+        Float averageRating = new Float(formation.getRating().get("average"));
+        rating.setRating(averageRating / 20);
+        rating.setStepSize(0.10f);
+        rating.setIsIndicator(true);
 
         VideoView videoView = (VideoView)findViewById(R.id.formationTeaser);
-        videoView.setVideoURI(Uri.parse("http://eas.elephorm.com/videos/"+ formation.getTeaser()));
+        videoView.setVideoURI(Uri.parse("http://eas.elephorm.com/videos/" + formation.getTeaser()));
+
 
         MediaController controller = new MediaController(this);
         controller.setAnchorView(videoView);
         controller.setMediaPlayer(videoView);
         videoView.setMediaController(controller);
 
-//        try {
-//            String url = formation.getTeaserInfo().get("video_url");
-//            Log.d(TAG, "URL ==> " + url);
-//            final MediaPlayer mediaPlayer = new MediaPlayer();
-//            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//            mediaPlayer.setDataSource("http://eas.elephorm.com/videos/tutoriel-audacity/teaser-de-la-formation-audacity");
-//            mediaPlayer.prepareAsync(); // might take long! (for buffering, etc)
-//
-//            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//                @Override
-//                public void onPrepared(MediaPlayer mp) {
-//                    mediaPlayer.start();
-//                }
-//            });
-//        } catch(Exception e) {
-//            Log.d(TAG, e.getMessage());
-//        }
+        /*Intent intent = new Intent(Intent.ACTION_VIEW );
+        intent.setDataAndType(Uri.parse("http://eas.elephorm.com/videos/" + formation.getTeaser()), "video*//*");
+        startActivity(intent);*/
 
     }
 

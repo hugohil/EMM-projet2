@@ -23,6 +23,7 @@
         android:paddingRight="20dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
+        android:background="?android:attr/selectableItemBackground"
         android:layout_below="@+id/subcat_group_name"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />

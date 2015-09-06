@@ -79,7 +79,7 @@ public class SubCatActivity extends DrawerActivity {
 
     @Override
     protected void resetTitle(){
-        getSupportActionBar().setTitle(title);
+        getSupportActionBar().setTitle(getString(R.string.formations) + " " + title);
     }
 
     public void bindView(String description, String title, String catId) {
