@@ -28,7 +28,9 @@ public class StringUtil {
 
     public static String truncatePrice(Float price) {
         String result = new Double(price).toString();
-        result = result.substring(0,5);
+        if(result.length() > 4) {
+            result = result.substring(0, 5);
+        }
         return result;
     }
 

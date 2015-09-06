@@ -24,8 +24,11 @@ import com.example.clement.emm_project2.util.ImageLoader;
 import com.example.clement.emm_project2.util.JsonUtil;
 import com.example.clement.emm_project2.util.StringUtil;
 import com.github.pedrovgs.DraggableView;
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import org.json.JSONObject;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FormationActivity extends AppCompatActivity {
 
@@ -64,10 +67,11 @@ public class FormationActivity extends AppCompatActivity {
         TextView duration = (TextView) findViewById(R.id.formationDuration);
         TextView price = (TextView) findViewById(R.id.formationPrice);
         TextView lessonCount = (TextView) findViewById(R.id.lessonCount);
-        TextView description = (TextView) findViewById(R.id.formationDescription);
+        ExpandableTextView description = (ExpandableTextView) findViewById(R.id.formationDescription);
         RatingBar rating = (RatingBar) findViewById(R.id.formationRating);
-
-
+        CircleImageView authorPicture = (CircleImageView) findViewById(R.id.formationAuthorPicture);
+        TextView authorInfo = (TextView) findViewById(R.id.formationAuthorInfo);
+        TextView authorName = (TextView) findViewById(R.id.formationAuthorName);
 
         ImageLoader imgLoader = new ImageLoader(App.getAppContext());
         imgLoader.DisplayImage(formation.getPoster(), loader, imageView);
@@ -77,10 +81,18 @@ public class FormationActivity extends AppCompatActivity {
         price.setText(StringUtil.truncatePrice(formation.getPrice()) + " €");
         lessonCount.setText(formation.getLessonNumber() + " Leçons");
         description.setText(Html.fromHtml(formation.getDescription()));
-        Float averageRating = new Float(formation.getRating().get("average"));
-        rating.setRating(averageRating / 20);
-        rating.setStepSize(0.10f);
-        rating.setIsIndicator(true);
+
+        if(formation.getRating().get("average") != null) {
+            Float averageRating = new Float(formation.getRating().get("average"));
+            rating.setRating(averageRating / 20);
+            rating.setStepSize(0.10f);
+            rating.setIsIndicator(true);
+        }
+
+        imgLoader.DisplayImage(formation.getAuthors().get(0).getPictureSmall(), loader, authorPicture);
+        authorInfo.setText(getString(R.string.yourTeacher) + " "+ formation.getTitle());
+        authorName.setText(formation.getAuthors().get(0).getFullName());
+
 
         VideoView videoView = (VideoView)findViewById(R.id.formationTeaser);
         videoView.setVideoURI(Uri.parse("http://eas.elephorm.com/videos/" + formation.getTeaser()));

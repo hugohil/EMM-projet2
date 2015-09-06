@@ -37,4 +37,5 @@ dependencies {
     compile files('libs/jsoup-1.8.3.jar')
     compile 'com.github.nirhart:parallaxscroll:1.0'
     compile 'com.github.pedrovgs:draggablepanel:1.8'
+    compile 'com.ms-square:expandableTextView:0.1.4'
 }
