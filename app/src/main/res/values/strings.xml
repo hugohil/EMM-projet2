@@ -32,4 +32,6 @@
     <string name="formations">Formations</string>
     <string name="yourTeacher">Votre formateur</string>
     <string name="rate">avis</string>
+    <string name="dialog_error">Erreur</string>
+    <string name="download_dialog_error_msg">Désolé, une erreur s\'est produite lors du téléchargement des données.</string>
 </resources>

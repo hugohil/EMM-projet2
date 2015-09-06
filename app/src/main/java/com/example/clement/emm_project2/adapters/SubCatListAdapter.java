@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
@@ -101,6 +104,21 @@ public class SubCatListAdapter extends ArrayAdapter<SubCategory> {
                     @Override
                     public void onError(String error) {
                         Log.wtf("Error", error);
+                        final Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                progress.dismiss();
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(App.getAppContext(), R.style.alertDialogStyle);
+                                builder.setTitle(R.string.dialog_error);
+                                builder.setMessage(R.string.download_dialog_error_msg);
+                                builder.setPositiveButton("OK", null);
+                                AlertDialog dialog = builder.create();
+                                dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+                                dialog.show();
+                            }
+                        }, 2000);
                     }
                 });
 
