@@ -82,8 +82,12 @@
             android:label="@string/title_activity_favorite" >
         </activity>
         <activity
-            android:name=".activities.FormationActivity"
+            android:name=".activities.FormationSummaryActivity"
             android:label="@string/title_activity_formation" >
+        </activity>
+        <activity
+            android:name=".activities.FormationDetailActivity"
+            android:label="@string/title_activity_formation_detail" >
         </activity>
     </application>
 

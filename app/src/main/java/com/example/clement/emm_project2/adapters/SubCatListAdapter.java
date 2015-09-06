@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.example.clement.emm_project2.activities.FormationActivity;
+import com.example.clement.emm_project2.activities.FormationSummaryActivity;
 import com.example.clement.emm_project2.activities.FormationsActivity;
 import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.app.App;
@@ -85,7 +85,7 @@ public class SubCatListAdapter extends ArrayAdapter<SubCategory> {
                         List<Formation> formations = JsonUtil.parseJsonDatas((JSONArray) datas, Formation.class);
                         Intent intent;
                         if (formations.size() == 1) {
-                            intent = new Intent(act, FormationActivity.class);
+                            intent = new Intent(act, FormationSummaryActivity.class);
                             intent.putExtra("ean", formations.get(0).getEan());
                             act.startActivity(intent);
                         } else {

@@ -133,7 +133,7 @@ public class FormationsActivity extends DrawerActivity {
     }
 
     private void redirectToSingleView(String formationEan) {
-        Intent intent = new Intent(context, FormationActivity.class);
+        Intent intent = new Intent(context, FormationSummaryActivity.class);
         intent.putExtra("ean", formationEan);
         context.startActivity(intent);
     }

@@ -32,4 +32,6 @@
     <string name="formations">Formations</string>
     <string name="yourTeacher">Votre formateur</string>
     <string name="rate">avis</string>
+    <string name="title_activity_formation_detail">FormationDetailActivity</string>
+    <string name="begin_formation">Formation complète</string>
 </resources>
