@@ -119,21 +119,23 @@ public class FormationSummaryActivity extends AppCompatActivity {
         if(ratingCountFloat == null){
             ratingCountFloat = 0.0f;
         }
-        ratingCount.setText("("+Math.round(ratingCountFloat)+ " " + getString(R.string.rate) + ")");
+        ratingCount.setText("(" + Math.round(ratingCountFloat) + " " + getString(R.string.rate) + ")");
 
         imgLoader.DisplayImage(formation.getAuthors().get(0).getPictureSmall(), loader, authorPicture);
-        authorInfo.setText(getString(R.string.yourTeacher) + " "+ formation.getTitle());
+        authorInfo.setText(getString(R.string.yourTeacher) + " " + formation.getTitle());
         authorName.setText(formation.getAuthors().get(0).getFullName());
 
 
-        VideoView videoView = (VideoView)findViewById(R.id.formationTeaser);
-        videoView.setVideoURI(Uri.parse("http://eas.elephorm.com/videos/" + formation.getTeaser()));
 
+        ImageView teaserPoster = (ImageView) findViewById(R.id.formationTeaserPoster);
+        imgLoader.DisplayImage(formation.getTeaserInfo().get("video_poster"), loader, teaserPoster);
 
-        MediaController controller = new MediaController(this);
-        controller.setAnchorView(videoView);
-        controller.setMediaPlayer(videoView);
-        videoView.setMediaController(controller);
+        // on click play teaser
+
+//        MediaController controller = new MediaController(this);
+//        controller.setAnchorView(videoView);
+//        controller.setMediaPlayer(videoView);
+//        videoView.setMediaController(controller);
 
         ((ParallaxScrollView)findViewById(R.id.mainScrollView)).fullScroll(ScrollView.FOCUS_UP);
 
@@ -148,6 +150,12 @@ public class FormationSummaryActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_formation, menu);
         return true;
+    }
+
+    public void playTeaserFullScreen(View v) {
+        Intent intent = new Intent(Intent.ACTION_VIEW );
+        intent.setDataAndType(Uri.parse("http://eas.elephorm.com/videos/" + formation.getTeaser()), "video/*");
+        startActivity(intent);
     }
 
     @Override

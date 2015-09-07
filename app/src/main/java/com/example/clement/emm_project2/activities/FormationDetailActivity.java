@@ -16,6 +16,7 @@ import com.example.clement.emm_project2.adapters.ItemListAdapter;
 import com.example.clement.emm_project2.app.App;
 import com.example.clement.emm_project2.app.server.ResponseHandler;
 import com.example.clement.emm_project2.app.server.ServerHandler;
+import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.Formation;
 import com.example.clement.emm_project2.model.Item;
 import com.example.clement.emm_project2.util.JsonUtil;
@@ -46,20 +47,10 @@ public class FormationDetailActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             final String eanCode= extras.getString("ean");
-            ServerHandler server = new ServerHandler(App.getAppContext());
-            server.getFormation(eanCode, new ResponseHandler() {
-                @Override
-                public void onSuccess(Object datas) {
-                    Formation formation = JsonUtil.parseJsonData((JSONObject) datas, Formation.class);
-                    getSupportActionBar().setTitle(formation.getTitle());
-                    displayFormation(formation);
-                }
-
-                @Override
-                public void onError(String error) {
-                    Log.wtf(TAG, error);
-                }
-            });
+            DataAccess da = new DataAccess(App.getAppContext());
+            List<Formation> formations = da.findDataWhere(Formation.class, "ean", eanCode);
+            Formation formation = formations.get(0);
+            displayFormation(formation);
         }
     }
 

@@ -87,6 +87,7 @@ public class SubCatListAdapter extends ArrayAdapter<SubCategory> {
                 List<Formation> dbFormations = da.findDataWhere(Formation.class, "subCatId", subcat.getMongoID());
                 if(dbFormations.size() > 0) {
                     //Formation found in database
+                    progress.dismiss();
                     handleRedirection(dbFormations, subcat);
                 } else {
                     server.getFormations(subcat.getMongoID(), new ResponseHandler() {
