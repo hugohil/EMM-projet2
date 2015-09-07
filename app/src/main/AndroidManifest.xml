@@ -90,6 +90,10 @@
             android:name=".activities.FormationDetailActivity"
             android:label="@string/title_activity_formation_detail" >
         </activity>
+        <activity
+            android:name=".activities.StartedVideosActivity"
+            android:label="@string/title_activity_started_videos" >
+        </activity>
     </application>
 
 </manifest>
