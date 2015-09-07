@@ -269,20 +269,23 @@
                 </com.ms.square.android.expandabletextview.ExpandableTextView>
 
                 <Button
-                    android:id="@+id/startFormation"
-                    android:layout_width="fill_parent"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
                     android:text="@string/begin_formation"
-                    android:background="@color/primary"
-                    android:drawableLeft="@drawable/ic_action_play_circle_outline"
-                    android:textSize="24sp"
-                    android:onClick="startFormation"/>
+                    android:id="@+id/startFormation"
+                    android:background="@color/primary_dark"
+                    android:textColor="#FFFFFF"
+                    android:onClick="startFormation"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_margin="20dp"/>
 
                 <VideoView
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
-                    android:id="@+id/formationTeaser" />
+                    android:id="@+id/formationTeaser"
+                    />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
