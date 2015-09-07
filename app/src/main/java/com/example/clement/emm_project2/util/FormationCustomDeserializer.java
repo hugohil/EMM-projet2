@@ -55,7 +55,6 @@ public class FormationCustomDeserializer extends JsonDeserializer<Formation> {
         String poster = node.get("poster").asText();
         //            int __v;
 
-
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<Map<String,Map<String, String>>> typeRefImages = new TypeReference<Map<String,Map<String, String>>>(){};
         Map<String, Map<String, String>> images = mapper.readValue(node.get("images").traverse(), typeRefImages);

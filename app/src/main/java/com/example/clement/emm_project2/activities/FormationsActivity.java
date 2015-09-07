@@ -82,6 +82,11 @@ public class FormationsActivity extends DrawerActivity {
                 @Override
                 public void onSuccess(Object datas) {
                     List<Formation> formations = JsonUtil.parseJsonDatas((JSONArray) datas, Formation.class);
+                    DataAccess da = new DataAccess(App.getAppContext());
+                    da.open();
+                    da.createData(formations.get(0));
+                    da.close();
+
                     subCatFormations.addAll(formations);
                     mAdapter.notifyDataSetChanged();
                 }
