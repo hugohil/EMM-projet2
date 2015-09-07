@@ -20,9 +20,14 @@ import android.widget.VideoView;
 
 import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.app.App;
+import com.example.clement.emm_project2.app.drawer.DrawerActivity;
+import com.example.clement.emm_project2.app.drawer.DrawerItem;
+import com.example.clement.emm_project2.app.drawer.DrawerSection;
+import com.example.clement.emm_project2.app.drawer.DrawerSectionItem;
 import com.example.clement.emm_project2.app.server.ResponseHandler;
 import com.example.clement.emm_project2.app.server.ServerHandler;
 import com.example.clement.emm_project2.data.DataAccess;
+import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.model.Formation;
 import com.example.clement.emm_project2.util.ImageLoader;
 import com.example.clement.emm_project2.util.JsonUtil;
@@ -33,21 +38,26 @@ import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class FormationSummaryActivity extends AppCompatActivity {
+public class FormationSummaryActivity extends DrawerActivity {
 
     private final static String TAG = FormationSummaryActivity.class.getSimpleName();
     private Formation formation;
     private Switch favoriteSwitch;
     private SharedPrefUtil sharedPref = new SharedPrefUtil();
+    private DataAccess dataAccess;
+    private List<Category> categories = new ArrayList<Category>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_formation);
+
         favoriteSwitch = (Switch) findViewById(R.id.act_formation_switch);
 
         Bundle extras = getIntent().getExtras();
@@ -76,6 +86,35 @@ public class FormationSummaryActivity extends AppCompatActivity {
             displayFormation(formation);
         }
 
+        ArrayList<DrawerItem> menuItems = new ArrayList<DrawerItem>();
+        List<Category> dbCategories;
+        dataAccess = new DataAccess(this);
+        dbCategories = dataAccess.getAllDatas(Category.class);
+        Collections.sort(dbCategories, new Comparator<Category>() {
+            public int compare(Category c1, Category c2) {
+                String t1 = c1.getTitle().toUpperCase();
+                String t2 = c2.getTitle().toUpperCase();
+                return t1.compareTo(t2);
+            }
+        });
+        if(SharedPrefUtil.areFavoriteFormations()) {
+            menuItems.add(DrawerSection.create(300, "Navigation", "ic_action_label", this));
+            menuItems.add(DrawerSectionItem.create(301, "Favoris", true));
+            menuItems.add(DrawerSectionItem.create(302, "Parcours", true));
+        }
+        menuItems.add(DrawerSection.create(200, "Catégories", "ic_action_bookmark", FormationSummaryActivity.this));
+        for(Category category : dbCategories) {
+            menuItems.add(DrawerSectionItem.create(dbCategories.indexOf(category), category.getTitle(), true));
+        }
+        menuItems.add(DrawerSection.create(100, "Configuration", "ic_action_settings", FormationSummaryActivity.this));
+        menuItems.add(DrawerSectionItem.create(101, "Preferences", true));
+        setDrawerContent(menuItems);
+        categories.addAll(dbCategories);
+    }
+
+    @Override
+    protected void resetTitle(){
+        setTitle(formation.getTitle());
     }
 
     public void startFormation(View v) {
@@ -171,5 +210,34 @@ public class FormationSummaryActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected int getLayoutResourceId() {
+        return R.layout.activity_formation;
+    }
+
+    @Override
+    protected void onNavItemSelected(int id) {
+        if(id < 100 ){
+            // Click on categories
+            Category cat = categories.get(id);
+
+            Intent i = new Intent(this, SubCatActivity.class);
+            i.putExtra("desc", cat.getDescription());
+            i.putExtra("title", cat.getTitle());
+            i.putExtra("catId", cat.getMongoID());
+
+            startActivity(i);
+        }
+        if(id > 300){
+            if(id > 301){
+                Intent i = new Intent(this, StartedVideosActivity.class);
+                startActivity(i);
+            } else {
+                Intent i = new Intent(this, FavoriteActivity.class);
+                startActivity(i);
+            }
+        }
     }
 }
