@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.clement.emm_project2.R;
@@ -53,6 +54,7 @@ public class FormationDetailActivity extends DrawerActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.wtf(TAG, SharedPrefUtil.getSeenItemIds().size()+ " seen ITEMS");
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
@@ -100,9 +102,10 @@ public class FormationDetailActivity extends DrawerActivity {
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
                 Item item = videos.get(chapters.get(groupPosition)).get(childPosition);
-                TextView itemText = (TextView)v.findViewById(R.id.lblListItem);
-                itemText.setTextColor(getResources().getColor(R.color.material_green));
+                ImageView playIcon = (ImageView) v.findViewById(R.id.icon_additional_icon);
+                playIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_done));
                 sharedPref.addStartedVideo(formation, item);
+                Log.wtf(TAG, sharedPref.getSeenItemIds().size() +" + seen items");
 
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setDataAndType(Uri.parse((String) item.getFieldVideo().get(0).get("filepath")), "video/*");
@@ -119,7 +122,6 @@ public class FormationDetailActivity extends DrawerActivity {
             if(item.getType().equals("chapter")) {
                 List<Item> childrens = new ArrayList<Item>();
                 for(Item item2: items) {
-                    Log.d(TAG, "item mongo id =>"+item.getMongoID());
                     if(item.getChildrens().contains(item2.getMongoID())) {
                         childrens.add(item2);
                     }

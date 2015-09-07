@@ -63,7 +63,6 @@ public class FormationSummaryActivity extends DrawerActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             final String eanCode= extras.getString("ean");
-            Log.wtf(TAG,"EAN => "+eanCode);
 
             if(sharedPref.isFormationFavorited(eanCode)){
                 favoriteSwitch.setChecked(true);

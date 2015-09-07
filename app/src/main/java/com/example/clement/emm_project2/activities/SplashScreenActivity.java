@@ -51,14 +51,10 @@ public class SplashScreenActivity extends Activity {
         // TODO : check last sync date
         // If none => run sync manually
         // Then, get app preferences, and compare last sync date with sheduled date / period (run sync if necessary)
-        if (!SharedPrefUtil.areCategoriesInCache()) {
-            Log.d(TAG, "CATGEGORIES NOT FOUND IN CACHE");
+        if (!SharedPrefUtil.didSynchroRunOnce()) {
+            Log.d(TAG, "CATEGORIES NOT FOUND IN CACHE");
             Log.d(TAG, "trying to run sync");
             Account account = SyncUtil.CreateSyncAccount(this);
-            if(account == null) {
-                Log.d(TAG, "cannot Create sync Accout !");
-                redirect();
-            }
             ContentResolver.setSyncAutomatically(account, "com.example.clement.emm_project2.datasync.provider", true);
             ContentResolver.requestSync(account, "com.example.clement.emm_project2.datasync.provider", new Bundle());
         } else {

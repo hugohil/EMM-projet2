@@ -72,7 +72,6 @@ public class FormationsActivity extends DrawerActivity {
             List<Formation> dbFormations = da.findDataWhere(Formation.class, "subCatId", subCatId);
             if(dbFormations.isEmpty()) {
                 Log.d(TAG, "No formations ... strange");
-
             } else {
                 Log.d(TAG, "Got Formations in db");
                 Log.d(TAG, "SIZE =>"+dbFormations.size());

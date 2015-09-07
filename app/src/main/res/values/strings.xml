@@ -22,7 +22,6 @@
     <string name="title_activity_formations">FormationsActivity</string>
     <string name="formations_loaded_subcat">formationsLoadedSubcat</string>
     <string name="act_formation_fav_switch">Favori</string>
-    <string name="favoritesFormations">FavFormations</string>
     <string name="title_activity_favorite">FavoriteActivity</string>
     <string name="favorite_title">Formations favorites</string>
     <string name="loading">Chargement des données</string>
@@ -45,4 +44,6 @@
     <string name="travel">parcours</string>
     <string name="remove_videos_from_path">Voulez-vous supprimer cette vidéo des vidéos courantes ?</string>
     <string name="remove_video_title">Retirer la vidéo courante</string>
+    <string name="favoritesFormations">favoriteFormations</string>
+    <string name="didSychroRunOnce">didSynchroRunOnce</string>
 </resources>

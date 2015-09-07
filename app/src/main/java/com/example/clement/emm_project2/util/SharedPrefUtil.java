@@ -32,33 +32,28 @@ public class SharedPrefUtil {
     private final static String TAG = SharedPrefUtil.class.getSimpleName();
 //    private static List<Formation> favoritesFormations = new ArrayList<Formation>();
 
-    public static void registerDataIdInCache(AppData data) {
-        if(data != null) {
-            Context context = App.getAppContext();
-            SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
-                    Context.MODE_PRIVATE);
-            Set<String> loadedIds = sharedPref.getStringSet(data.getClass().getSimpleName(), null);
-            if(loadedIds == null) {
-                loadedIds = new HashSet<String>();
-            } else if(loadedIds.contains(data.getMongoID())) {
-                Log.d(TAG, data.getClass().getSimpleName() + " with id "+ data.getMongoID()  +"("+ loadedIds.toString()+")");
-                throw new RuntimeException("Data id is already present in cache !!!");
-            }
-            loadedIds.add(data.getMongoID());
+    public static void registerSyncDone() {
+        Context context = App.getAppContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean(context.getString(R.string.didSychroRunOnce), true);
+        editor.commit();
+    }
 
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putStringSet(data.getClass().getSimpleName(), loadedIds);
-            editor.commit();
-        } else {
-            Log.wtf(TAG, "DATA IS NULL !!!");
-        }
+    public static boolean didSynchroRunOnce() {
+        Context context = App.getAppContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
+                Context.MODE_PRIVATE);
+        boolean result = sharedPref.getBoolean(context.getString(R.string.didSychroRunOnce), false);
+        return result;
     }
 
     public static void registerFormationsOfSubcategory(String subCatId) {
         Context context = App.getAppContext();
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
                 Context.MODE_PRIVATE);
-        Set<String> loadedSubCatFormations = sharedPref.getStringSet(context.getString(R.string.formations_loaded_subcat), null);
+        Set<String> loadedSubCatFormations = new HashSet<String>(sharedPref.getStringSet(context.getString(R.string.formations_loaded_subcat), null));
         if(loadedSubCatFormations == null) {
             loadedSubCatFormations = new HashSet<String>();
         } else if(loadedSubCatFormations.contains(subCatId)) {
@@ -70,36 +65,9 @@ public class SharedPrefUtil {
         editor.putStringSet(context.getString(R.string.formations_loaded_subcat), loadedSubCatFormations);
         editor.commit();
     }
-
-    public static void initFavoriteFormation(){
-
-    }
-
-    public static boolean isDataInCache(AppData data) {
-        Context context = App.getAppContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
-                Context.MODE_PRIVATE);
-        Set<String> loadedIds = sharedPref.getStringSet(data.getClass().getSimpleName(), null);
-        if(loadedIds == null || !loadedIds.contains(data.getMongoID())) {
-            return false;
-        }
-        return true;
-    }
-
-    public static boolean areCategoriesInCache() {
-        Context context = App.getAppContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
-                Context.MODE_PRIVATE);
-        Set<String> loadedIds = sharedPref.getStringSet(context.getString(R.string.category), null);
-        if(loadedIds == null) {
-            return false;
-        }
-        return true;
-    }
-
     public static void addFavoriteFormation(String formationID){
         Context context = App.getAppContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.favoritesFormations),
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
                 Context.MODE_PRIVATE);
         HashSet<String> favoritesIDs = new HashSet<String>(sharedPref.getStringSet(context.getString(R.string.favoritesFormations), new HashSet<String>()));
         if(favoritesIDs == null) {
@@ -112,13 +80,13 @@ public class SharedPrefUtil {
 
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putStringSet(context.getString(R.string.favoritesFormations), favoritesIDs);
-        editor.apply();
+        editor.commit();
         Log.d(TAG, favoritesIDs.toString());
     }
 
     public static void removeFavoriteFormation(String formationID) {
         Context context = App.getAppContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.favoritesFormations),
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
                 Context.MODE_PRIVATE);
         HashSet<String> favoritesIDs = new HashSet<String>(sharedPref.getStringSet(context.getString(R.string.favoritesFormations), new HashSet<String>()));
         if(favoritesIDs.size() < 1) {
@@ -130,7 +98,7 @@ public class SharedPrefUtil {
         }
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putStringSet(context.getString(R.string.favoritesFormations), favoritesIDs);
-        editor.apply();
+        editor.commit();
         Log.d(TAG, favoritesIDs.toString());
     }
 
@@ -141,29 +109,28 @@ public class SharedPrefUtil {
 
     public static void registerPendingFormation(Formation formation) {
         Context context = App.getAppContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.travel),
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
                 Context.MODE_PRIVATE);
-        Set<String> formationIds = sharedPref.getStringSet(context.getString(R.string.pending_videos), new HashSet<String>());
+        Set<String> formationIds = new HashSet<String>(sharedPref.getStringSet(context.getString(R.string.pending_videos), new HashSet<String>()));
         if(!formationIds.contains(formation.getMongoID())) {
             formationIds.add(formation.getMongoID());
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putStringSet(context.getString(R.string.pending_videos), formationIds);
+            editor.commit();
         }
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putStringSet(context.getString(R.string.pending_videos), formationIds);
-        editor.commit();
-
     }
 
     public static void registerSeenItem(Item item) {
         Context context = App.getAppContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.travel),
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
                 Context.MODE_PRIVATE);
-        Set<String> itemIds = sharedPref.getStringSet(context.getString(R.string.seen_items), new HashSet<String>());
+        Set<String> itemIds = new HashSet<String>(sharedPref.getStringSet(context.getString(R.string.seen_items), new HashSet<String>()));
         if(!itemIds.contains(item.getMongoID())) {
             itemIds.add(item.getMongoID());
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putStringSet(context.getString(R.string.seen_items), itemIds);
+            editor.commit();
         }
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putStringSet(context.getString(R.string.seen_items), itemIds);
-        editor.commit();
     }
 
     public static void unregisterSeenItem(Item item) {
@@ -187,16 +154,16 @@ public class SharedPrefUtil {
 
     public static Set<String> getSeenItemIds() {
         Context context = App.getAppContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.travel),
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
                 Context.MODE_PRIVATE);
-        return sharedPref.getStringSet(context.getString(R.string.seen_items), new HashSet<String>());
+        return new HashSet<String>(sharedPref.getStringSet(context.getString(R.string.seen_items), new HashSet<String>()));
     }
 
     public static Set<String> getPendingFormationIds() {
         Context context = App.getAppContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.travel),
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
                 Context.MODE_PRIVATE);
-        return sharedPref.getStringSet(context.getString(R.string.pending_videos), new HashSet<String>());
+        return new HashSet<String>(sharedPref.getStringSet(context.getString(R.string.pending_videos), new HashSet<String>()));
     }
 
     public static boolean areFormationsOfSubCategoryInCache(String id) {
@@ -204,7 +171,7 @@ public class SharedPrefUtil {
         Context context = App.getAppContext();
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
                 Context.MODE_PRIVATE);
-        Set<String> loadedIds = sharedPref.getStringSet(context.getString(R.string.formations_loaded_subcat), null);
+        Set<String> loadedIds = sharedPref.getStringSet(context.getString(R.string.formations_loaded_subcat), new HashSet<String>());
         if(loadedIds == null || !loadedIds.contains(id)) {
             return false;
         }
@@ -215,13 +182,11 @@ public class SharedPrefUtil {
         Context context = App.getAppContext();
         context.getSharedPreferences(context.getString(R.string.cached_datas),
                 Context.MODE_PRIVATE).edit().clear().commit();
-        context.getSharedPreferences(context.getString(R.string.favoritesFormations),
-                Context.MODE_PRIVATE).edit().clear().commit();
     }
 
     public static boolean areFavoriteFormations() {
         Context context = App.getAppContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.favoritesFormations),
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
                 Context.MODE_PRIVATE);
         HashSet<String> favoriteIDs = new HashSet<String>(sharedPref.getStringSet(context.getString(R.string.favoritesFormations), new HashSet<String>()));
         return favoriteIDs.size() > 0;
@@ -231,7 +196,7 @@ public class SharedPrefUtil {
         DataAccess da = new DataAccess(App.getAppContext());
         List<Formation> favoritesFormations = new ArrayList<Formation>();
         Context context = App.getAppContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.favoritesFormations),
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
                 Context.MODE_PRIVATE);
         HashSet<String> favoritesIDs = new HashSet<String>(sharedPref.getStringSet(context.getString(R.string.favoritesFormations), new HashSet<String>()));
         if(favoritesIDs.size() < 1) {
@@ -253,7 +218,7 @@ public class SharedPrefUtil {
 
     public static boolean isFormationFavorited(String formationID) {
         Context context = App.getAppContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.favoritesFormations),
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
                 Context.MODE_PRIVATE);
         HashSet<String> favoriteIDs = new HashSet<String>(sharedPref.getStringSet(context.getString(R.string.favoritesFormations), new HashSet<String>()));
         return favoriteIDs.contains(formationID);

@@ -120,10 +120,8 @@ public class DataAccess {
                 values);
         // Log.d(TAG, "Inserted data "+data.toString()+ " id= "+insertId);
 
-        // 3. Insert ID in sharedPref
-        SharedPrefUtil.registerDataIdInCache(data);
 
-        // 4. Get & return created data
+        // 3. Get & return created data
         Cursor cursor = database.query(tableName,
                 fieldNames, "id = " + insertId, null,
                 null, null, null);
