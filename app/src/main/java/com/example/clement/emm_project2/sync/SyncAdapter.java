@@ -19,6 +19,7 @@ import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.model.Formation;
 import com.example.clement.emm_project2.model.SubCategory;
 import com.example.clement.emm_project2.util.JsonUtil;
+import com.example.clement.emm_project2.util.SharedPrefUtil;
 
 import org.json.JSONArray;
 
@@ -79,6 +80,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             }
                         }
                         dataAccess.close();
+                        SharedPrefUtil.registerSyncDone();
                         Log.d(TAG, "Reached last category, launching activity");
                         Log.i(TAG, "App initialized !");
                         Intent i = new Intent(SYNC_FINISHED);

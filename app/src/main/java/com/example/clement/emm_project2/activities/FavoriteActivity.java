@@ -82,8 +82,6 @@ public class FavoriteActivity extends DrawerActivity {
         setDrawerContent(menuItems);
         categories.addAll(dbCategories);
 
-        sharedPref.initFavoriteFormation();
-
         bindView();
     }
 

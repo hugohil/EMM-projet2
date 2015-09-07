@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.clement.emm_project2.R;
@@ -62,9 +63,9 @@ public class ItemListAdapter extends BaseExpandableListAdapter {
                 .findViewById(R.id.lblListItem);
 
         Set<String> seenItems = SharedPrefUtil.getSeenItemIds();
-        Log.d("oulala", "seen items +> " + seenItems.toString());
         if( seenItems != null && seenItems.contains(item.getMongoID())) {
-            txtListChild.setTextColor(_context.getResources().getColor(R.color.material_green));
+            ImageView playIcon = (ImageView) convertView.findViewById(R.id.icon_additional_icon);
+            playIcon.setImageDrawable(_context.getResources().getDrawable(R.drawable.ic_action_done));
         }
 
         txtListChild.setText(childText);
