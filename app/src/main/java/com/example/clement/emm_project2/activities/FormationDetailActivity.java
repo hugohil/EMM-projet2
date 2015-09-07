@@ -84,7 +84,8 @@ public class FormationDetailActivity extends AppCompatActivity {
             if(item.getType().equals("chapter")) {
                 List<Item> childrens = new ArrayList<Item>();
                 for(Item item2: items) {
-                    if(item.getChildrens().contains(item2.getMongoId())) {
+                    Log.d(TAG, "item mongo id =>"+item.getMongoID());
+                    if(item.getChildrens().contains(item2.getMongoID())) {
                         childrens.add(item2);
                     }
                 }

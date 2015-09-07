@@ -14,14 +14,13 @@ import java.util.Map;
  * Created by Clement on 23/08/15.
  */
 @JsonDeserialize(using = ItemCustomDeserializer.class)
-public class Item extends AppData implements Serializable {
+public class Item extends AppData {
 
     private String title;
     private String type;
     private int nid;
     private int nbCredits;
     private String fieldPoster;
-    private String mongoId;
     private List<String> childrens;
     private boolean free;
     private List<Map<String, Object>> fieldFiles;
@@ -67,14 +66,6 @@ public class Item extends AppData implements Serializable {
 
     public void setFieldPoster(String fieldPoster) {
         this.fieldPoster = fieldPoster;
-    }
-
-    public String getMongoId() {
-        return mongoId;
-    }
-
-    public void setMongoId(String mongoId) {
-        this.mongoId = mongoId;
     }
 
     public List<String> getChildrens() {

@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Created by Clement on 10/08/15.
  */
-public class Author extends AppData implements Serializable {
+public class Author extends AppData {
 
     @JsonProperty("fullname")
     private String fullName;

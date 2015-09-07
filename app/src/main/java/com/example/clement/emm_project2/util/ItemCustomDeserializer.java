@@ -65,14 +65,14 @@ public class ItemCustomDeserializer extends JsonDeserializer<Item> {
         item.setNid(nid);
         item.setNbCredits(nbCredits);
         item.setFree(free);
-        item.setMongoId(mongoId);
+        item.setMongoID(mongoId);
         item.setActive(active);
         item.setChildrens(childrens);
         item.setFieldFiles(fieldFiles);
         item.setFieldPoster(fieldPoster);
         item.setFieldVideo(fieldVideo);
         item.setFieldVignette(fieldVignette);
-
+        
         return item;
     }
 }
