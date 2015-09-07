@@ -9,10 +9,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.RatingBar;
 import android.widget.ScrollView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -23,6 +25,7 @@ import com.example.clement.emm_project2.app.server.ServerHandler;
 import com.example.clement.emm_project2.model.Formation;
 import com.example.clement.emm_project2.util.ImageLoader;
 import com.example.clement.emm_project2.util.JsonUtil;
+import com.example.clement.emm_project2.util.SharedPrefUtil;
 import com.example.clement.emm_project2.util.StringUtil;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.nirhart.parallaxscroll.views.ParallaxScrollView;
@@ -35,16 +38,34 @@ public class FormationSummaryActivity extends AppCompatActivity {
 
     private final static String TAG = FormationSummaryActivity.class.getSimpleName();
     private Formation formation;
+    private Switch favoriteSwitch;
+    private SharedPrefUtil sharedPref = new SharedPrefUtil();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formation);
+        favoriteSwitch = (Switch) findViewById(R.id.act_formation_switch);
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             final String eanCode= extras.getString("ean");
-            Log.wtf(TAG,"EAN => "+eanCode.toString());
+            Log.wtf(TAG,"EAN => "+eanCode);
+
+            if(sharedPref.isFormationFavorited(eanCode)){
+                favoriteSwitch.setChecked(true);
+            }
+
+            favoriteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        sharedPref.addFavoriteFormation(eanCode);
+                    } else {
+                        sharedPref.removeFavoriteFormation(eanCode);
+                    }
+                }
+            });
+
             ServerHandler server = new ServerHandler(App.getAppContext());
             server.getFormation(eanCode, new ResponseHandler() {
                 @Override
@@ -60,7 +81,6 @@ public class FormationSummaryActivity extends AppCompatActivity {
                 }
             });
         }
-
 
     }
 

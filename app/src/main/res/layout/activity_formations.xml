@@ -12,19 +12,10 @@
         android:layout_height="match_parent"
         android:paddingTop="10dp">
 
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/act_formation_fav_switch"
-            android:id="@+id/act_formation_fav_switch"
-            android:layout_gravity="right|top"
-            android:paddingRight="20dp"
-            android:textAlignment="viewStart"/>
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/my_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="467dp"
+            android:layout_height="match_parent"
             android:scrollbars="vertical"
             android:layout_gravity="center_horizontal|bottom"
             />

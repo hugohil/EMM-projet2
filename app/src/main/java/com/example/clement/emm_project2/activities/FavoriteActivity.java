@@ -2,6 +2,8 @@ package com.example.clement.emm_project2.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,14 +11,14 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.example.clement.emm_project2.R;
-import com.example.clement.emm_project2.adapters.SubCatListAdapter;
+import com.example.clement.emm_project2.adapters.FormationListAdapter;
 import com.example.clement.emm_project2.app.drawer.DrawerActivity;
 import com.example.clement.emm_project2.app.drawer.DrawerItem;
 import com.example.clement.emm_project2.app.drawer.DrawerSection;
 import com.example.clement.emm_project2.app.drawer.DrawerSectionItem;
 import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.Category;
-import com.example.clement.emm_project2.model.SubCategory;
+import com.example.clement.emm_project2.model.Formation;
 import com.example.clement.emm_project2.util.SharedPrefUtil;
 
 import java.util.ArrayList;
@@ -27,9 +29,10 @@ import java.util.List;
 public class FavoriteActivity extends DrawerActivity {
     private final static String TAG = FavoriteActivity.class.getSimpleName();
 
-    private ArrayList<SubCategory> subCats = new ArrayList<SubCategory>();
-    private SubCatListAdapter adapter;
-    private ListView listView;
+    private ArrayList<Formation> formations = new ArrayList<Formation>();
+    private FormationListAdapter adapter;
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;
     private DataAccess dataAccess;
     private List<Category> categories = new ArrayList<Category>();
     private SharedPrefUtil sharedPref = new SharedPrefUtil();
@@ -39,9 +42,19 @@ public class FavoriteActivity extends DrawerActivity {
         super.onCreate(savedInstanceState);
         setTitle(R.string.favorite_title);
 
-        adapter = new SubCatListAdapter(this, subCats);
-        listView = (ListView) findViewById(R.id.act_fav_list);
-        listView.setAdapter(adapter);
+        recyclerView = (RecyclerView) findViewById(R.id.act_fav_recycler);
+        mLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(mLayoutManager);
+        adapter = new FormationListAdapter(formations);
+        adapter.setOnCardClickListener(new FormationListAdapter.FormationClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                String formationEan = adapter.getFormationEan(position);
+                redirectToSingleView(formationEan);
+
+            }
+        });
+        recyclerView.setAdapter(adapter);
         dataAccess = new DataAccess(getBaseContext());
 
         // All this needs to be in an Async task (activity is doin' to much work on his main Thread ... Skipps maaaany frames)
@@ -68,6 +81,12 @@ public class FavoriteActivity extends DrawerActivity {
         sharedPref.initFavoriteFormation();
 
         bindView();
+    }
+
+    private void redirectToSingleView(String formationEan) {
+        Intent intent = new Intent(this, FormationSummaryActivity.class);
+        intent.putExtra("ean", formationEan);
+        this.startActivity(intent);
     }
 
     @Override
@@ -98,18 +117,18 @@ public class FavoriteActivity extends DrawerActivity {
     }
 
     public void bindView() {
-        List<SubCategory> favList = sharedPref.getFavoritesFormations();
+        List<Formation> favList = sharedPref.getFavoritesFormations();
         Log.d(TAG, favList.toString());
         if(favList.size() > 0){
-            Collections.sort(favList, new Comparator<SubCategory>() {
-                public int compare(SubCategory c1, SubCategory c2) {
+            Collections.sort(favList, new Comparator<Formation>() {
+                public int compare(Formation c1, Formation c2) {
                     String t1 = c1.getTitle().toUpperCase();
                     String t2 = c2.getTitle().toUpperCase();
                     return t1.compareTo(t2);
                 }
             });
-            subCats.clear();
-            subCats.addAll(favList);
+            formations.clear();
+            formations.addAll(favList);
             adapter.notifyDataSetChanged();
         }
     }

@@ -10,6 +10,7 @@ import com.example.clement.emm_project2.activities.FormationsActivity;
 import com.example.clement.emm_project2.app.App;
 import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.AppData;
+import com.example.clement.emm_project2.model.Formation;
 import com.example.clement.emm_project2.model.SubCategory;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ import java.util.Set;
 public class SharedPrefUtil {
 
     private final static String TAG = SharedPrefUtil.class.getSimpleName();
-    private static List<SubCategory> favoritesFormations = new ArrayList<SubCategory>();
+    private static List<Formation> favoritesFormations = new ArrayList<Formation>();
     private DataAccess da = new DataAccess(App.getAppContext());
 
     public static void registerDataIdInCache(AppData data) {
@@ -76,13 +77,14 @@ public class SharedPrefUtil {
         }
 
         for(String id : favoritesIDs){
-            List<SubCategory> fav = da.findDataWhere(SubCategory.class, "mongoid", id);
+            Log.d(TAG, "id: "+id);
+            List<Formation> fav = da.findDataWhere(Formation.class, "ean", id);
             if(fav.size() > 0){
-                Log.d(TAG, fav.get(0).toString());
+                Log.d(TAG, "title: "+fav.get(0).getTitle());
                 favoritesFormations.add(fav.get(0));
             }
         }
-        Log.d(TAG, favoritesFormations.toString());
+        Log.d(TAG, "all formations: "+favoritesFormations.toString());
     }
 
     public static boolean isDataInCache(AppData data) {
@@ -173,7 +175,7 @@ public class SharedPrefUtil {
         return favoriteIDs.size() > 0;
     }
 
-    public List<SubCategory> getFavoritesFormations() {
+    public List<Formation> getFavoritesFormations() {
         Log.d(TAG, favoritesFormations.toString());
         return favoritesFormations;
     }
