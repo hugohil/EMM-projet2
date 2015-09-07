@@ -19,6 +19,7 @@ import com.example.clement.emm_project2.app.server.ServerHandler;
 import com.example.clement.emm_project2.model.Formation;
 import com.example.clement.emm_project2.model.Item;
 import com.example.clement.emm_project2.util.JsonUtil;
+import com.example.clement.emm_project2.util.SharedPrefUtil;
 
 import org.json.JSONObject;
 
@@ -35,6 +36,7 @@ public class FormationDetailActivity extends AppCompatActivity {
     List<Item> chapters = new ArrayList<Item>();
     HashMap<Item, List<Item>> videos = new HashMap<Item, List<Item>>();
     private Context context = this;
+    private SharedPrefUtil sharedPref = new SharedPrefUtil();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +63,7 @@ public class FormationDetailActivity extends AppCompatActivity {
         }
     }
 
-    public void displayFormation(Formation formation) {
+    public void displayFormation(final Formation formation) {
         ArrayList<Item> items = (ArrayList)formation.getItems();
         expListView = (ExpandableListView) findViewById(R.id.itemsListView);
         prepareItemsLists(items);
@@ -71,10 +73,12 @@ public class FormationDetailActivity extends AppCompatActivity {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-                    Item item = videos.get(chapters.get(groupPosition)).get(childPosition);
-                    Log.d(TAG, "FIELD VIDEO =>"+item.getFieldVideo().get(0).get("filepath"));
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setDataAndType(Uri.parse((String)item.getFieldVideo().get(0).get("filepath")), "video/*");
+                Item item = videos.get(chapters.get(groupPosition)).get(childPosition);
+                String ids = formation.getEan() + "," + id; // My eyes ... they hurt :'( !
+                sharedPref.addStartedVideo(ids);
+                Log.d(TAG, "FIELD VIDEO =>"+item.getFieldVideo().get(0).get("filepath"));
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse((String)item.getFieldVideo().get(0).get("filepath")), "video/*");
                 context.startActivity(intent);
 
                 return false;

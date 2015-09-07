@@ -11,6 +11,7 @@ import com.example.clement.emm_project2.app.App;
 import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.AppData;
 import com.example.clement.emm_project2.model.Formation;
+import com.example.clement.emm_project2.model.Item;
 import com.example.clement.emm_project2.model.SubCategory;
 
 import java.util.ArrayList;
@@ -89,7 +90,7 @@ public class SharedPrefUtil {
                 favoritesFormations.add(fav.get(0));
             }
         }
-        Log.d(TAG, "all formations: "+favoritesFormations.toString());
+        Log.d(TAG, "all formations: " + favoritesFormations.toString());
     }
 
     public static boolean isDataInCache(AppData data) {
@@ -149,6 +150,75 @@ public class SharedPrefUtil {
         editor.putStringSet(context.getString(R.string.favoritesFormations), favoritesIDs);
         editor.apply();
         Log.d(TAG, favoritesIDs.toString());
+    }
+
+    public void addStartedVideo(String IDs){
+        Context context = App.getAppContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.started_videos),
+                Context.MODE_PRIVATE);
+        HashSet<String> itemIDs = new HashSet<String>(sharedPref.getStringSet(context.getString(R.string.started_videos), new HashSet<String>()));
+        if(itemIDs == null) {
+            itemIDs = new HashSet<String>();
+        } else if(itemIDs.contains(IDs)) {
+            Log.d(TAG, "Data id is already present in cache !!!");
+            return;
+        }
+        itemIDs.add(IDs);
+
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putStringSet(context.getString(R.string.started_videos), itemIDs);
+        editor.apply();
+        Log.d(TAG, itemIDs.toString());
+    }
+
+    public void removeStartedID(String IDs) {
+        Context context = App.getAppContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.started_videos),
+                Context.MODE_PRIVATE);
+        HashSet<String> itemIDs = new HashSet<String>(sharedPref.getStringSet(context.getString(R.string.started_videos), new HashSet<String>()));
+        if(itemIDs.size() < 1) {
+            Log.d(TAG, "Data id is not present in cache, cannot remove.");
+            return;
+        }
+        if(itemIDs.contains(IDs)) {
+            itemIDs.remove(IDs);
+        }
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putStringSet(context.getString(R.string.started_videos), itemIDs);
+        editor.apply();
+        Log.d(TAG, itemIDs.toString());
+    }
+
+    public List<Item> getStartedVideos(){
+        Context context = App.getAppContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.started_videos),
+                Context.MODE_PRIVATE);
+        List<Item> startedVideos = new ArrayList<Item>();
+        HashSet<String> itemIDs = new HashSet<String>(sharedPref.getStringSet(context.getString(R.string.started_videos), new HashSet<String>()));
+        if(itemIDs.size() < 1) {
+            Log.d(TAG, "No started videos present in cache, cannot register.");
+            return startedVideos;
+        }
+
+        for(String id : itemIDs){
+            Log.d(TAG, "id: "+id);
+            String[] ids = id.split(",");
+            Log.d(TAG, "ids: "+ids.toString());
+            String formationID = ids[0];
+            String itemID = ids[1];
+            List<Formation> formz = da.findDataWhere(Formation.class, "ean", formationID);
+            Log.d(TAG, "formz: "+formz.toString());
+            if(formz.size() > 0){
+                for (Item i : formz.get(0).getItems()){
+                    if(i.getMongoID() == itemID){
+                        Log.d(TAG, "title: "+i.getTitle());
+                        startedVideos.add(i);
+                    }
+                }
+            }
+        }
+        Log.d(TAG, "all videos: " + startedVideos.toString());
+        return startedVideos;
     }
 
     public static boolean areFormationsOfSubCategoryInCache(String id) {

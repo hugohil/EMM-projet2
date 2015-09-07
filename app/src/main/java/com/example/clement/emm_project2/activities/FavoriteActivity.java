@@ -69,6 +69,10 @@ public class FavoriteActivity extends DrawerActivity {
                 return t1.compareTo(t2);
             }
         });
+        if(SharedPrefUtil.areFavoriteFormations()) {
+            menuItems.add(DrawerSection.create(300, "Navigation", "ic_action_label", this));
+            menuItems.add(DrawerSectionItem.create(301, "Parcours", true));
+        }
         menuItems.add(DrawerSection.create(200, "Catégories", "ic_action_bookmark", FavoriteActivity.this));
         for(Category category : dbCategories) {
             menuItems.add(DrawerSectionItem.create(dbCategories.indexOf(category), category.getTitle(), true));
@@ -148,6 +152,10 @@ public class FavoriteActivity extends DrawerActivity {
             i.putExtra("title", cat.getTitle());
             i.putExtra("catId", cat.getMongoID());
 
+            startActivity(i);
+        }
+        if(id > 300){
+            Intent i = new Intent(this, StartedVideosActivity.class);
             startActivity(i);
         }
     }

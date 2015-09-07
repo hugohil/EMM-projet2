@@ -12,10 +12,10 @@ package com.example.clement.emm_project2.data.database;
      */
     public class DatabaseHelper extends SQLiteOpenHelper {
 
-        private static final String TAG = DatabaseHelper.class.getSimpleName();
+    private static final String TAG = DatabaseHelper.class.getSimpleName();
 
-        // Database Version
-        private static final int DATABASE_VERSION = 86;
+    // Database Version
+    private static final int DATABASE_VERSION = 87;
 
     // Database Name
     private static final String DATABASE_NAME = "elephormDB";

@@ -59,6 +59,7 @@ public class SubCatActivity extends DrawerActivity {
         if(SharedPrefUtil.areFavoriteFormations()) {
             menuItems.add(DrawerSection.create(300, "Navigation", "ic_action_label", this));
             menuItems.add(DrawerSectionItem.create(301, "Favoris", true));
+            menuItems.add(DrawerSectionItem.create(302, "Parcours", true));
         }
         menuItems.add(DrawerSection.create(200, "Catégories", "ic_action_bookmark", SubCatActivity.this));
         for(Category category : dbCategories) {
@@ -136,8 +137,13 @@ public class SubCatActivity extends DrawerActivity {
             getSupportActionBar().setTitle(category.getTitle());
         }
         if(id > 300){
-            Intent i = new Intent(this, FavoriteActivity.class);
-            startActivity(i);
+            if(id > 301){
+                Intent i = new Intent(this, StartedVideosActivity.class);
+                startActivity(i);
+            } else {
+                Intent i = new Intent(this, FavoriteActivity.class);
+                startActivity(i);
+            }
         }
     }
 }
