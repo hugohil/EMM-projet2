@@ -2,6 +2,7 @@ package com.example.clement.emm_project2.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -87,7 +88,7 @@ public class SubCatActivity extends DrawerActivity {
     public void bindView(String description, String title, String catId) {
         ExpandableTextView desc = (ExpandableTextView) findViewById(R.id.act_subcat_desc);
         String html = StringUtil.html2Text(description); // Needs to be done in DataAccess?
-        desc.setText(html);
+        desc.setText(Html.fromHtml(html));
         setTitle(title);
 
         // Set subcategories list

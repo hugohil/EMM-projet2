@@ -189,11 +189,11 @@ public class SharedPrefUtil {
         Log.d(TAG, itemIDs.toString());
     }
 
-    public List<Item> getStartedVideos(){
+    public ArrayList<Item> getStartedVideos(){
         Context context = App.getAppContext();
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.started_videos),
                 Context.MODE_PRIVATE);
-        List<Item> startedVideos = new ArrayList<Item>();
+        ArrayList<Item> startedVideos = new ArrayList<Item>();
         HashSet<String> itemIDs = new HashSet<String>(sharedPref.getStringSet(context.getString(R.string.started_videos), new HashSet<String>()));
         if(itemIDs.size() < 1) {
             Log.d(TAG, "No started videos present in cache, cannot register.");
@@ -203,11 +203,10 @@ public class SharedPrefUtil {
         for(String id : itemIDs){
             Log.d(TAG, "id: "+id);
             String[] ids = id.split(",");
-            Log.d(TAG, "ids: "+ids.toString());
+            Log.d(TAG, "ids: "+ids);
             String formationID = ids[0];
             String itemID = ids[1];
             List<Formation> formz = da.findDataWhere(Formation.class, "ean", formationID);
-            Log.d(TAG, "formz: "+formz.toString());
             if(formz.size() > 0){
                 for (Item i : formz.get(0).getItems()){
                     if(i.getMongoID() == itemID){
