@@ -161,7 +161,6 @@ public class DataAccess {
     }
 
     private <T extends AppData> T cursorToData(Cursor cursor, Class c) {
-        Log.d(TAG, "CURSOR TO DATA");
         AppData data = null;
         try {
            data = (AppData)c.newInstance();
@@ -176,7 +175,6 @@ public class DataAccess {
             Object fieldValue = null;
             switch(cursor.getType(i + 2)) {
                 case Cursor.FIELD_TYPE_BLOB:
-                    Log.d(TAG, "Field "+f.getName()+ " is a BLOB");
                     fieldValue = deserializeObject(cursor.getBlob(i + 2));
                     break;
                 case Cursor.FIELD_TYPE_FLOAT:
@@ -186,14 +184,12 @@ public class DataAccess {
                     fieldValue = cursor.getInt(i + 2);
                     break;
                 case Cursor.FIELD_TYPE_STRING:
-                    Log.d(TAG, "Field "+f.getName()+ " is a STRING");
                     fieldValue = cursor.getString(i + 2);
                     break;
                 case Cursor.FIELD_TYPE_NULL:
                     break;
 
             }
-            Log.d(TAG,"FIELDVALUE => "+fieldValue);
             ReflectUtil.setObjectFieldValue(data, f, fieldValue);
         }
         return (T)data;

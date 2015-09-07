@@ -14,12 +14,13 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.activities.FormationSummaryActivity;
 import com.example.clement.emm_project2.activities.FormationsActivity;
-import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.app.App;
 import com.example.clement.emm_project2.app.server.ResponseHandler;
 import com.example.clement.emm_project2.app.server.ServerHandler;
+import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.Formation;
 import com.example.clement.emm_project2.model.SubCategory;
 import com.example.clement.emm_project2.util.JsonUtil;
@@ -76,51 +77,53 @@ public class SubCatListAdapter extends ArrayAdapter<SubCategory> {
             @Override
             public void onClick(View v) {
                 ServerHandler server = new ServerHandler(App.getAppContext());
-                final Activity act = (Activity) getContext();
                 final ProgressDialog progress;
-                progress = ProgressDialog.show(act, act.getString(R.string.loading),
-                        act.getString(R.string.loading), true);
+                progress = ProgressDialog.show(getContext(), getContext().getString(R.string.loading),
+                        getContext().getString(R.string.loading), true);
 
+                // Look for formation in da
 
-                server.getFormations(subcat.getMongoID(), new ResponseHandler() {
-                    @Override
-                    public void onSuccess(Object datas) {
-                        List<Formation> formations = JsonUtil.parseJsonDatas((JSONArray) datas, Formation.class);
-                        Intent intent;
-                        if (formations.size() == 1) {
-                            intent = new Intent(act, FormationSummaryActivity.class);
-                            intent.putExtra("ean", formations.get(0).getEan());
-                            act.startActivity(intent);
-                        } else {
-                            Intent i = new Intent(act, FormationsActivity.class);
-                            i.putExtra("subCatId", subcat.getMongoID());
-                            i.putExtra("subCatTitle", subcat.getTitle());
-                            act.startActivity(i);
-                        }
-                        progress.dismiss();
-
-                    }
-
-                    @Override
-                    public void onError(String error) {
-                        Log.wtf("Error", error);
-                        final Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                progress.dismiss();
-
-                                AlertDialog.Builder builder = new AlertDialog.Builder(App.getAppContext(), R.style.alertDialogStyle);
-                                builder.setTitle(R.string.dialog_error);
-                                builder.setMessage(R.string.download_dialog_error_msg);
-                                builder.setPositiveButton("OK", null);
-                                AlertDialog dialog = builder.create();
-                                dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-                                dialog.show();
+                final DataAccess da = new DataAccess(App.getAppContext());
+                List<Formation> dbFormations = da.findDataWhere(Formation.class, "subCatId", subcat.getMongoID());
+                if(dbFormations.size() > 0) {
+                    //Formation found in database
+                    handleRedirection(dbFormations, subcat);
+                } else {
+                    server.getFormations(subcat.getMongoID(), new ResponseHandler() {
+                        @Override
+                        public void onSuccess(Object datas) {
+                            List<Formation> formations = JsonUtil.parseJsonDatas((JSONArray) datas, Formation.class);
+                            da.open();
+                            for(Formation formation: formations) {
+                                da.createData(formation);
                             }
-                        }, 2000);
-                    }
-                });
+                            da.close();
+                            handleRedirection(formations, subcat);
+                            progress.dismiss();
+
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            Log.wtf("Error", error);
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progress.dismiss();
+
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(App.getAppContext(), R.style.alertDialogStyle);
+                                    builder.setTitle(R.string.dialog_error);
+                                    builder.setMessage(R.string.download_dialog_error_msg);
+                                    builder.setPositiveButton("OK", null);
+                                    AlertDialog dialog = builder.create();
+                                    dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+                                    dialog.show();
+                                }
+                            }, 2000);
+                        }
+                    });
+                }
 
 
 
@@ -128,5 +131,20 @@ public class SubCatListAdapter extends ArrayAdapter<SubCategory> {
         });
 
         return convertView;
+    }
+
+    private void handleRedirection(List<Formation> formations, SubCategory subcat) {
+        Intent intent;
+        Activity act = (Activity) getContext();
+        if (formations.size() == 1) {
+            intent = new Intent(act, FormationSummaryActivity.class);
+            intent.putExtra("ean", formations.get(0).getEan());
+            act.startActivity(intent);
+        } else {
+            Intent i = new Intent(act, FormationsActivity.class);
+            i.putExtra("subCatId", subcat.getMongoID());
+            i.putExtra("subCatTitle", subcat.getTitle());
+            act.startActivity(i);
+        }
     }
 }

@@ -22,6 +22,7 @@ import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.app.App;
 import com.example.clement.emm_project2.app.server.ResponseHandler;
 import com.example.clement.emm_project2.app.server.ServerHandler;
+import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.Formation;
 import com.example.clement.emm_project2.util.ImageLoader;
 import com.example.clement.emm_project2.util.JsonUtil;
@@ -31,6 +32,8 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 
 import org.json.JSONObject;
+
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -66,20 +69,11 @@ public class FormationSummaryActivity extends AppCompatActivity {
                 }
             });
 
-            ServerHandler server = new ServerHandler(App.getAppContext());
-            server.getFormation(eanCode, new ResponseHandler() {
-                @Override
-                public void onSuccess(Object datas) {
-                    Formation formation = JsonUtil.parseJsonData((JSONObject) datas, Formation.class);
-                    getSupportActionBar().setTitle(formation.getTitle());
-                    displayFormation(formation);
-                }
-
-                @Override
-                public void onError(String error) {
-                    Log.wtf(TAG, error);
-                }
-            });
+            DataAccess da = new DataAccess(App.getAppContext());
+            List<Formation> formations = da.findDataWhere(Formation.class, "ean", eanCode);
+            Formation formation = formations.get(0);
+            getSupportActionBar().setTitle(formation.getTitle());
+            displayFormation(formation);
         }
 
     }

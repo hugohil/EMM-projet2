@@ -9,8 +9,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 
 import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.adapters.FormationListAdapter;
@@ -19,15 +17,10 @@ import com.example.clement.emm_project2.app.drawer.DrawerActivity;
 import com.example.clement.emm_project2.app.drawer.DrawerItem;
 import com.example.clement.emm_project2.app.drawer.DrawerSection;
 import com.example.clement.emm_project2.app.drawer.DrawerSectionItem;
-import com.example.clement.emm_project2.app.server.ResponseHandler;
-import com.example.clement.emm_project2.app.server.ServerHandler;
 import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.model.Formation;
-import com.example.clement.emm_project2.util.JsonUtil;
 import com.example.clement.emm_project2.util.SharedPrefUtil;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -78,29 +71,8 @@ public class FormationsActivity extends DrawerActivity {
             final String subCatId= extras.getString("subCatId");
             List<Formation> dbFormations = da.findDataWhere(Formation.class, "subCatId", subCatId);
             if(dbFormations.isEmpty()) {
-                Log.d(TAG, "Requesting Formation to server");
-                ServerHandler server = new ServerHandler(App.getAppContext());
-                server.getFormations(subCatId, new ResponseHandler() {
-                    @Override
-                    public void onSuccess(Object datas) {
-                        List<Formation> formations = JsonUtil.parseJsonDatas((JSONArray) datas, Formation.class);
-                        Log.wtf(TAG, formations.get(0).getMongoID());
-                        da.open();
-                        Log.d(TAG, "Formations form server => "+formations.size());
-                        for(Formation form : formations) {
-                            Log.d(TAG, "Registering formation "+form.getEan());
-                            da.createData(form);
-                        }
-                        da.close();
-                        subCatFormations.addAll(formations);
-                        mAdapter.notifyDataSetChanged();
-                    }
+                Log.d(TAG, "No formations ... strange");
 
-                    @Override
-                    public void onError(String error) {
-                        Log.wtf(TAG, error);
-                    }
-                });
             } else {
                 Log.d(TAG, "Got Formations in db");
                 Log.d(TAG, "SIZE =>"+dbFormations.size());
