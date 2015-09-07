@@ -39,4 +39,5 @@
     <string name="started_videos">started_videos</string>
     <string name="title_activity_started_videos">StartedVideosActivity</string>
     <string name="started_videos_title">Votre parcours</string>
+    <string name="videos_started_nope">Il semblerait que n\'ayez démarré aucune formation pour l\'instant.</string>
 </resources>

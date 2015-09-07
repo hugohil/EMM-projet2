@@ -2,14 +2,19 @@ package com.example.clement.emm_project2.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.adapters.FormationListAdapter;
 import com.example.clement.emm_project2.adapters.ItemListAdapter;
+import com.example.clement.emm_project2.adapters.VideosListAdapter;
+import com.example.clement.emm_project2.app.App;
 import com.example.clement.emm_project2.app.drawer.DrawerActivity;
 import com.example.clement.emm_project2.app.drawer.DrawerItem;
 import com.example.clement.emm_project2.app.drawer.DrawerSection;
@@ -29,20 +34,28 @@ public class StartedVideosActivity extends DrawerActivity {
     private final static String TAG = StartedVideosActivity.class.getSimpleName();
 
     private ArrayList<Item> videos = new ArrayList<Item>();
-    private ItemListAdapter adapter;
+    private VideosListAdapter adapter;
     private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
     private DataAccess dataAccess;
     private List<Category> categories = new ArrayList<Category>();
     private SharedPrefUtil sharedPref = new SharedPrefUtil();
+    private LinearLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(R.string.started_videos_title);
 
-        List<Item> videosList = sharedPref.getStartedVideos();
+        ArrayList<Item> videosList = sharedPref.getStartedVideos();
         Log.d(TAG, videosList.toString());
+
+        recyclerView = (RecyclerView) findViewById(R.id.act_videos_recycler);
+        recyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(mLayoutManager);
+        adapter = new VideosListAdapter(videos);
+        recyclerView.setAdapter(adapter);
+
         if(videosList.size() > 0){
             Collections.sort(videosList, new Comparator<Item>() {
                 public int compare(Item c1, Item c2) {
@@ -55,7 +68,13 @@ public class StartedVideosActivity extends DrawerActivity {
             videos.addAll(videosList);
             adapter.notifyDataSetChanged();
         } else {
-            // TODO: dialog saying that there is no videos started.
+            AlertDialog.Builder builder = new AlertDialog.Builder(App.getAppContext(), R.style.alertDialogStyle);
+            builder.setTitle(R.string.dialog_error);
+            builder.setMessage(R.string.videos_started_nope);
+            builder.setPositiveButton("OK", null);
+            AlertDialog dialog = builder.create();
+            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+            dialog.show();
         }
 
         ArrayList<DrawerItem> menuItems = new ArrayList<DrawerItem>();

@@ -74,7 +74,8 @@ public class FormationDetailActivity extends AppCompatActivity {
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
                 Item item = videos.get(chapters.get(groupPosition)).get(childPosition);
-                String ids = formation.getEan() + "," + id; // My eyes ... they hurt :'( !
+                Log.d(TAG, "item.mongoID: "+item.getMongoID());
+                String ids = formation.getEan() + "," + item.getMongoID(); // My eyes ... they hurt :'( !
                 sharedPref.addStartedVideo(ids);
                 Log.d(TAG, "FIELD VIDEO =>"+item.getFieldVideo().get(0).get("filepath"));
                 Intent intent = new Intent(Intent.ACTION_VIEW);
