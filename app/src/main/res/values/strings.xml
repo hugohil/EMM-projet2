@@ -43,4 +43,6 @@
     <string name="pending_videos">pendingVideos</string>
     <string name="seen_items">seenItems</string>
     <string name="travel">parcours</string>
+    <string name="remove_videos_from_path">Voulez-vous supprimer cette vidéo des vidéos courantes ?</string>
+    <string name="remove_video_title">Retirer la vidéo courante</string>
 </resources>

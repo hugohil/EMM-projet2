@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 public class StartedVideosActivity extends DrawerActivity {
     private final static String TAG = StartedVideosActivity.class.getSimpleName();
@@ -38,7 +39,6 @@ public class StartedVideosActivity extends DrawerActivity {
     private RecyclerView recyclerView;
     private DataAccess dataAccess;
     private List<Category> categories = new ArrayList<Category>();
-    private SharedPrefUtil sharedPref = new SharedPrefUtil();
     private LinearLayoutManager mLayoutManager;
 
     @Override
@@ -46,40 +46,10 @@ public class StartedVideosActivity extends DrawerActivity {
         super.onCreate(savedInstanceState);
         setTitle(R.string.started_videos_title);
 
-        ArrayList<Item> videosList = null; // call sharedPrefUtil.getPendingVideoIds
-        Log.d(TAG, videosList.toString());
-
-        recyclerView = (RecyclerView) findViewById(R.id.act_videos_recycler);
-        recyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(mLayoutManager);
-        adapter = new VideosListAdapter(videos);
-        recyclerView.setAdapter(adapter);
-
-        if(videosList.size() > 0){
-            Collections.sort(videosList, new Comparator<Item>() {
-                public int compare(Item c1, Item c2) {
-                    String t1 = c1.getTitle().toUpperCase();
-                    String t2 = c2.getTitle().toUpperCase();
-                    return t1.compareTo(t2);
-                }
-            });
-            videos.clear();
-            videos.addAll(videosList);
-            adapter.notifyDataSetChanged();
-        } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(App.getAppContext(), R.style.alertDialogStyle);
-            builder.setTitle(R.string.dialog_error);
-            builder.setMessage(R.string.videos_started_nope);
-            builder.setPositiveButton("OK", null);
-            AlertDialog dialog = builder.create();
-            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-            dialog.show();
-        }
+        dataAccess = new DataAccess(this);
 
         ArrayList<DrawerItem> menuItems = new ArrayList<DrawerItem>();
         List<Category> dbCategories;
-        dataAccess = new DataAccess(this);
         dbCategories = dataAccess.getAllDatas(Category.class);
         Collections.sort(dbCategories, new Comparator<Category>() {
             public int compare(Category c1, Category c2) {
@@ -96,6 +66,56 @@ public class StartedVideosActivity extends DrawerActivity {
         menuItems.add(DrawerSectionItem.create(101, "Preferences", true));
         setDrawerContent(menuItems);
         categories.addAll(dbCategories);
+
+        List<Formation> formationsList = new ArrayList<Formation>();
+        List<Item> itemList = new ArrayList<Item>();
+
+        Set<String> videosIDs = SharedPrefUtil.getPendingFormationIds();
+        Log.d(TAG, "videosIDs: "+videosIDs);
+        for (String id : videosIDs){
+            Log.d(TAG, "id: "+id);
+            Formation formation = (Formation) dataAccess.findDataWhere(Formation.class, "mongoid", id).get(0);
+            assert formation != null;
+            formationsList.add(formation);
+        }
+        Log.d(TAG, formationsList.toString());
+
+        recyclerView = (RecyclerView) findViewById(R.id.act_videos_recycler);
+        recyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(mLayoutManager);
+        adapter = new VideosListAdapter(videos);
+        recyclerView.setAdapter(adapter);
+
+        if(formationsList.size() > 0){
+            Collections.sort(formationsList, new Comparator<Formation>() {
+                public int compare(Formation c1, Formation c2) {
+                    String t1 = c1.getTitle().toUpperCase();
+                    String t2 = c2.getTitle().toUpperCase();
+                    return t1.compareTo(t2);
+                }
+            });
+            for (Formation formation : formationsList){
+                for (Item item : formation.getItems()){
+                    for (String id : SharedPrefUtil.getSeenItemIds()){
+                        if(item.getMongoID().equals(id)){
+                            itemList.add(item);
+                        }
+                    }
+                }
+            }
+            videos.clear();
+            videos.addAll(itemList);
+            adapter.notifyDataSetChanged();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(App.getAppContext(), R.style.alertDialogStyle);
+            builder.setTitle(R.string.dialog_error);
+            builder.setMessage(R.string.videos_started_nope);
+            builder.setPositiveButton("OK", null);
+            AlertDialog dialog = builder.create();
+            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+            dialog.show();
+        }
     }
 
     @Override

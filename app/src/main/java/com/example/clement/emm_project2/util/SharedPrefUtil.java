@@ -16,6 +16,7 @@ import com.example.clement.emm_project2.model.SubCategory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -159,6 +160,25 @@ public class SharedPrefUtil {
         Set<String> itemIds = sharedPref.getStringSet(context.getString(R.string.seen_items), new HashSet<String>());
         if(!itemIds.contains(item.getMongoID())) {
             itemIds.add(item.getMongoID());
+        }
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putStringSet(context.getString(R.string.seen_items), itemIds);
+        editor.commit();
+    }
+
+    public static void unregisterSeenItem(Item item) {
+        Context context = App.getAppContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.travel),
+                Context.MODE_PRIVATE);
+        Set<String> itemIds = sharedPref.getStringSet(context.getString(R.string.seen_items), new HashSet<String>());
+        if(itemIds.contains(item.getMongoID())) {
+            Iterator<String> iterator = itemIds.iterator();
+            while (iterator.hasNext()) {
+                String element = iterator.next();
+                if (element.equals(item.getMongoID())) {
+                    iterator.remove();
+                }
+            }
         }
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putStringSet(context.getString(R.string.seen_items), itemIds);
