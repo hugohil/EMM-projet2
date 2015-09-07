@@ -6,9 +6,12 @@ package com.example.clement.emm_project2.adapters;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +20,7 @@ import android.widget.TextView;
 
 import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.model.Item;
+import com.example.clement.emm_project2.util.SharedPrefUtil;
 
 public class ItemListAdapter extends BaseExpandableListAdapter {
 
@@ -45,8 +49,8 @@ public class ItemListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
-
-        final String childText = getChild(groupPosition, childPosition).getTitle();
+        Item item = getChild(groupPosition, childPosition);
+        final String childText = item.getTitle();
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -56,6 +60,12 @@ public class ItemListAdapter extends BaseExpandableListAdapter {
 
         TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.lblListItem);
+
+        Set<String> seenItems = SharedPrefUtil.getSeenItemIds();
+        Log.d("oulala", "seen items +> " + seenItems.toString());
+        if( seenItems != null && seenItems.contains(item.getMongoID())) {
+            txtListChild.setTextColor(_context.getResources().getColor(R.color.material_green));
+        }
 
         txtListChild.setText(childText);
         return convertView;

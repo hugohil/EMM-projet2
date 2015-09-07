@@ -40,4 +40,7 @@
     <string name="title_activity_started_videos">StartedVideosActivity</string>
     <string name="started_videos_title">Votre parcours</string>
     <string name="videos_started_nope">Il semblerait que n\'ayez démarré aucune formation pour l\'instant.</string>
+    <string name="pending_videos">pendingVideos</string>
+    <string name="seen_items">seenItems</string>
+    <string name="travel">parcours</string>
 </resources>

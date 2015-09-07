@@ -46,7 +46,7 @@ public class StartedVideosActivity extends DrawerActivity {
         super.onCreate(savedInstanceState);
         setTitle(R.string.started_videos_title);
 
-        ArrayList<Item> videosList = sharedPref.getStartedVideos();
+        ArrayList<Item> videosList = null; // call sharedPrefUtil.getPendingVideoIds
         Log.d(TAG, videosList.toString());
 
         recyclerView = (RecyclerView) findViewById(R.id.act_videos_recycler);

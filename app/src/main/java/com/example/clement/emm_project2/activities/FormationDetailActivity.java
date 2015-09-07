@@ -2,6 +2,7 @@ package com.example.clement.emm_project2.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.adapters.ItemListAdapter;
@@ -98,10 +100,10 @@ public class FormationDetailActivity extends DrawerActivity {
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
                 Item item = videos.get(chapters.get(groupPosition)).get(childPosition);
-                Log.d(TAG, "item.mongoID: " + item.getMongoID());
-                String ids = formation.getEan() + "," + item.getMongoID(); // My eyes ... they hurt :'( !
-                sharedPref.addStartedVideo(ids);
-                Log.d(TAG, "FIELD VIDEO =>" + item.getFieldVideo().get(0).get("filepath"));
+                TextView itemText = (TextView)v.findViewById(R.id.lblListItem);
+                itemText.setTextColor(getResources().getColor(R.color.material_green));
+                sharedPref.addStartedVideo(formation, item);
+
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setDataAndType(Uri.parse((String) item.getFieldVideo().get(0).get("filepath")), "video/*");
                 context.startActivity(intent);
