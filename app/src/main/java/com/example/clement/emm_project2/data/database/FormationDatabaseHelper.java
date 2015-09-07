@@ -1,5 +1,12 @@
 package com.example.clement.emm_project2.data.database;
 
+import com.example.clement.emm_project2.model.Author;
+import com.example.clement.emm_project2.model.Item;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by Clement on 17/08/15.
  */
@@ -48,11 +55,13 @@ public class FormationDatabaseHelper {
             + COLUMN_SUBTITLE + " text, "
             + COLUMN_PRODUCT_URL + " text,"
             + COLUMN_EAN + " text,"
+            + COLUMN_TYPE + " text,"
             + COLUMN_PRICE + " real,"
             + COLUMN_DESCRIPTION + " text,"
             + COLUMN_DURATION + " integer,"
             + COLUMN_OBJECTIVES + " text,"
             + COLUMN_PREREQUISITES + " text,"
+            + COLUMN_CAN_DOWNLOAD + " integer,"
             + COLUMN_QCM + " text,"
             + COLUMN_TEASER_TEXT + " text,"
             + COLUMN_CATEGORY + " text,"
@@ -66,10 +75,8 @@ public class FormationDatabaseHelper {
             + COLUMN_RATING + " blob,"
             + COLUMN_VIDEO_COUNT + " integer,"
             + COLUMN_ACTIVE + " integer,"
-            + COLUMN_TYPE + " text,"
-            + COLUMN_CAN_DOWNLOAD + " integer,"
-            + COLUMN_V + " text,"
             + COLUMN_UPDATED_AT + " text,"
+            + COLUMN_V + " text,"
             + COLUMN_ITEMS + " blob,"
             + COLUMN_CHILDREN + " blob,"
             + COLUMN_TEASER_INFO + " text, "

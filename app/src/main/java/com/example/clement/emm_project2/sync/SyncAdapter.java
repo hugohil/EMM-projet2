@@ -56,8 +56,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         dbHelper.dropAllDatas();
 
         dbHelper.withTransaction(new Runnable() {
-            @Override
-            public void run() {
+                @Override
+                public void run() {
                 Log.wtf(TAG, "Running Data Synchronization");
                 final ServerHandler server = new ServerHandler(App.getAppContext());
                 server.getCategories(new ResponseHandler() {

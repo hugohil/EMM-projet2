@@ -4,12 +4,13 @@ import android.media.Image;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * Created by Clement on 10/08/15.
  */
-public class Author extends AppData {
+public class Author extends AppData implements Serializable {
 
     @JsonProperty("fullname")
     private String fullName;

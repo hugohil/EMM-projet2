@@ -1,21 +1,21 @@
 package com.example.clement.emm_project2.data.database;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
+    import android.content.Context;
+    import android.database.sqlite.SQLiteDatabase;
+    import android.database.sqlite.SQLiteOpenHelper;
+    import android.util.Log;
 
-import com.example.clement.emm_project2.util.SharedPrefUtil;
+    import com.example.clement.emm_project2.util.SharedPrefUtil;
 
-/**
- * Created by Clement on 10/08/15.
- */
-public class DatabaseHelper extends SQLiteOpenHelper {
+    /**
+     * Created by Clement on 10/08/15.
+     */
+    public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String TAG = DatabaseHelper.class.getSimpleName();
+        private static final String TAG = DatabaseHelper.class.getSimpleName();
 
-    // Database Version
-    private static final int DATABASE_VERSION = 85;
+        // Database Version
+        private static final int DATABASE_VERSION = 86;
 
     // Database Name
     private static final String DATABASE_NAME = "elephormDB";

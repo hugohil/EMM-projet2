@@ -3,6 +3,7 @@ package com.example.clement.emm_project2.util;
 import android.util.Log;
 
 import com.example.clement.emm_project2.data.DataAccess;
+import com.example.clement.emm_project2.model.Formation;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.lang.reflect.Field;
@@ -56,16 +57,20 @@ public class ReflectUtil {
         boolean isFieldList = false;
         boolean isFieldMap = false;
         try {
-            if(Collection.class.isAssignableFrom(field.getType())) {
-                // Field type is a List<T>, we need to look for the specific getter
-                m = o.getClass().getDeclaredMethod("set" + StringUtil.capitalize(field.getName()), TypeReference.class, String.class);
-                isFieldList = true;
-            } else if(Map.class.isAssignableFrom(field.getType())) {
-                // Field type is a Map<T>, we need to look for the specific getter
-                m = o.getClass().getDeclaredMethod("set" + StringUtil.capitalize(field.getName()), TypeReference.class, String.class);
-                isFieldMap = true;
-            } else {
+            if(o.getClass().equals(Formation.class)) {
                 m = o.getClass().getDeclaredMethod("set" + StringUtil.capitalize(field.getName()), field.getType());
+            } else {
+                if (Collection.class.isAssignableFrom(field.getType())) {
+                    // Field type is a List<T>, we need to look for the specific getter
+                    m = o.getClass().getDeclaredMethod("set" + StringUtil.capitalize(field.getName()), TypeReference.class, String.class);
+                    isFieldList = true;
+                } else if (Map.class.isAssignableFrom(field.getType())) {
+                    // Field type is a Map<T>, we need to look for the specific getter
+                    m = o.getClass().getDeclaredMethod("set" + StringUtil.capitalize(field.getName()), TypeReference.class, String.class);
+                    isFieldMap = true;
+                } else {
+                    m = o.getClass().getDeclaredMethod("set" + StringUtil.capitalize(field.getName()), field.getType());
+                }
             }
         } catch(NoSuchMethodException e) {
            Log.e(TAG, "error while trying to get the property '"
@@ -84,12 +89,16 @@ public class ReflectUtil {
                     fieldValue = (Float)fieldValue;
                 }
 
-                if(isFieldList) {
-                    m.invoke(o, new TypeReference<List<Object>> () {},fieldValue);
-                } else if(isFieldMap) {
-                    m.invoke(o, new TypeReference<Map<Object, Object>>() {}, fieldValue);
-                } else {
+                if(o.getClass().equals(Formation.class)) {
                     m.invoke(o, fieldValue);
+                } else {
+                    if(isFieldList) {
+                        m.invoke(o, new TypeReference<List<Object>> () {},fieldValue);
+                    } else if(isFieldMap) {
+                        m.invoke(o, new TypeReference<Map<Object, Object>>() {}, fieldValue);
+                    } else {
+                        m.invoke(o, fieldValue);
+                    }
                 }
             } catch(Exception e) {
                 Log.e(TAG, "error while trying to invoke setter of property '"

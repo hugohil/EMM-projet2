@@ -5,6 +5,7 @@ import com.example.clement.emm_project2.util.ItemCustomDeserializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Map;
  * Created by Clement on 23/08/15.
  */
 @JsonDeserialize(using = ItemCustomDeserializer.class)
-public class Item extends AppData {
+public class Item extends AppData implements Serializable {
 
     private String title;
     private String type;

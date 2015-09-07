@@ -32,20 +32,25 @@ public class SharedPrefUtil {
     private DataAccess da = new DataAccess(App.getAppContext());
 
     public static void registerDataIdInCache(AppData data) {
-        Context context = App.getAppContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
-                Context.MODE_PRIVATE);
-        Set<String> loadedIds = sharedPref.getStringSet(data.getClass().getSimpleName(), null);
-        if(loadedIds == null) {
-            loadedIds = new HashSet<String>();
-        } else if(loadedIds.contains(data.getMongoID())) {
-            throw new RuntimeException("Data id is already present in cache !!!");
-        }
-        loadedIds.add(data.getMongoID());
+        if(data != null) {
+            Context context = App.getAppContext();
+            SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.cached_datas),
+                    Context.MODE_PRIVATE);
+            Set<String> loadedIds = sharedPref.getStringSet(data.getClass().getSimpleName(), null);
+            if(loadedIds == null) {
+                loadedIds = new HashSet<String>();
+            } else if(loadedIds.contains(data.getMongoID())) {
+                Log.d(TAG, data.getClass().getSimpleName() + " with id "+ data.getMongoID()  +"("+ loadedIds.toString()+")");
+                throw new RuntimeException("Data id is already present in cache !!!");
+            }
+            loadedIds.add(data.getMongoID());
 
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putStringSet(data.getClass().getSimpleName(), loadedIds);
-        editor.commit();
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putStringSet(data.getClass().getSimpleName(), loadedIds);
+            editor.commit();
+        } else {
+            Log.wtf(TAG, "DATA IS NULL !!!");
+        }
     }
 
     public static void registerFormationsOfSubcategory(String subCatId) {

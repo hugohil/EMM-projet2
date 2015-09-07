@@ -70,30 +70,45 @@ public class FormationsActivity extends DrawerActivity {
         mRecyclerView.setAdapter(mAdapter);
         final Context context = this;
 
+        final DataAccess da = new DataAccess(App.getAppContext());
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             title = extras.getString("subCatTitle");
             setTitle(title);
             final String subCatId= extras.getString("subCatId");
-            ServerHandler server = new ServerHandler(App.getAppContext());
-            server.getFormations(subCatId, new ResponseHandler() {
-                @Override
-                public void onSuccess(Object datas) {
-                    List<Formation> formations = JsonUtil.parseJsonDatas((JSONArray) datas, Formation.class);
-                    DataAccess da = new DataAccess(App.getAppContext());
-                    da.open();
-                    da.createData(formations.get(0));
-                    da.close();
+            List<Formation> dbFormations = da.findDataWhere(Formation.class, "subCatId", subCatId);
+            if(dbFormations.isEmpty()) {
+                Log.d(TAG, "Requesting Formation to server");
+                ServerHandler server = new ServerHandler(App.getAppContext());
+                server.getFormations(subCatId, new ResponseHandler() {
+                    @Override
+                    public void onSuccess(Object datas) {
+                        List<Formation> formations = JsonUtil.parseJsonDatas((JSONArray) datas, Formation.class);
+                        Log.wtf(TAG, formations.get(0).getMongoID());
+                        da.open();
+                        Log.d(TAG, "Formations form server => "+formations.size());
+                        for(Formation form : formations) {
+                            Log.d(TAG, "Registering formation "+form.getEan());
+                            da.createData(form);
+                        }
+                        da.close();
+                        subCatFormations.addAll(formations);
+                        mAdapter.notifyDataSetChanged();
+                    }
 
-                    subCatFormations.addAll(formations);
-                    mAdapter.notifyDataSetChanged();
-                }
+                    @Override
+                    public void onError(String error) {
+                        Log.wtf(TAG, error);
+                    }
+                });
+            } else {
+                Log.d(TAG, "Got Formations in db");
+                Log.d(TAG, "SIZE =>"+dbFormations.size());
+                subCatFormations.addAll(dbFormations);
+                mAdapter.notifyDataSetChanged();
+            }
 
-                @Override
-                public void onError(String error) {
-                    Log.wtf(TAG, error);
-                }
-            });
+
 
         } else {
             throw new RuntimeException("No intent extras ! Cannot find targeted category !! ");

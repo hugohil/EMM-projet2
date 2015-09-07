@@ -9,12 +9,23 @@ import android.util.Log;
 
 import com.example.clement.emm_project2.data.database.DatabaseHelper;
 import com.example.clement.emm_project2.model.AppData;
+import com.example.clement.emm_project2.model.Formation;
 import com.example.clement.emm_project2.util.ReflectUtil;
 import com.example.clement.emm_project2.util.SharedPrefUtil;
+import com.example.clement.emm_project2.util.StringUtil;
+import com.fasterxml.jackson.core.type.TypeReference;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Clement on 10/08/15.
@@ -38,6 +49,41 @@ public class DataAccess {
         dbHelper.close();
     }
 
+    public static byte[] serializeObject(Object o) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+        try {
+            ObjectOutput out = new ObjectOutputStream(bos);
+            out.writeObject(o);
+            out.close();
+
+            // Get the bytes of the serialized object
+            byte[] buf = bos.toByteArray();
+
+            return buf;
+        } catch (IOException ioe) {
+            Log.e("serializeObject", "error", ioe);
+
+            return null;
+        }
+    }
+
+    public static Object deserializeObject(byte[] b) {
+        try {
+            ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(b));
+            Object object = in.readObject();
+            in.close();
+
+            return object;
+        } catch (ClassNotFoundException cnfe) {
+            Log.e("deserializeObject", "class not found error", cnfe);
+            return null;
+        } catch (IOException ioe) {
+            Log.e("deserializeObject", "io error", ioe);
+            return null;
+        }
+    }
+
     public <T extends AppData> T createData(AppData data) {
         // 1. Build ContentValues
         ContentValues values = new ContentValues();
@@ -52,10 +98,21 @@ public class DataAccess {
             fieldNames[i + 2] = fieldName;
             if(fieldValue != null) {
                 // We need to handle special case here like fieldValue type or some restricted fields
-                values.put(fieldName, fieldValue.toString());
+                if((Collection.class.isAssignableFrom(fieldValue.getClass()) || Map.class.isAssignableFrom(fieldValue.getClass()))) {
+                    values.put(fieldName, serializeObject(fieldValue));
+                } else {
+                    values.put(fieldName, fieldValue.toString());
+                }
             }
         }
-        values.put("mongoid", data.getMongoID());
+
+        // Formations do not have a mongoId : suuuucks ! We loose generic typing
+        if(data.getClass().equals(Formation.class)) {
+            values.put("mongoid", ((Formation)data).getEan());
+        } else {
+            values.put("mongoid", data.getMongoID());
+        }
+//        Log.d(TAG, values.toString());
 
         // 2. Insert in DB
         String tableName = ReflectUtil.getDatabaseTableName(data);
@@ -104,6 +161,7 @@ public class DataAccess {
     }
 
     private <T extends AppData> T cursorToData(Cursor cursor, Class c) {
+        Log.d(TAG, "CURSOR TO DATA");
         AppData data = null;
         try {
            data = (AppData)c.newInstance();
@@ -118,7 +176,8 @@ public class DataAccess {
             Object fieldValue = null;
             switch(cursor.getType(i + 2)) {
                 case Cursor.FIELD_TYPE_BLOB:
-                    fieldValue = cursor.getBlob(i + 2);
+                    Log.d(TAG, "Field "+f.getName()+ " is a BLOB");
+                    fieldValue = deserializeObject(cursor.getBlob(i + 2));
                     break;
                 case Cursor.FIELD_TYPE_FLOAT:
                     fieldValue = cursor.getFloat(i + 2);
@@ -127,12 +186,14 @@ public class DataAccess {
                     fieldValue = cursor.getInt(i + 2);
                     break;
                 case Cursor.FIELD_TYPE_STRING:
+                    Log.d(TAG, "Field "+f.getName()+ " is a STRING");
                     fieldValue = cursor.getString(i + 2);
                     break;
                 case Cursor.FIELD_TYPE_NULL:
                     break;
 
             }
+            Log.d(TAG,"FIELDVALUE => "+fieldValue);
             ReflectUtil.setObjectFieldValue(data, f, fieldValue);
         }
         return (T)data;

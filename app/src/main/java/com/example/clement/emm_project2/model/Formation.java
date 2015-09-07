@@ -37,7 +37,7 @@ public class Formation extends AppData {
     private String ean;
 
     @JsonProperty("type")
-    private FORMATION_TYPE type;
+    private String type;
 
     @JsonProperty("price")
     private Float price;
@@ -170,12 +170,12 @@ public class Formation extends AppData {
         this.canDownload = canDownload;
     }
 
-    public FORMATION_TYPE getType() {
+    public String getType() {
         return type;
     }
 
     public void setType(String type) {
-        this.type = FORMATION_TYPE.valueOf(type);
+        this.type = type;
     }
 
     public String getTitle() {
