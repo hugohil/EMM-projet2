@@ -1,6 +1,7 @@
 package com.example.clement.emm_project2.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,8 +70,11 @@ public class FormationListAdapter extends RecyclerView.Adapter<FormationListAdap
     public void onBindViewHolder(FormationHolder holder, int position) {
         Formation formation = formations.get(position);
         holder.formationName.setText(formation.getTitle());
-        if(formation.getObjectives() != "null"){
-            holder.objectives.setText(formation.getObjectives());
+
+        assert formation.getObjectives() != null;
+        if(!formation.getObjectives().equals("null")){
+            Log.d(TAG, "obj: " + formation.getObjectives());
+            holder.objectives.setText(Html.fromHtml(formation.getObjectives()));
         }
 
         // Loader image - will be shown before loading image
