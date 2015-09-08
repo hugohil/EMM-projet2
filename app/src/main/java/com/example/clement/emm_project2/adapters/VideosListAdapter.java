@@ -30,6 +30,7 @@ import com.example.clement.emm_project2.model.SubCategory;
 import com.example.clement.emm_project2.util.SharedPrefUtil;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -41,9 +42,11 @@ public class VideosListAdapter extends RecyclerView.Adapter<VideosListAdapter.Vi
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView title;
+        TextView seenItemsCount;
         public ViewHolder(View v) {
             super(v);
             title = (TextView) v.findViewById(R.id.videos_row_title);
+            seenItemsCount = (TextView) v.findViewById(R.id.videos_row_itemCount);
             Log.d(TAG, title.toString());
         }
     }
@@ -69,6 +72,20 @@ public class VideosListAdapter extends RecyclerView.Adapter<VideosListAdapter.Vi
         Log.d(TAG, holder.title.toString());
         final Formation formation = mDataset.get(position);
         holder.title.setText(formation.getTitle());
+
+        List<Item> items = formation.getItems();
+        HashSet<String> seenItems = (HashSet<String>) SharedPrefUtil.getSeenItemIds();
+
+        int count = 0;
+        int totalCount = formation.getVideoCount();
+        for(Item item: items) {
+            if(seenItems.contains(item.getMongoID())) {
+                count ++;
+            }
+        }
+        Log.d(TAG, "COUNT  =>" + count);
+        float percentage = (float)(count * totalCount) / 100;
+        holder.seenItemsCount.setText(count  +"/" + totalCount + " (" + percentage + "%)");
 
         holder.title.setOnClickListener(new View.OnClickListener() {
             @Override

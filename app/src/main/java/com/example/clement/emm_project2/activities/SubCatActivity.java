@@ -66,6 +66,7 @@ public class SubCatActivity extends DrawerActivity {
 
         // Set subcategories list
         List<SubCategory> DBList = dataAccess.findDataWhere(SubCategory.class, "catId", catId);
+
         Collections.sort(DBList, new Comparator<SubCategory>() {
             public int compare(SubCategory c1, SubCategory c2) {
                 String t1 = c1.getTitle().toUpperCase();
