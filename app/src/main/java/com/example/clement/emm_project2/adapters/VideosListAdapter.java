@@ -84,7 +84,7 @@ public class VideosListAdapter extends RecyclerView.Adapter<VideosListAdapter.Vi
             }
         }
         Log.d(TAG, "COUNT  =>" + count);
-        float percentage = (float)(count * totalCount) / 100;
+        float percentage = (float)(count * 100) / totalCount;
         holder.seenItemsCount.setText(count  +"/" + totalCount + " (" + percentage + "%)");
 
         holder.title.setOnClickListener(new View.OnClickListener() {
