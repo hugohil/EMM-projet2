@@ -2,16 +2,19 @@ package com.example.clement.emm_project2.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ListView;
 
 import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.adapters.FormationListAdapter;
+import com.example.clement.emm_project2.app.App;
 import com.example.clement.emm_project2.app.drawer.DrawerActivity;
 import com.example.clement.emm_project2.app.drawer.DrawerItem;
 import com.example.clement.emm_project2.app.drawer.DrawerSection;
@@ -109,7 +112,8 @@ public class FavoriteActivity extends DrawerActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_delete_user_preferences) {
+            SharedPrefUtil.handleUserPreferencesDelete(this);
             return true;
         }
 
@@ -118,7 +122,7 @@ public class FavoriteActivity extends DrawerActivity {
 
     public void bindView() {
         List<Formation> favList = sharedPref.getFavoritesFormations();
-        if(favList.size() > 0){
+        if(favList != null && favList.size() > 0){
             Collections.sort(favList, new Comparator<Formation>() {
                 public int compare(Formation c1, Formation c2) {
                     String t1 = c1.getTitle().toUpperCase();
@@ -129,6 +133,14 @@ public class FavoriteActivity extends DrawerActivity {
             formations.clear();
             formations.addAll(favList);
             adapter.notifyDataSetChanged();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(App.getAppContext(), R.style.alertDialogStyle);
+            builder.setTitle(R.string.dialog_error);
+            builder.setMessage(R.string.favorite_activity_nope);
+            builder.setPositiveButton("OK", null);
+            AlertDialog dialog = builder.create();
+            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+            dialog.show();
         }
     }
 

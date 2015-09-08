@@ -62,6 +62,7 @@ public class FormationDetailActivity extends DrawerActivity {
             DataAccess da = new DataAccess(App.getAppContext());
             List<Formation> formations = da.findDataWhere(Formation.class, "ean", eanCode);
             formation = formations.get(0);
+            getSupportActionBar().setTitle(formation.getTitle());
             displayFormation(formation);
         }
 
@@ -146,7 +147,8 @@ public class FormationDetailActivity extends DrawerActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_delete_user_preferences) {
+            SharedPrefUtil.handleUserPreferencesDelete(this);
             return true;
         }
 

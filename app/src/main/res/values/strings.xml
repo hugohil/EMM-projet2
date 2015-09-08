@@ -46,4 +46,10 @@
     <string name="remove_video_title">Retirer la vidéo courante</string>
     <string name="favoritesFormations">favoriteFormations</string>
     <string name="didSychroRunOnce">didSynchroRunOnce</string>
+    <string name="favorite_activity_nope">Désolé, il semblerais que vous n\'ayez aucune formation favorite...</string>
+    <string name="formationTeaser">Teaser de la formation :</string>
+    <string name="delete_preferences">Supprimer les données</string>
+    <string name="warning">Attention</string>
+    <string name="ask_user_pref_delete">Voulez vous vraiment supprimer vos favoris et votre parcours?</string>
+    <string name="successfully_deleted_prefs">Vos favoris et votre parcours ont été réinitialisé.</string>
 </resources>

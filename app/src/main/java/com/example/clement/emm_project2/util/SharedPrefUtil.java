@@ -1,12 +1,16 @@
 package com.example.clement.emm_project2.util;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.activities.FormationsActivity;
+import com.example.clement.emm_project2.activities.MainActivity;
 import com.example.clement.emm_project2.app.App;
 import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.AppData;
@@ -216,5 +220,29 @@ public class SharedPrefUtil {
                 Context.MODE_PRIVATE);
         HashSet<String> favoriteIDs = new HashSet<String>(sharedPref.getStringSet(context.getString(R.string.favoritesFormations), new HashSet<String>()));
         return favoriteIDs.contains(formationID);
+    }
+
+    public static void handleUserPreferencesDelete(final Context context) {
+        new AlertDialog.Builder(context)
+                .setTitle(context.getString(R.string.warning))
+                .setMessage(context.getString(R.string.ask_user_pref_delete))
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        deleteFavsAndTravel();
+                        Toast.makeText(context, context.getString(R.string.successfully_deleted_prefs), Toast.LENGTH_SHORT).show();
+                    }})
+                .setNegativeButton(android.R.string.no, null).show();
+    }
+
+    private static void deleteFavsAndTravel() {
+        Context context = App.getAppContext();
+        context.getSharedPreferences(context.getString(R.string.favoritesFormations),
+                Context.MODE_PRIVATE).edit().clear().commit();
+        context.getSharedPreferences(context.getString(R.string.seen_items),
+                Context.MODE_PRIVATE).edit().clear().commit();
+        context.getSharedPreferences(context.getString(R.string.pending_videos),
+                Context.MODE_PRIVATE).edit().clear().commit();
+
     }
 }

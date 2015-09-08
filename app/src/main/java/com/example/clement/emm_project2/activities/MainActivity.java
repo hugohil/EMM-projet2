@@ -14,6 +14,7 @@ import com.example.clement.emm_project2.app.drawer.DrawerSection;
 import com.example.clement.emm_project2.app.drawer.DrawerSectionItem;
 import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.Category;
+import com.example.clement.emm_project2.util.SharedPrefUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +71,8 @@ public class MainActivity extends DrawerActivity {
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_delete_user_preferences) {
+            SharedPrefUtil.handleUserPreferencesDelete(this);
             return true;
         }
 

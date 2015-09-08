@@ -288,6 +288,13 @@
                         android:paddingRight="10dp"
                         android:layout_margin="20dp"/>
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="15dp"
+                        android:text="@string/formationTeaser"
+                        ></TextView>
+
                     <RelativeLayout
                         android:id="@+id/relativeLayout2"
                         android:layout_width="wrap_content"

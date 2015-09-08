@@ -137,7 +137,8 @@ public class StartedVideosActivity extends DrawerActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_delete_user_preferences) {
+            SharedPrefUtil.handleUserPreferencesDelete(this);
             return true;
         }
 

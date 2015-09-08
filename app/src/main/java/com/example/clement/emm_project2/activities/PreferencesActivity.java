@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.clement.emm_project2.R;
+import com.example.clement.emm_project2.util.SharedPrefUtil;
 
 
 public class PreferencesActivity extends ActionBarActivity {
@@ -31,7 +32,8 @@ public class PreferencesActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_delete_user_preferences) {
+            SharedPrefUtil.handleUserPreferencesDelete(this);
             return true;
         }
 
