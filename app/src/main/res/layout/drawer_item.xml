@@ -8,13 +8,21 @@
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     >
 
+    <ImageView
+        android:id="@+id/navmenuitem_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_action_attach_money"
+        android:paddingLeft="25dp"/>
+
     <TextView
         android:id="@+id/navmenuitem_label"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center_vertical"
         android:text="TextView"
-        android:paddingLeft="25dp"
+        android:paddingLeft="50dp"
         android:textColor="@android:color/black"/>
 
 </RelativeLayout>

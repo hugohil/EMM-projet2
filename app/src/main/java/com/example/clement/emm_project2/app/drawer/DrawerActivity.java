@@ -159,7 +159,6 @@ public abstract class DrawerActivity extends ActionBarActivity {
     }
 
     protected void onNavItemSelected(int id) {
-        Log.d("OUOU", "CLICKED ID => " + id);
         if(id < 100 ) {
             Category cat = categories.get(id);
 
@@ -198,7 +197,7 @@ public abstract class DrawerActivity extends ActionBarActivity {
     }
 
     protected void addFavoritesAndUserTravel(){
-        this.drawerItems.add(DrawerSection.create(300, "Navigation", "ic_action_label", this));
+        this.drawerItems.add(DrawerSection.create(300, "Navigation", "ic_action_apps", this));
         this.drawerItems.add(DrawerSectionItem.create(301, "Favoris", true));
         this.drawerItems.add(DrawerSectionItem.create(302, "Parcours", true));
     }
