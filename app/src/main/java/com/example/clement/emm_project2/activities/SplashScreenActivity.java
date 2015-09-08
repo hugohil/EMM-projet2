@@ -7,33 +7,16 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.clement.emm_project2.R;
-import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.data.database.DatabaseHelper;
-import com.example.clement.emm_project2.model.Category;
-import com.example.clement.emm_project2.model.Formation;
-import com.example.clement.emm_project2.model.SubCategory;
-import com.example.clement.emm_project2.app.server.ResponseHandler;
-import com.example.clement.emm_project2.app.server.ServerHandler;
-import com.example.clement.emm_project2.sync.StubContentProvider;
 import com.example.clement.emm_project2.sync.SyncAdapter;
-import com.example.clement.emm_project2.util.JsonUtil;
 import com.example.clement.emm_project2.util.SharedPrefUtil;
 import com.example.clement.emm_project2.util.SyncUtil;
-
-import org.json.JSONArray;
-
-import java.util.List;
 
 public class SplashScreenActivity extends Activity {
     private final String TAG = SplashScreenActivity.class.getSimpleName();

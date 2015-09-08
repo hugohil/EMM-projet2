@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="60dp"
     android:orientation="vertical"
+    android:gravity="center"
     android:padding="8dp">
 
     <TextView
         android:id="@+id/lblListHeader"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:paddingLeft="15dp"
         android:layout_marginLeft="15dp"
-        android:textSize="13dp"
+        android:textSize="15dp"
         android:textColor="#000000"
+        android:text="ldfjopgjopzjgpez fjezofgjzefn efnzfez"
+        android:layout_gravity="center"
          />
 
 </LinearLayout>

@@ -1,20 +1,14 @@
 package com.example.clement.emm_project2.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.adapters.SubCatListAdapter;
 import com.example.clement.emm_project2.app.drawer.DrawerActivity;
-import com.example.clement.emm_project2.app.drawer.DrawerItem;
-import com.example.clement.emm_project2.app.drawer.DrawerSection;
-import com.example.clement.emm_project2.app.drawer.DrawerSectionItem;
 import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.model.SubCategory;
@@ -41,34 +35,14 @@ public class SubCatActivity extends DrawerActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        super.addFavoritesAndUserTravel();
+        super.addCategories();
 
         adapter = new SubCatListAdapter(this, subCats);
         listView = (ListView) findViewById(R.id.act_subcat_list);
         listView.setAdapter(adapter);
-        // All this needs to be in an Async task (activity is doin' to much work on his main Thread ... Skipps maaaany frames)
-        ArrayList<DrawerItem> menuItems = new ArrayList<DrawerItem>();
-        List<Category> dbCategories;
-        dataAccess = new DataAccess(this);
-        dbCategories = dataAccess.getAllDatas(Category.class);
-        Collections.sort(dbCategories, new Comparator<Category>() {
-            public int compare(Category c1, Category c2) {
-                String t1 = c1.getTitle().toUpperCase();
-                String t2 = c2.getTitle().toUpperCase();
-                return t1.compareTo(t2);
-            }
-        });
-        menuItems.add(DrawerSection.create(300, "Navigation", "ic_action_label", this));
-        menuItems.add(DrawerSectionItem.create(301, "Favoris", true));
-        menuItems.add(DrawerSectionItem.create(302, "Parcours", true));
 
-        menuItems.add(DrawerSection.create(200, "Catégories", "ic_action_bookmark", SubCatActivity.this));
-        for(Category category : dbCategories) {
-            menuItems.add(DrawerSectionItem.create(dbCategories.indexOf(category), category.getTitle(), true));
-        }
-        menuItems.add(DrawerSection.create(100, "Configuration", "ic_action_settings", SubCatActivity.this));
-        menuItems.add(DrawerSectionItem.create(101, "Preferences", true));
-        setDrawerContent(menuItems);
-        categories.addAll(dbCategories);
+        dataAccess = new DataAccess(this);
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
@@ -129,22 +103,4 @@ public class SubCatActivity extends DrawerActivity {
         return R.layout.activity_sub_cat;
     }
 
-    @Override
-    protected void onNavItemSelected(int id) {
-        if(id < 100 ){
-            // Click on categories
-            Category category = categories.get(id);
-            bindView(category.getDescription(), category.getTitle(), category.getMongoID());
-            getSupportActionBar().setTitle(category.getTitle());
-        }
-        if(id > 300){
-            if(id > 301){
-                Intent i = new Intent(this, StartedVideosActivity.class);
-                startActivity(i);
-            } else {
-                Intent i = new Intent(this, FavoriteActivity.class);
-                startActivity(i);
-            }
-        }
-    }
 }

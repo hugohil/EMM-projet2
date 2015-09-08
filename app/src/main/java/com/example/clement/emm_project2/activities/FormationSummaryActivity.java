@@ -3,44 +3,28 @@ package com.example.clement.emm_project2.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.RatingBar;
 import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.app.App;
 import com.example.clement.emm_project2.app.drawer.DrawerActivity;
-import com.example.clement.emm_project2.app.drawer.DrawerItem;
-import com.example.clement.emm_project2.app.drawer.DrawerSection;
-import com.example.clement.emm_project2.app.drawer.DrawerSectionItem;
-import com.example.clement.emm_project2.app.server.ResponseHandler;
-import com.example.clement.emm_project2.app.server.ServerHandler;
 import com.example.clement.emm_project2.data.DataAccess;
-import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.model.Formation;
 import com.example.clement.emm_project2.util.ImageLoader;
-import com.example.clement.emm_project2.util.JsonUtil;
 import com.example.clement.emm_project2.util.SharedPrefUtil;
 import com.example.clement.emm_project2.util.StringUtil;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -51,12 +35,12 @@ public class FormationSummaryActivity extends DrawerActivity {
     private Formation formation;
     private Switch favoriteSwitch;
     private SharedPrefUtil sharedPref = new SharedPrefUtil();
-    private DataAccess dataAccess;
-    private List<Category> categories = new ArrayList<Category>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        super.addFavoritesAndUserTravel();
+        super.addCategories();
 
         favoriteSwitch = (Switch) findViewById(R.id.act_formation_switch);
 
@@ -84,29 +68,6 @@ public class FormationSummaryActivity extends DrawerActivity {
             getSupportActionBar().setTitle(formation.getTitle());
             displayFormation(formation);
         }
-
-        ArrayList<DrawerItem> menuItems = new ArrayList<DrawerItem>();
-        List<Category> dbCategories;
-        dataAccess = new DataAccess(this);
-        dbCategories = dataAccess.getAllDatas(Category.class);
-        Collections.sort(dbCategories, new Comparator<Category>() {
-            public int compare(Category c1, Category c2) {
-                String t1 = c1.getTitle().toUpperCase();
-                String t2 = c2.getTitle().toUpperCase();
-                return t1.compareTo(t2);
-            }
-        });
-        menuItems.add(DrawerSection.create(300, "Navigation", "ic_action_label", this));
-        menuItems.add(DrawerSectionItem.create(301, "Favoris", true));
-        menuItems.add(DrawerSectionItem.create(302, "Parcours", true));
-        menuItems.add(DrawerSection.create(200, "Catégories", "ic_action_bookmark", FormationSummaryActivity.this));
-        for(Category category : dbCategories) {
-            menuItems.add(DrawerSectionItem.create(dbCategories.indexOf(category), category.getTitle(), true));
-        }
-        menuItems.add(DrawerSection.create(100, "Configuration", "ic_action_settings", FormationSummaryActivity.this));
-        menuItems.add(DrawerSectionItem.create(101, "Preferences", true));
-        setDrawerContent(menuItems);
-        categories.addAll(dbCategories);
     }
 
     @Override
@@ -166,18 +127,7 @@ public class FormationSummaryActivity extends DrawerActivity {
         ImageView teaserPoster = (ImageView) findViewById(R.id.formationTeaserPoster);
         imgLoader.DisplayImage(formation.getTeaserInfo().get("video_poster"), loader, teaserPoster);
 
-        // on click play teaser
-
-//        MediaController controller = new MediaController(this);
-//        controller.setAnchorView(videoView);
-//        controller.setMediaPlayer(videoView);
-//        videoView.setMediaController(controller);
-
         ((ParallaxScrollView)findViewById(R.id.mainScrollView)).fullScroll(ScrollView.FOCUS_UP);
-
-        /*Intent intent = new Intent(Intent.ACTION_VIEW );
-        intent.setDataAndType(Uri.parse("http://eas.elephorm.com/videos/" + formation.getTeaser()), "video*//*");
-        startActivity(intent);*/
 
     }
 
@@ -213,29 +163,5 @@ public class FormationSummaryActivity extends DrawerActivity {
     @Override
     protected int getLayoutResourceId() {
         return R.layout.activity_formation;
-    }
-
-    @Override
-    protected void onNavItemSelected(int id) {
-        if(id < 100 ){
-            // Click on categories
-            Category cat = categories.get(id);
-
-            Intent i = new Intent(this, SubCatActivity.class);
-            i.putExtra("desc", cat.getDescription());
-            i.putExtra("title", cat.getTitle());
-            i.putExtra("catId", cat.getMongoID());
-
-            startActivity(i);
-        }
-        if(id > 300){
-            if(id > 301){
-                Intent i = new Intent(this, StartedVideosActivity.class);
-                startActivity(i);
-            } else {
-                Intent i = new Intent(this, FavoriteActivity.class);
-                startActivity(i);
-            }
-        }
     }
 }

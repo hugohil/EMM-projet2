@@ -1,17 +1,12 @@
 package com.example.clement.emm_project2.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.widget.ListView;
 
 import com.example.clement.emm_project2.R;
 import com.example.clement.emm_project2.adapters.CatListAdapter;
 import com.example.clement.emm_project2.app.drawer.DrawerActivity;
-import com.example.clement.emm_project2.app.drawer.DrawerItem;
-import com.example.clement.emm_project2.app.drawer.DrawerSection;
-import com.example.clement.emm_project2.app.drawer.DrawerSectionItem;
 import com.example.clement.emm_project2.data.DataAccess;
 import com.example.clement.emm_project2.model.Category;
 import com.example.clement.emm_project2.util.SharedPrefUtil;
@@ -31,14 +26,8 @@ public class MainActivity extends DrawerActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // No need to setContentView since it is done in the superClass =)
         super.onCreate(savedInstanceState);
-
-        ArrayList<DrawerItem> menuItems = new ArrayList<DrawerItem>();
-        menuItems.add(DrawerSection.create(100, "Configuration", "ic_action_settings", MainActivity.this));
-        menuItems.add(DrawerSectionItem.create(101, "Preferences", true));
-        menuItems.add(DrawerSection.create(300, "Navigation", "ic_action_label", this));
-        menuItems.add(DrawerSectionItem.create(301, "Favoris", true));
-        menuItems.add(DrawerSectionItem.create(302, "Parcours", true));
-        setDrawerContent(menuItems);
+        super.addFavoritesAndUserTravel();
+        super.addCategories();
         displayCategories();
     }
 
@@ -82,27 +71,5 @@ public class MainActivity extends DrawerActivity {
     @Override
     protected int getLayoutResourceId() {
         return R.layout.activity_main;
-    }
-
-    @Override
-    protected void onNavItemSelected(int id) {
-        // When we'll have categories in drawer, just check if id > 200
-        // If so start intent with the good cat id @see subCatActivity onNavItemSelected
-        Intent intent;
-        if(id > 300){
-            if(id > 301){
-                Intent i = new Intent(this, StartedVideosActivity.class);
-                startActivity(i);
-            } else {
-                Intent i = new Intent(this, FavoriteActivity.class);
-                startActivity(i);
-            }
-        }
-        switch(id) {
-            case 101: intent = new Intent(this, PreferencesActivity.class);
-                startActivity(intent);
-                break;
-            default: break;
-        }
     }
 }

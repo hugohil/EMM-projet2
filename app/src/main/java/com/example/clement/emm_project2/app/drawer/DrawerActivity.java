@@ -1,5 +1,6 @@
 package com.example.clement.emm_project2.app.drawer;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -14,9 +15,17 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.clement.emm_project2.R;
+import com.example.clement.emm_project2.activities.FavoriteActivity;
+import com.example.clement.emm_project2.activities.StartedVideosActivity;
+import com.example.clement.emm_project2.activities.SubCatActivity;
 import com.example.clement.emm_project2.adapters.DrawerAdapter;
+import com.example.clement.emm_project2.data.DataAccess;
+import com.example.clement.emm_project2.model.Category;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by Clement on 14/08/15.
@@ -31,11 +40,15 @@ public abstract class DrawerActivity extends ActionBarActivity {
     private ArrayList<DrawerItem> drawerItems;
     private ActionBarDrawerToggle drawerToggle;
     private DrawerLayout drawerLayout;
+    private List<Category> categories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResourceId());
+
+        DataAccess dataAccess = new DataAccess(this);
+        categories = dataAccess.getAllDatas(Category.class);
 
         this.drawerItems = new ArrayList<DrawerItem>();
         this.drawerListView = (ListView)findViewById(R.id.left_drawer);
@@ -145,6 +158,49 @@ public abstract class DrawerActivity extends ActionBarActivity {
         }
     }
 
-    protected abstract void onNavItemSelected(int id);
+    protected void onNavItemSelected(int id) {
+        Log.d("OUOU", "CLICKED ID => " + id);
+        if(id < 100 ) {
+            Category cat = categories.get(id);
+
+            Intent i = new Intent(this, SubCatActivity.class);
+            i.putExtra("desc", cat.getDescription());
+            i.putExtra("title", cat.getTitle());
+            i.putExtra("catId", cat.getMongoID());
+
+            startActivity(i);
+        }
+        Intent i;
+        switch(id) {
+            case 301:
+                i = new Intent(this, FavoriteActivity.class);
+                startActivity(i);
+                break;
+            case 302:
+                i = new Intent(this, StartedVideosActivity.class);
+                startActivity(i);
+                break;
+        }
+    };
+
+    protected void addCategories() {
+        Collections.sort(categories, new Comparator<Category>() {
+            public int compare(Category c1, Category c2) {
+                String t1 = c1.getTitle().toUpperCase();
+                String t2 = c2.getTitle().toUpperCase();
+                return t1.compareTo(t2);
+            }
+        });
+        this.drawerItems.add(DrawerSection.create(200, "Catégories", "ic_action_bookmark", this));
+        for(Category category : categories) {
+            this.drawerItems.add(DrawerSectionItem.create(categories.indexOf(category), category.getTitle(), true));
+        }
+    }
+
+    protected void addFavoritesAndUserTravel(){
+        this.drawerItems.add(DrawerSection.create(300, "Navigation", "ic_action_label", this));
+        this.drawerItems.add(DrawerSectionItem.create(301, "Favoris", true));
+        this.drawerItems.add(DrawerSectionItem.create(302, "Parcours", true));
+    }
 
 }

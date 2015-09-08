@@ -108,6 +108,20 @@ public class ItemListAdapter extends BaseExpandableListAdapter {
         lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(headerTitle);
 
+        List<String> childrenIds = getGroup(groupPosition).getChildrens();
+        boolean sawAllChildrens = true;
+        for(String childrenId : childrenIds) {
+            if(!SharedPrefUtil.getSeenItemIds().contains(childrenId)) {
+                sawAllChildrens = false;
+                break;
+            }
+        }
+
+        if(sawAllChildrens) {
+            convertView.setBackgroundColor(Color.GRAY);
+            lblListHeader.setTextColor(Color.WHITE);
+        }
+
         return convertView;
     }
 

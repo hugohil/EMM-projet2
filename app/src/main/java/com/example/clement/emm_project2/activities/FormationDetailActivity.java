@@ -54,7 +54,8 @@ public class FormationDetailActivity extends DrawerActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.wtf(TAG, SharedPrefUtil.getSeenItemIds().size()+ " seen ITEMS");
+        super.addFavoritesAndUserTravel();
+        super.addCategories();
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
@@ -65,29 +66,6 @@ public class FormationDetailActivity extends DrawerActivity {
             getSupportActionBar().setTitle(formation.getTitle());
             displayFormation(formation);
         }
-
-        ArrayList<DrawerItem> menuItems = new ArrayList<DrawerItem>();
-        List<Category> dbCategories;
-        dataAccess = new DataAccess(this);
-        dbCategories = dataAccess.getAllDatas(Category.class);
-        Collections.sort(dbCategories, new Comparator<Category>() {
-            public int compare(Category c1, Category c2) {
-                String t1 = c1.getTitle().toUpperCase();
-                String t2 = c2.getTitle().toUpperCase();
-                return t1.compareTo(t2);
-            }
-        });
-        menuItems.add(DrawerSection.create(300, "Navigation", "ic_action_label", this));
-        menuItems.add(DrawerSectionItem.create(301, "Favoris", true));
-        menuItems.add(DrawerSectionItem.create(302, "Parcours", true));
-        menuItems.add(DrawerSection.create(200, "Catégories", "ic_action_bookmark", FormationDetailActivity.this));
-        for(Category category : dbCategories) {
-            menuItems.add(DrawerSectionItem.create(dbCategories.indexOf(category), category.getTitle(), true));
-        }
-        menuItems.add(DrawerSection.create(100, "Configuration", "ic_action_settings", FormationDetailActivity.this));
-        menuItems.add(DrawerSectionItem.create(101, "Preferences", true));
-        setDrawerContent(menuItems);
-        categories.addAll(dbCategories);
     }
 
     public void displayFormation(final Formation formation) {
@@ -121,12 +99,14 @@ public class FormationDetailActivity extends DrawerActivity {
             if(item.getType().equals("chapter")) {
                 List<Item> childrens = new ArrayList<Item>();
                 for(Item item2: items) {
-                    if(item.getChildrens().contains(item2.getMongoID())) {
+                    if(item.getChildrens().contains(item2.getMongoID()) && item2.getType().equals("video")) {
                         childrens.add(item2);
                     }
                 }
-                chapters.add(item);
-                videos.put(item, childrens);
+                if(childrens.size() > 0) {
+                    chapters.add(item);
+                    videos.put(item, childrens);
+                }
             }
 
         }
@@ -165,27 +145,4 @@ public class FormationDetailActivity extends DrawerActivity {
         return R.layout.activity_formation_detail;
     }
 
-    @Override
-    protected void onNavItemSelected(int id) {
-        if(id < 100 ){
-            // Click on categories
-            Category cat = categories.get(id);
-
-            Intent i = new Intent(this, SubCatActivity.class);
-            i.putExtra("desc", cat.getDescription());
-            i.putExtra("title", cat.getTitle());
-            i.putExtra("catId", cat.getMongoID());
-
-            startActivity(i);
-        }
-        if(id > 300){
-            if(id > 301){
-                Intent i = new Intent(this, StartedVideosActivity.class);
-                startActivity(i);
-            } else {
-                Intent i = new Intent(this, FavoriteActivity.class);
-                startActivity(i);
-            }
-        }
-    }
 }
