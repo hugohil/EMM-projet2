@@ -1,5 +1,7 @@
 package com.example.clement.emm_project2.activities;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -65,7 +67,14 @@ public class StartedVideosActivity extends DrawerActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(App.getAppContext(), R.style.alertDialogStyle);
             builder.setTitle(R.string.dialog_error);
             builder.setMessage(R.string.videos_started_nope);
-            builder.setPositiveButton("OK", null);
+            builder.setPositiveButton("OK",  new DialogInterface.OnClickListener()
+            {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                    Intent intent = new Intent(App.getAppContext(), MainActivity.class);
+                    startActivity(intent);
+                }
+            });
             AlertDialog dialog = builder.create();
             dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
             dialog.show();

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -362,5 +363,15 @@ public class Formation extends AppData {
             }
         }
         return count;
+    }
+
+    public List<String> getItemIds() {
+        List<String> result = new ArrayList<String>();
+        for(Item item: items) {
+            if(item.getType().equals("video")) {
+                result.add(item.getMongoID());
+            }
+        }
+        return result;
     }
 }

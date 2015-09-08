@@ -21,6 +21,7 @@ import com.example.clement.emm_project2.app.drawer.DrawerActivity;
 import com.example.clement.emm_project2.app.drawer.DrawerItem;
 import com.example.clement.emm_project2.app.drawer.DrawerSection;
 import com.example.clement.emm_project2.app.drawer.DrawerSectionItem;
+import com.example.clement.emm_project2.app.notifications.AppNotificationManager;
 import com.example.clement.emm_project2.app.server.ResponseHandler;
 import com.example.clement.emm_project2.app.server.ServerHandler;
 import com.example.clement.emm_project2.data.DataAccess;
@@ -87,6 +88,12 @@ public class FormationDetailActivity extends DrawerActivity {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setDataAndType(Uri.parse((String) item.getFieldVideo().get(0).get("filepath")), "video/*");
                 context.startActivity(intent);
+
+                if(SharedPrefUtil.getSeenItemIds().containsAll(formation.getItemIds())) {
+                    AppNotificationManager notifManager = new AppNotificationManager(App.getAppContext());
+                    notifManager.notify(getString(R.string.congratulations),
+                            getString(R.string.you_completed_formation) + " "+ formation.getTitle(), 0);
+                }
 
                 return false;
             }

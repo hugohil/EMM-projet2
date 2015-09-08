@@ -52,4 +52,6 @@
     <string name="warning">Attention</string>
     <string name="ask_user_pref_delete">Voulez vous vraiment supprimer vos favoris et votre parcours?</string>
     <string name="successfully_deleted_prefs">Vos favoris et votre parcours ont été réinitialisé.</string>
+    <string name="congratulations">Felicitations</string>
+    <string name="you_completed_formation">Vous avez complété la formation</string>
 </resources>
