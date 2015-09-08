@@ -93,10 +93,9 @@ public class FormationsActivity extends DrawerActivity {
                 return t1.compareTo(t2);
             }
         });
-        if(SharedPrefUtil.areFavoriteFormations()) {
-            menuItems.add(DrawerSection.create(300, "Navigation", "ic_action_label", this));
-            menuItems.add(DrawerSectionItem.create(301, "Favoris", true));
-        }
+        menuItems.add(DrawerSection.create(300, "Navigation", "ic_action_label", this));
+        menuItems.add(DrawerSectionItem.create(301, "Favoris", true));
+        menuItems.add(DrawerSectionItem.create(302, "Parcours", true));
         menuItems.add(DrawerSection.create(200, "Catégories", "ic_action_bookmark", this));
         for(Category category : categories) {
             menuItems.add(DrawerSectionItem.create(categories.indexOf(category), category.getTitle(), true));
@@ -167,6 +166,10 @@ public class FormationsActivity extends DrawerActivity {
             startActivity(i);
         }
         if(id > 300){
+            if(id > 301) {
+                Intent i = new Intent(this, StartedVideosActivity.class);
+                startActivity(i);
+            }
             Intent i = new Intent(this, FavoriteActivity.class);
             startActivity(i);
         }

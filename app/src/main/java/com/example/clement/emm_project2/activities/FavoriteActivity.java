@@ -69,10 +69,8 @@ public class FavoriteActivity extends DrawerActivity {
                 return t1.compareTo(t2);
             }
         });
-        if(SharedPrefUtil.areFavoriteFormations()) {
-            menuItems.add(DrawerSection.create(300, "Navigation", "ic_action_label", this));
-            menuItems.add(DrawerSectionItem.create(301, "Parcours", true));
-        }
+        menuItems.add(DrawerSection.create(300, "Navigation", "ic_action_label", this));
+        menuItems.add(DrawerSectionItem.create(301, "Parcours", true));
         menuItems.add(DrawerSection.create(200, "Catégories", "ic_action_bookmark", FavoriteActivity.this));
         for(Category category : dbCategories) {
             menuItems.add(DrawerSectionItem.create(dbCategories.indexOf(category), category.getTitle(), true));
@@ -120,7 +118,6 @@ public class FavoriteActivity extends DrawerActivity {
 
     public void bindView() {
         List<Formation> favList = sharedPref.getFavoritesFormations();
-        Log.d(TAG, favList.toString());
         if(favList.size() > 0){
             Collections.sort(favList, new Comparator<Formation>() {
                 public int compare(Formation c1, Formation c2) {

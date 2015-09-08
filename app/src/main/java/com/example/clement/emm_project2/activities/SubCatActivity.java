@@ -57,11 +57,10 @@ public class SubCatActivity extends DrawerActivity {
                 return t1.compareTo(t2);
             }
         });
-        if(SharedPrefUtil.areFavoriteFormations()) {
-            menuItems.add(DrawerSection.create(300, "Navigation", "ic_action_label", this));
-            menuItems.add(DrawerSectionItem.create(301, "Favoris", true));
-            menuItems.add(DrawerSectionItem.create(302, "Parcours", true));
-        }
+        menuItems.add(DrawerSection.create(300, "Navigation", "ic_action_label", this));
+        menuItems.add(DrawerSectionItem.create(301, "Favoris", true));
+        menuItems.add(DrawerSectionItem.create(302, "Parcours", true));
+
         menuItems.add(DrawerSection.create(200, "Catégories", "ic_action_bookmark", SubCatActivity.this));
         for(Category category : dbCategories) {
             menuItems.add(DrawerSectionItem.create(dbCategories.indexOf(category), category.getTitle(), true));

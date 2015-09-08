@@ -34,7 +34,7 @@ import java.util.Set;
 public class StartedVideosActivity extends DrawerActivity {
     private final static String TAG = StartedVideosActivity.class.getSimpleName();
 
-    private ArrayList<Item> videos = new ArrayList<Item>();
+    private ArrayList<Formation> videos = new ArrayList<Formation>();
     private VideosListAdapter adapter;
     private RecyclerView recyclerView;
     private DataAccess dataAccess;
@@ -80,33 +80,13 @@ public class StartedVideosActivity extends DrawerActivity {
         }
         Log.d(TAG, formationsList.toString());
 
-        recyclerView = (RecyclerView) findViewById(R.id.act_videos_recycler);
-        recyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(mLayoutManager);
-        adapter = new VideosListAdapter(videos);
-        recyclerView.setAdapter(adapter);
-
         if(formationsList.size() > 0){
-            Collections.sort(formationsList, new Comparator<Formation>() {
-                public int compare(Formation c1, Formation c2) {
-                    String t1 = c1.getTitle().toUpperCase();
-                    String t2 = c2.getTitle().toUpperCase();
-                    return t1.compareTo(t2);
-                }
-            });
-            for (Formation formation : formationsList){
-                for (Item item : formation.getItems()){
-                    for (String id : SharedPrefUtil.getSeenItemIds()){
-                        if(item.getMongoID().equals(id)){
-                            itemList.add(item);
-                        }
-                    }
-                }
-            }
-            videos.clear();
-            videos.addAll(itemList);
-            adapter.notifyDataSetChanged();
+            recyclerView = (RecyclerView) findViewById(R.id.act_videos_recycler);
+            recyclerView.setHasFixedSize(true);
+            mLayoutManager = new LinearLayoutManager(this);
+            recyclerView.setLayoutManager(mLayoutManager);
+            adapter = new VideosListAdapter(formationsList);
+            recyclerView.setAdapter(adapter);
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(App.getAppContext(), R.style.alertDialogStyle);
             builder.setTitle(R.string.dialog_error);

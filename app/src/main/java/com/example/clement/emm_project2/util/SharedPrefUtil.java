@@ -107,6 +107,25 @@ public class SharedPrefUtil {
         }
     }
 
+    public static void unregisterPendingFormation(Formation formation) {
+        Context context = App.getAppContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.pending_videos),
+                Context.MODE_PRIVATE);
+        Set<String> formationsIds = sharedPref.getStringSet(context.getString(R.string.pending_videos), new HashSet<String>());
+        if(formationsIds.contains(formation.getMongoID())) {
+            Iterator<String> iterator = formationsIds.iterator();
+            while (iterator.hasNext()) {
+                String element = iterator.next();
+                if (element.equals(formation.getMongoID())) {
+                    iterator.remove();
+                }
+            }
+        }
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putStringSet(context.getString(R.string.pending_videos), formationsIds);
+        editor.commit();
+    }
+
     public static void registerSeenItem(Item item) {
         Context context = App.getAppContext();
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.seen_items),

@@ -19,10 +19,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.clement.emm_project2.R;
+import com.example.clement.emm_project2.activities.FormationDetailActivity;
 import com.example.clement.emm_project2.activities.StartedVideosActivity;
 import com.example.clement.emm_project2.activities.SubCatActivity;
 import com.example.clement.emm_project2.app.App;
 import com.example.clement.emm_project2.model.Category;
+import com.example.clement.emm_project2.model.Formation;
 import com.example.clement.emm_project2.model.Item;
 import com.example.clement.emm_project2.model.SubCategory;
 import com.example.clement.emm_project2.util.SharedPrefUtil;
@@ -35,7 +37,7 @@ import java.util.List;
  */
 public class VideosListAdapter extends RecyclerView.Adapter<VideosListAdapter.ViewHolder> {
     private static final String TAG = VideosListAdapter.class.getSimpleName();
-    private List<Item> mDataset;
+    private List<Formation> mDataset;
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView title;
@@ -47,7 +49,7 @@ public class VideosListAdapter extends RecyclerView.Adapter<VideosListAdapter.Vi
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public VideosListAdapter(List<Item> myDataset) {
+    public VideosListAdapter(List<Formation> myDataset) {
         mDataset = myDataset;
     }
 
@@ -65,14 +67,14 @@ public class VideosListAdapter extends RecyclerView.Adapter<VideosListAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Log.d(TAG, holder.title.toString());
-        final Item item = mDataset.get(position);
-        holder.title.setText(item.getTitle());
+        final Formation formation = mDataset.get(position);
+        holder.title.setText(formation.getTitle());
 
         holder.title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.parse((String) item.getFieldVideo().get(0).get("filepath")), "video/*");
+                Intent intent = new Intent(App.getAppContext(), FormationDetailActivity.class);
+                intent.putExtra("ean", formation.getEan());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                 App.getAppContext().startActivity(intent);
             }
@@ -87,7 +89,7 @@ public class VideosListAdapter extends RecyclerView.Adapter<VideosListAdapter.Vi
                 builder.setMessage(R.string.remove_videos_from_path);
                 builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            SharedPrefUtil.unregisterSeenItem(item);
+                            SharedPrefUtil.unregisterPendingFormation(formation);
                             Intent i = new Intent(App.getAppContext(), StartedVideosActivity.class);
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                             App.getAppContext().startActivity(i);
